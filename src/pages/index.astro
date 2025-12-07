@@ -1,18 +1,20 @@
 ---
-
 import '../styles/global.css'
-
+import Hello from "../components/Hello.astro";
 ---
 
-<html lang="en">
+<html lang="en" class="text-white">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Passero+One&display=swap" rel="stylesheet">
+		<title>Bhavani Chandra</title>
 	</head>
 	<body>
-		<h1 class="text-2xl font-bold text-blue-800 ml-auto me-auto block w-5">Astro</h1>
+		<Hello />
 	</body>
 </html>
