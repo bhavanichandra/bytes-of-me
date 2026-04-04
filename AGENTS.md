@@ -14,10 +14,10 @@ The site should feel personal, opinionated, and intentional rather than generic 
 
 ## Project Overview
 - Framework: Astro 5
-- Package manager: `pnpm`
+- Package manager: `bun`
 - Styling: Tailwind CSS v4 via `@tailwindcss/vite`
 - Animation library: `gsap`
-- Runtime: Node `24.12.0` via Volta
+- Runtime: Bun `1.3.11`
 
 ## Experience Goals
 - Prioritize storytelling over feature sprawl.
@@ -47,15 +47,15 @@ The site should feel personal, opinionated, and intentional rather than generic 
 - Avoid unnecessary inline comments.
 
 ## Commands
-- Install dependencies: `pnpm install`
-- Start dev server: `pnpm dev`
-- Build production output: `pnpm build`
-- Preview production build: `pnpm preview`
-- Run Astro CLI: `pnpm astro`
+- Install dependencies: `bun install`
+- Start dev server: `bun dev`
+- Build production output: `bun run build`
+- Preview production build: `bun run preview`
+- Run Astro CLI: `bun run astro`
 
 ## Validation
 - For code changes, validate with the narrowest relevant command first.
-- Use `pnpm build` as the default project-level verification unless the task only requires a smaller check.
+- Use `bun run build` as the default project-level verification unless the task only requires a smaller check.
 
 ## Git Hygiene
 - Do not commit generated output such as `dist/` or `.astro/` changes.
