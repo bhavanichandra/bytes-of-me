@@ -2,6 +2,7 @@
 // Shared page layout: grain background + sticky-note corner panel
 // on every page.
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title: string;
@@ -17,6 +18,7 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <ClientRouter />
   </head>
   <body class="grain-bg" style="background-color:#1a1918">
     <slot />

@@ -1,0 +1,98 @@
+---
+// Persistent left column: identity + Blogs/Projects nav. Shared across
+// Home/Blogs/Projects; transition:persist keeps it mounted (no flicker)
+// across Astro view-transition navigation between those routes.
+// Width: fixed narrow (variant N), not the wide column — see BHA-62.
+interface Props {
+  current: "home" | "blogs" | "projects";
+}
+
+const { current } = Astro.props;
+
+const links = [
+  { href: "/blogs", label: "Blogs", key: "blogs" },
+  { href: "/projects", label: "Projects", key: "projects" },
+];
+---
+
+<aside
+  class="rail w-full md:w-64 shrink-0 flex flex-col gap-10 pt-20 pb-8 px-8 text-white"
+  transition:persist
+  transition:name="rail"
+>
+  <div class="flex flex-col gap-3 items-start text-left">
+    <div id="rail-name" class="text-2xl font-semibold">Bhavani Chandra</div>
+    <div id="rail-tagline" class="text-neutral-300 text-lg tracking-wide">Laziness is the mother of progress</div>
+    <div id="rail-role" class="text-neutral-400 text-sm tracking-wide">Senior Software Engineer @ GE Vernova</div>
+  </div>
+
+  <nav class="flex flex-col items-start gap-2">
+    {links.map((link) => (
+      <a
+        data-rail-pill
+        href={link.href}
+        class:list={[
+          "px-4 py-2 rounded-full border text-sm tracking-wide transition-colors",
+          current === link.key
+            ? "border-white/30 text-white bg-white/5"
+            : "border-transparent text-neutral-400 hover:text-white",
+        ]}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+</aside>
+
+<script>
+  import { gsap } from "gsap";
+
+  // Entrance plays once per browser tab, not on every in-app navigation —
+  // replaying it on each view-transition swap read as the text flickering
+  // away and back.
+  const ANIMATED_KEY = "rail-animated";
+
+  function bindHover(pills: NodeListOf<Element>) {
+    pills.forEach((pill) => {
+      if ((pill as HTMLElement).dataset.hoverBound) return;
+      (pill as HTMLElement).dataset.hoverBound = "true";
+      pill.addEventListener("mouseenter", () => gsap.to(pill, { scale: 1.06, x: 4, duration: 0.25, ease: "power2.out" }));
+      pill.addEventListener("mouseleave", () => gsap.to(pill, { scale: 1, x: 0, duration: 0.25, ease: "power2.out" }));
+      pill.addEventListener("mousedown", () => gsap.to(pill, { scale: 0.94, duration: 0.1, ease: "power2.out" }));
+      pill.addEventListener("mouseup", () => gsap.to(pill, { scale: 1.06, duration: 0.15, ease: "power2.out" }));
+    });
+  }
+
+  function animateRail() {
+    const rail = document.querySelector(".rail");
+    if (!rail) return;
+    const lines = rail.querySelectorAll("#rail-name, #rail-tagline, #rail-role");
+    const pills = rail.querySelectorAll("[data-rail-pill]");
+
+    if (sessionStorage.getItem(ANIMATED_KEY)) {
+      gsap.set(lines, { opacity: 1, x: 0 });
+      gsap.set(pills, { opacity: 1, x: 0 });
+      bindHover(pills);
+      return;
+    }
+
+    gsap.set(lines, { opacity: 0, x: -14 });
+    gsap.set(pills, { opacity: 0, x: -10 });
+
+    const tl = gsap.timeline();
+    tl.to(lines, { opacity: 1, x: 0, duration: 0.6, stagger: 0.12, ease: "power2.out" })
+      .to(pills, { opacity: 1, x: 0, duration: 0.4, stagger: 0.08, ease: "back.out(1.7)" }, "-=0.2");
+
+    bindHover(pills);
+    sessionStorage.setItem(ANIMATED_KEY, "true");
+  }
+
+  // Guard against re-registering this listener every time the script tag
+  // re-executes after a view-transition swap (the script isn't persisted,
+  // only the <aside> is).
+  if (!(window as any).__railBound) {
+    (window as any).__railBound = true;
+    document.addEventListener("astro:page-load", animateRail);
+  }
+  animateRail();
+</script>
