@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/* Sandpaper grain texture, validated in the BHA-50 card prototype
+   (prototype/bha-50-card-design). Apply to a page background alongside
+   a warm dark ground (e.g. #1a1918) once a page adopts this look. */
+.grain-bg {
+  position: relative;
+}
+.grain-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
