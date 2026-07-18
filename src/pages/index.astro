@@ -1,19 +1,10 @@
 ---
-import '../styles/global.css'
-import Hello from "../components/Hello.astro";
-import MeCards from "../components/MeCards.astro";
+import Layout from "../layouts/Layout.astro";
+import MinimalIntro from "../components/MinimalIntro.astro";
+import SidePanel from "../components/SidePanel.astro";
 ---
 
-<html lang="en" class="text-white">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Bhavani Chandra</title>
-	</head>
-	<body class="grain-bg" style="background-color:#1a1918">
-		<Hello />
-		<MeCards />
-	</body>
-</html>
+<Layout title="Bhavani Chandra">
+  <MinimalIntro />
+  <SidePanel />
+</Layout>

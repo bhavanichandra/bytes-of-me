@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import MinimalIntro from "../components/MinimalIntro.astro";
+import SidePanel from "../components/SidePanel.astro";
+import CardGrid from "../components/CardGrid.astro";
+import Card from "../components/Card.astro";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const dateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short" });
+---
+
+<Layout title="Projects — Bhavani Chandra">
+  <MinimalIntro />
+  <SidePanel current="projects" />
+
+  <main class="max-w-5xl mx-auto px-6 pb-24">
+    <CardGrid>
+      {projects.map((project) => (
+        <Card
+          href={project.data.href}
+          title={project.data.title}
+          tag={project.data.tag}
+          date={dateFmt.format(project.data.date)}
+        />
+      ))}
+    </CardGrid>
+  </main>
+</Layout>
