@@ -1,23 +1,28 @@
 ---
-// Shared card for blog posts and projects (BHA-50). Used inside <CardGrid>.
+// Shared card for /projects. Used inside <CardGrid>.
+import Tag from "./Tag.astro";
+
 interface Props {
   href: string;
   title: string;
   tag: string;
   date: string;
+  image?: string;
 }
 
-const { href, title, tag, date } = Astro.props;
+const { href, title, tag, date, image } = Astro.props;
 ---
 
-<a href={href} class="card group flex flex-col gap-4 transition-opacity duration-300">
+<a href={href} class="card spotlight-item group flex flex-col gap-4 transition-opacity duration-300">
   <div class="relative rounded-2xl bg-[#242220] h-40 flex items-center justify-center overflow-hidden">
-    <span class="text-3xl opacity-30 group-hover:opacity-50 transition">✦</span>
+    {image ? (
+      <img src={image} alt={title} class="w-full h-full object-cover" />
+    ) : (
+      <span class="text-3xl opacity-30 group-hover:opacity-50 transition">✦</span>
+    )}
   </div>
   <div class="flex flex-col gap-2">
-    <span class="w-fit text-[10px] uppercase tracking-widest text-neutral-400 bg-white/5 rounded-full px-3 py-1 border border-white/10">
-      {tag}
-    </span>
+    <Tag label={tag} size="md" />
     <h3 class="text-lg text-neutral-100 leading-snug group-hover:text-white transition">{title}</h3>
     <span class="text-xs text-neutral-500">{date}</span>
   </div>

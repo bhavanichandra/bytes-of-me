@@ -29,7 +29,7 @@ To build a robust incident management system, let us architect an API-Led Connec
 
 
 
-![api-led-connectivity-systems.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652041393356/KGghJD8OR.png align="left")
+![api-led-connectivity-systems.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652041393356/KGghJD8OR.png)
 
 ### Summary
 - The SaaS Applications are Salesforce, ServiceNow, Slack, and the legacy system.

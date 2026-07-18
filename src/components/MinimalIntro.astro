@@ -1,18 +1,9 @@
 ---
-// Minimal root/blogs/projects header (BHA-58): name, subtitle, current
-// workplace — no photo. The full photo+bio header lives on /about (Hello.astro).
+// Minimal root/blogs/projects header: name, subtitle, current workplace —
+// no photo. The full photo+bio header lives on /about (Hello.astro).
+import IdentityBlock from "./IdentityBlock.astro";
 ---
 
 <header class="w-full flex flex-col items-center gap-3 pt-20 pb-8 text-white">
-  <div class="text-2xl font-semibold text-white">
-    Bhavani Chandra
-  </div>
-
-  <div class="text-neutral-300 text-lg tracking-wide">
-    Laziness is the mother of progress
-  </div>
-
-  <div class="text-neutral-400 text-sm tracking-wide">
-    Senior Software Engineer @ GE Vernova
-  </div>
+  <IdentityBlock />
 </header>

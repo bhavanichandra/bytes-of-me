@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import Tag from "../../components/Tag.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -23,7 +24,7 @@ const dateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "shor
       <span class="text-xs text-neutral-500">{dateFmt.format(post.data.date)}</span>
       <span class="flex gap-1.5">
         {post.data.tags.map((tag) => (
-          <span class="text-[10px] uppercase tracking-widest text-neutral-400 bg-white/5 rounded-full px-2.5 py-0.5 border border-white/10">{tag}</span>
+          <Tag label={tag} />
         ))}
       </span>
     </div>

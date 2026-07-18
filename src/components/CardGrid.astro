@@ -1,14 +1,8 @@
 ---
-// Wraps <Card> instances. Provides the shared-tag spotlight hover:
-// the hovered card stays sharp, its siblings dim.
+// Wraps <Card> instances. Spotlight hover comes from the shared
+// .spotlight-group/.spotlight-item rule in global.css.
 ---
 
-<div class="cards-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="cards-grid spotlight-group grid grid-cols-1 md:grid-cols-3 gap-6">
   <slot />
 </div>
-
-<style is:global>
-  .cards-grid:hover .card:not(:hover) {
-    opacity: 0.4;
-  }
-</style>

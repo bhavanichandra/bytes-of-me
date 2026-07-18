@@ -29,7 +29,7 @@ A Middleware is software that acts as a software glue between systems by providi
 - The core concept of ESB is connecting to different systems by putting a communication bus or a software glue between them, decoupling various applications, and allowing them to communicate without any dependency. 
 - MuleSoft developed a runtime engine called Mule, a flexible ESB solution that will act as the glue between systems by providing pluggable connectors.
 
-![What is an ESB  MuleSoft.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652036226043/TscNzHnfY.png align="center")
+![What is an ESB  MuleSoft.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1652036226043/TscNzHnfY.png)
 
 ## Connectors:
 

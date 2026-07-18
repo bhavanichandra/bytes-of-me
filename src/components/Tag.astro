@@ -1,0 +1,11 @@
+---
+interface Props {
+  label: string;
+  size?: "sm" | "md";
+}
+
+const { label, size = "sm" } = Astro.props;
+const padding = size === "md" ? "px-3 py-1" : "px-2.5 py-0.5";
+---
+
+<span class={`text-[10px] uppercase tracking-widest text-neutral-400 bg-white/5 rounded-full border border-white/10 ${padding}`}>{label}</span>

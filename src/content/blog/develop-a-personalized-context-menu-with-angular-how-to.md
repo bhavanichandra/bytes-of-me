@@ -124,7 +124,7 @@ You can check the complete code at [Github](https://github.com/themuler/custom-c
 
 The outcome of this component looks like this:
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1702675144887/4e179818-db2d-4970-a4f7-832bc8f332c5.png align="center")
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1702675144887/4e179818-db2d-4970-a4f7-832bc8f332c5.png)
 
 As you see here, the custom context menu will not appear in the outer part of the zone shown above.
 

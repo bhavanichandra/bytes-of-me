@@ -70,8 +70,8 @@ sudo systemctl start flex-gateway
 
 ```bash
 sudo flexctl register <GatewayName> \
-  --token=a8c34b42-a6be-4c82-92be-db7496983289 \
-  --organization=0de7096a-6bf0-422c-a567-7450c69c0405 \
+  --token=<YOUR_TOKEN> \
+  --organization=<YOUR_ORGANIZATION_ID> \
   --connected=true \
   --output-directory=/usr/local/share/mulesoft/flex-gateway/conf.d
 ```
@@ -90,32 +90,32 @@ sudo systemctl list-units flex-gateway*
 * Go to API Manager, and click on Add API button at the top of the page. Click on **Add New API**.
     
 
-![API Manager 2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667506900265/4LDKTXL-w.png align="center")
+![API Manager 2.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667506900265/4LDKTXL-w.png)
 
 * In the Add API page, select the Flex gateway and select the gateway you have added above. Click Next to continue.
     
 
-![Add API Runtime Flow](https://cdn.hashnode.com/res/hashnode/image/upload/v1667506953873/g7MNo3u2l.png align="center")
+![Add API Runtime Flow](https://cdn.hashnode.com/res/hashnode/image/upload/v1667506953873/g7MNo3u2l.png)
 
 * In the next page, you can either select API from the exchange or create a new API. Give the appropriate name and asset type based on your API. For this blog, I selected HTTP API. I'm going to interface JSON Typicode API and manage it. Click Next to continue.
     
 
-![API Manager 4.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507014171/PmJhYIBq9.png align="center")
+![API Manager 4.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507014171/PmJhYIBq9.png)
 
 * In the next page, you can add the endpoint details, base path and port. Click on Next to continue.
     
 
-![API Manager 5.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507041036/Ln9nUjbFt.png align="center")
+![API Manager 5.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507041036/Ln9nUjbFt.png)
 
 * Here, you can see the full summary of the flex gateway API configuration. After this, click on the Save and Deploy API button below.
     
 
-![API Manager 6.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507060854/uFd-k-mLr.png align="center")
+![API Manager 6.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507060854/uFd-k-mLr.png)
 
 * API manager deploys the API to the flex gateway, and it will apply the API configuration to the flex gateway.
     
 
-![API Deployed](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507089222/_l5UMsXhP.png align="center")
+![API Deployed](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507089222/_l5UMsXhP.png)
 
 * In this article, I am going to apply two policies: Go to the policies page and select Rate-Limiting Policy.
     
@@ -124,19 +124,19 @@ sudo systemctl list-units flex-gateway*
 * Add the necessary configuration to enable the policy
     
 
-![Rate-Limiting Factor](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507111359/lXcb7vKDJ.png align="center")
+![Rate-Limiting Factor](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507111359/lXcb7vKDJ.png)
 
 * Next Select, Client ID Enforcement and select Basic Authentication as the credential origin.
     
 * Now, to access the API, we need the client ID and client secret. Go to the Exchange and click on the **Request Access** button. Follow through the creation process and get the tokens.
     
 
-![Request Access](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507263591/GkJQNmaEr.png align="center")
+![Request Access](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507263591/GkJQNmaEr.png)
 
 * Once you got the access, you can go to the server where flex gateway is created and use localhost to make API calls as shown below
     
 
-![HTTP Call](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507399036/W_urnyNYG.png align="center")
+![HTTP Call](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507399036/W_urnyNYG.png)
 
 * In the above screenshot,
     
@@ -151,7 +151,7 @@ sudo systemctl list-units flex-gateway*
 * In the next HTTP call, I called the API every second to trigger the Rate-Limiting policy. You can see Too Many Requests' response, which indicates the policy worked.
     
 
-![HTTP Call 2](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507421639/c5Uxo3LeG.png align="center")
+![HTTP Call 2](https://cdn.hashnode.com/res/hashnode/image/upload/v1667507421639/c5Uxo3LeG.png)
 
 ## Sources:
 

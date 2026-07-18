@@ -125,7 +125,7 @@ curl --location 'http://localhost:8084/api/users'
 
 The below are the logs from the docker container:
 
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727300928422/d6f6a105-2a8e-4367-bb98-dbdbce9d7b33.png align="center")
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727300928422/d6f6a105-2a8e-4367-bb98-dbdbce9d7b33.png)
 
 As you can see above, the path `/api/users` is rewritten to call the actual API with just `/users`.
 
