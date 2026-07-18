@@ -1,0 +1,68 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Tag from "../../components/Tag.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const dateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
+---
+
+<Layout title={`${post.data.title} — Bhavani Chandra`}>
+  <main class="max-w-2xl mx-auto px-6 pt-20 pb-24">
+    <a href="/blogs" class="text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition">← Blogs</a>
+    <h1 class="text-3xl text-white mt-6 mb-3 leading-snug">{post.data.title}</h1>
+    <div class="flex items-center gap-3 mb-10">
+      <span class="text-xs text-neutral-500">{dateFmt.format(post.data.date)}</span>
+      <span class="flex gap-1.5">
+        {post.data.tags.map((tag) => (
+          <Tag label={tag} />
+        ))}
+      </span>
+    </div>
+    <article class="post-body text-neutral-200 leading-relaxed">
+      <Content />
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .post-body :global(h1),
+  .post-body :global(h2),
+  .post-body :global(h3) {
+    color: white;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+  .post-body :global(p) {
+    margin-bottom: 1rem;
+  }
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    list-style: disc;
+  }
+  .post-body :global(a) {
+    color: white;
+    text-decoration: underline;
+  }
+  .post-body :global(img) {
+    border-radius: 0.75rem;
+    margin: 1rem 0;
+  }
+  .post-body :global(code) {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+  }
+</style>

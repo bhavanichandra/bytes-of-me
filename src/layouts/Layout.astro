@@ -1,0 +1,35 @@
+---
+// Shared page layout: grain background + sticky-note corner panel
+// on every page.
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="en" class="text-white">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="grain-bg" style="background-color:#1a1918">
+    <slot />
+
+    <div class="corner-panel fixed bottom-8 left-8 z-50 group flex flex-col items-center">
+      <div class="flex flex-col items-center gap-3 bg-[#242220] border border-white/10 rounded-full px-3 py-4 mb-3 opacity-0 translate-y-3 scale-95 origin-bottom pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-200 ease-out">
+        <a href="mailto:bhavanichandra9+site@gmail.com" class="hover:opacity-80 transition"><img src="/email.svg" alt="Email" class="w-4 h-4" /></a>
+        <a href="https://github.com/bhavanichandra" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition"><img src="/github.svg" alt="GitHub" class="w-4 h-4" /></a>
+        <a href="https://www.linkedin.com/in/bhavanichandra/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition"><img src="/linkedin.svg" alt="LinkedIn" class="w-4 h-4" /></a>
+      </div>
+      <a href="/about" class="block w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-white/50 transition">
+        <img src="/my-photo.svg" alt="About" class="w-full h-full object-cover" />
+      </a>
+    </div>
+  </body>
+</html>

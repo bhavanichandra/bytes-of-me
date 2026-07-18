@@ -1,20 +1,10 @@
 ---
-import '../styles/global.css'
-import Hello from "../components/Hello.astro";
+import Layout from "../layouts/Layout.astro";
+import MinimalIntro from "../components/MinimalIntro.astro";
+import SidePanel from "../components/SidePanel.astro";
 ---
 
-<html lang="en" class="text-white">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Passero+One&display=swap" rel="stylesheet">
-		<title>Bhavani Chandra</title>
-	</head>
-	<body>
-		<Hello />
-	</body>
-</html>
+<Layout title="Bhavani Chandra">
+  <MinimalIntro />
+  <SidePanel />
+</Layout>
