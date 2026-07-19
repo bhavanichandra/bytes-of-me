@@ -58,3 +58,38 @@ pre[data-language]::after {
   letter-spacing: 0.05em;
   color: rgba(255, 255, 255, 0.35);
 }
+
+/* Shared markdown-body prose styling, used by any rendered content
+   collection entry (blog posts, project case studies) via
+   DetailPage.astro. */
+.prose-body h1,
+.prose-body h2,
+.prose-body h3 {
+  color: white;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+.prose-body p {
+  margin-bottom: 1rem;
+}
+.prose-body ul,
+.prose-body ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+.prose-body a {
+  color: white;
+  text-decoration: underline;
+}
+.prose-body img {
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+}
+.prose-body p code,
+.prose-body li code {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+}

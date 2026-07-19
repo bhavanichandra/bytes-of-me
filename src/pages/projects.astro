@@ -26,7 +26,7 @@ const projects = await getSortedProjects();
       {projects.map((project) => (
         <Card
           path={`~/projects/${project.id}`}
-          href={project.data.href}
+          href={`/projects/${project.id}`}
           title={project.data.title}
           tag={project.data.tag}
           date={projectDateFmt.format(project.data.date)}

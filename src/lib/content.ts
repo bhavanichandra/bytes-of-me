@@ -8,7 +8,7 @@ export async function getRecentPosts(limit?: number) {
 }
 
 export async function getSortedProjects() {
-  return (await getCollection("projects")).sort(
+  return (await getCollection("projects", ({ data }) => !data.draft)).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   );
 }
