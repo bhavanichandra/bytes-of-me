@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Font pairing decided in Wayfinder ticket #16 (Space Grotesk for
+   prose/headings, Space Mono for nav/labels/tags/metadata accents). */
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+}
+
 /* Warm dark ground + subtle grain, used site-wide. */
 .grain-bg {
   position: relative;
