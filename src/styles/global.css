@@ -21,10 +21,10 @@
   opacity: 0.4;
 }
 
-/* Editor-chrome treatment for fenced code blocks (BHA-66 personality
-   pass): fake traffic-light tab bar + a language label read off
-   Shiki's own data-language attribute. Applies to any Shiki-rendered
-   <pre> site-wide, wherever markdown gets rendered. */
+/* Editor-chrome treatment for fenced code blocks: fake traffic-light
+   tab bar + a language label read off Shiki's own data-language
+   attribute. Applies to any Shiki-rendered <pre> site-wide, wherever
+   markdown gets rendered. */
 pre[data-language] {
   position: relative;
   margin: 1.5rem 0;
