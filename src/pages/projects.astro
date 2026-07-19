@@ -21,6 +21,7 @@ const dateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "shor
       <CardGrid>
         {projects.map((project) => (
           <Card
+            id={project.id}
             href={project.data.href}
             title={project.data.title}
             tag={project.data.tag}
