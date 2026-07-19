@@ -42,7 +42,7 @@ const color = TIER_COLORS[tier];
   <div class="flex flex-col gap-2">
     <div class="font-mono text-[11px] text-neutral-500">{path}</div>
     {color ? (
-      <span class="card-pill font-mono">
+      <span class="card-pill font-mono badge-blip">
         <PixelIcon bitmap={SHIELD} color={color} size={1.5} />
         {tag}
       </span>
@@ -83,3 +83,23 @@ const color = TIER_COLORS[tier];
     border-radius: 999px;
   }
 </style>
+
+<script>
+  // Tier-gated click motion (issue #19): common cards get the plain
+  // CSS hover above only; rare/epic (".card--framed") also get a
+  // squash-stretch press + elastic bounce-back on click.
+  import { gsap } from "gsap";
+
+  function bindFramedCards() {
+    document.querySelectorAll<HTMLElement>(".card--framed").forEach((card) => {
+      if (card.dataset.motionBound) return;
+      card.dataset.motionBound = "true";
+      card.addEventListener("mousedown", () => gsap.to(card, { scaleX: 1.05, scaleY: 0.94, duration: 0.12, ease: "power2.out" }));
+      card.addEventListener("mouseup", () => gsap.to(card, { scaleX: 1, scaleY: 1, duration: 0.6, ease: "elastic.out(1, 0.4)" }));
+      card.addEventListener("mouseleave", () => gsap.to(card, { scaleX: 1, scaleY: 1, duration: 0.4, ease: "power2.out" }));
+    });
+  }
+
+  document.addEventListener("astro:page-load", bindFramedCards);
+  bindFramedCards();
+</script>

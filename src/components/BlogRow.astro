@@ -50,7 +50,28 @@ const color = TIER_COLORS[tier];
     width: 6px;
     height: 6px;
     background: var(--tier-color);
+    animation: badge-blip 0.4s steps(4, end);
   }
   .row--framed::before { top: 1.5rem; }
   .row--framed::after { bottom: 1.5rem; }
 </style>
+
+<script>
+  // Tier-gated click motion (issue #19): common rows get the plain
+  // CSS hover above only; rare/epic (".row--framed") also get a
+  // squash-stretch press + elastic bounce-back on click.
+  import { gsap } from "gsap";
+
+  function bindFramedRows() {
+    document.querySelectorAll<HTMLElement>(".row--framed").forEach((row) => {
+      if (row.dataset.motionBound) return;
+      row.dataset.motionBound = "true";
+      row.addEventListener("mousedown", () => gsap.to(row, { scaleX: 1.02, scaleY: 0.97, duration: 0.12, ease: "power2.out" }));
+      row.addEventListener("mouseup", () => gsap.to(row, { scaleX: 1, scaleY: 1, duration: 0.6, ease: "elastic.out(1, 0.4)" }));
+      row.addEventListener("mouseleave", () => gsap.to(row, { scaleX: 1, scaleY: 1, duration: 0.4, ease: "power2.out" }));
+    });
+  }
+
+  document.addEventListener("astro:page-load", bindFramedRows);
+  bindFramedRows();
+</script>
