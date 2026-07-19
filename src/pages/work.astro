@@ -1,9 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Rail from "../components/Rail.astro";
-import RailNav from "../components/RailNav.astro";
-import PageIntro from "../components/PageIntro.astro";
 import BlogRow from "../components/BlogRow.astro";
 import CardGrid from "../components/CardGrid.astro";
 import Card from "../components/Card.astro";
@@ -20,44 +17,40 @@ const projectDateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month
 ---
 
 <Layout title="Work — Bhavani Chandra">
-  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] min-h-screen">
-    <Rail />
-    <main class="contents">
-      <div class="pt-20 px-8">
-        <PageIntro />
-      </div>
-      <RailNav current="work" />
-      <div class="px-8 pb-24 flex flex-col gap-16">
-        <section id="blogs">
-          <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Blogs</h2>
-          <div class="rows-list spotlight-group flex flex-col gap-6">
-            {posts.map((post) => (
-              <BlogRow
-                href={`/blogs/${post.id}`}
-                title={post.data.title}
-                description={post.data.description}
-                date={postDateFmt.format(post.data.date)}
-                tags={post.data.tags}
-              />
-            ))}
-          </div>
-        </section>
+  <main class="max-w-3xl mx-auto px-6 pt-16 pb-24">
+    <a href="/" class="text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition">← Home</a>
+    <h1 class="text-3xl font-semibold text-white text-center mt-6 mb-16">Work</h1>
 
-        <section id="projects">
-          <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Projects</h2>
-          <CardGrid>
-            {projects.map((project) => (
-              <Card
-                id={project.id}
-                href={project.data.href}
-                title={project.data.title}
-                tag={project.data.tag}
-                date={projectDateFmt.format(project.data.date)}
-              />
-            ))}
-          </CardGrid>
-        </section>
-      </div>
-    </main>
-  </div>
+    <div class="flex flex-col gap-16">
+      <section id="blogs">
+        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Blogs</h2>
+        <div class="rows-list spotlight-group flex flex-col gap-6">
+          {posts.map((post) => (
+            <BlogRow
+              href={`/blogs/${post.id}`}
+              title={post.data.title}
+              description={post.data.description}
+              date={postDateFmt.format(post.data.date)}
+              tags={post.data.tags}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section id="projects">
+        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Projects</h2>
+        <CardGrid>
+          {projects.map((project) => (
+            <Card
+              id={project.id}
+              href={project.data.href}
+              title={project.data.title}
+              tag={project.data.tag}
+              date={projectDateFmt.format(project.data.date)}
+            />
+          ))}
+        </CardGrid>
+      </section>
+    </div>
+  </main>
 </Layout>
