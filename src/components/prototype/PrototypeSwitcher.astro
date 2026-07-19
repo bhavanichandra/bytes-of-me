@@ -1,0 +1,34 @@
+---
+// PROTOTYPE (wayfinder ticket #18) — floating variant switcher.
+// Dev-only; never rendered in a production build.
+interface Props {
+  current: string;
+  variants: string[];
+  names: Record<string, string>;
+}
+
+const { current, variants, names } = Astro.props;
+const idx = variants.indexOf(current);
+const prev = variants[(idx - 1 + variants.length) % variants.length];
+const next = variants[(idx + 1) % variants.length];
+---
+
+{import.meta.env.DEV && (
+  <div
+    style="position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); z-index:9999; display:flex; align-items:center; gap:0.75rem; background:#1e1d1b; border:1px solid rgba(255,255,255,0.15); border-radius:999px; padding:0.5rem 1.25rem; font-family:monospace; font-size:12px; color:#fff; box-shadow:0 4px 20px rgba(0,0,0,0.5);"
+  >
+    <a href={`?variant=${prev}`} style="color:#fff; text-decoration:none;">←</a>
+    <span>{current} — {names[current]}</span>
+    <a href={`?variant=${next}`} style="color:#fff; text-decoration:none;">→</a>
+  </div>
+)}
+
+<script define:vars={{ prev, next }}>
+  window.addEventListener("keydown", (e) => {
+    const el = document.activeElement;
+    const tag = el && el.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || (el && el.isContentEditable)) return;
+    if (e.key === "ArrowLeft") window.location.search = `?variant=${prev}`;
+    if (e.key === "ArrowRight") window.location.search = `?variant=${next}`;
+  });
+</script>

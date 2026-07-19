@@ -1,0 +1,80 @@
+---
+// PROTOTYPE (wayfinder ticket #18) — Variant B: pixel tab bar. A single
+// pixel-notched container (same clip-path language as the card motif)
+// split into two tab segments by a thin divider, each with a pixel icon
+// prefix — leans on the editor-chrome precedent (pre[data-language]).
+// Icon color is fixed per section (cyan for Blogs, red for Projects),
+// not tied to the active tab; label text stays neutral either way.
+import PixelIcon from "../PixelIcon.astro";
+import { BOOK, FOLDER } from "./navIcons";
+import NavHoverScript from "./NavHoverScript.astro";
+
+interface Props {
+  current: "home" | "blogs" | "projects";
+}
+
+const { current } = Astro.props;
+---
+
+<nav class="rail-nav w-full md:w-auto shrink-0 flex flex-col items-start gap-2 px-8 pb-8 text-white">
+  <div class="nav-b-frame flex">
+    <span class="nav-b-corner nav-b-corner--tl"></span>
+    <span class="nav-b-corner nav-b-corner--tr"></span>
+    <span class="nav-b-corner nav-b-corner--bl"></span>
+    <span class="nav-b-corner nav-b-corner--br"></span>
+    <a
+      data-rail-pill
+      href="/blogs"
+      class:list={[
+        "font-mono flex items-center gap-2 px-4 py-2 text-sm tracking-wide transition-colors",
+        current === "blogs" ? "text-white" : "text-neutral-400 hover:text-white",
+      ]}
+    >
+      <PixelIcon bitmap={BOOK} color="#22d3ee" size={1.5} />
+      Blogs
+    </a>
+    <div class="nav-b-divider"></div>
+    <a
+      data-rail-pill
+      href="/projects"
+      class:list={[
+        "font-mono flex items-center gap-2 px-4 py-2 text-sm tracking-wide transition-colors",
+        current === "projects" ? "text-white" : "text-neutral-400 hover:text-white",
+      ]}
+    >
+      <PixelIcon bitmap={FOLDER} color="#f87171" size={1.5} />
+      Projects
+    </a>
+  </div>
+</nav>
+
+<NavHoverScript />
+
+<style>
+  .nav-b-frame {
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.16);
+    background: #1a1918;
+    clip-path: polygon(
+      0 8px, 8px 8px, 8px 0,
+      calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
+      100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
+      8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
+    );
+  }
+  .nav-b-corner {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+  .nav-b-corner--tl { top: -2.5px; left: 5.5px; }
+  .nav-b-corner--tr { top: -2.5px; right: 5.5px; }
+  .nav-b-corner--bl { bottom: -2.5px; left: 5.5px; }
+  .nav-b-corner--br { bottom: -2.5px; right: 5.5px; }
+  .nav-b-divider {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 0.5rem 0;
+  }
+</style>

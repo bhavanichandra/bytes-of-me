@@ -1,0 +1,43 @@
+---
+// PROTOTYPE (wayfinder ticket #18) — Variant A: twin pills. Minimal
+// evolution of the current single "Quests" pill — same rounded-pill
+// shape, just two of them (Blogs/Projects), Space Mono labels.
+import NavHoverScript from "./NavHoverScript.astro";
+
+interface Props {
+  current: "home" | "blogs" | "projects";
+}
+
+const { current } = Astro.props;
+---
+
+<nav class="rail-nav w-full md:w-auto shrink-0 flex flex-col items-start gap-2 px-8 pb-8 text-white">
+  <div class="flex gap-2">
+    <a
+      data-rail-pill
+      href="/blogs"
+      class:list={[
+        "font-mono px-4 py-2 rounded-full border text-sm tracking-wide transition-colors",
+        current === "blogs"
+          ? "bg-white text-[#1a1918] border-white font-medium"
+          : "border-white/10 text-neutral-400 hover:text-white hover:border-pink-400/50",
+      ]}
+    >
+      Blogs
+    </a>
+    <a
+      data-rail-pill
+      href="/projects"
+      class:list={[
+        "font-mono px-4 py-2 rounded-full border text-sm tracking-wide transition-colors",
+        current === "projects"
+          ? "bg-white text-[#1a1918] border-white font-medium"
+          : "border-white/10 text-neutral-400 hover:text-white hover:border-pink-400/50",
+      ]}
+    >
+      Projects
+    </a>
+  </div>
+</nav>
+
+<NavHoverScript />
