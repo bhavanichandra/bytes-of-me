@@ -1,0 +1,68 @@
+---
+// PROTOTYPE — wipe me. Floating variant switcher for the font-pairing
+// prototype (Wayfinder ticket #16). Toggles data-variant on the nearest
+// .font-proto ancestor via ?variant= in the URL. Not for production use.
+interface Variant {
+  key: string;
+  label: string;
+}
+
+interface Props {
+  variants: Variant[];
+}
+
+const { variants } = Astro.props;
+---
+
+<div
+  id="font-proto-switcher"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 bg-black/90 border border-white/20 rounded-full px-4 py-2 shadow-lg backdrop-blur"
+  data-variants={JSON.stringify(variants)}
+>
+  <button id="font-proto-prev" class="text-white/70 hover:text-white px-1" aria-label="Previous variant">←</button>
+  <span id="font-proto-label" class="font-mono text-xs text-white whitespace-nowrap"></span>
+  <button id="font-proto-next" class="text-white/70 hover:text-white px-1" aria-label="Next variant">→</button>
+</div>
+
+<script>
+  const switcher = document.getElementById("font-proto-switcher")!;
+  const variants: { key: string; label: string }[] = JSON.parse(switcher.dataset.variants ?? "[]");
+  const label = document.getElementById("font-proto-label")!;
+  const target = document.querySelector<HTMLElement>(".font-proto")!;
+
+  function currentIndex() {
+    const params = new URLSearchParams(location.search);
+    const key = params.get("variant") ?? variants[0].key;
+    const idx = variants.findIndex((v) => v.key === key);
+    return idx === -1 ? 0 : idx;
+  }
+
+  function apply(idx: number) {
+    const variant = variants[idx];
+    target.dataset.variant = variant.key;
+    label.textContent = `${variant.key.toUpperCase()} — ${variant.label}`;
+    const url = new URL(location.href);
+    url.searchParams.set("variant", variant.key);
+    history.replaceState(null, "", url);
+  }
+
+  function cycle(delta: number) {
+    const idx = (currentIndex() + delta + variants.length) % variants.length;
+    apply(idx);
+  }
+
+  document.getElementById("font-proto-prev")!.addEventListener("click", () => cycle(-1));
+  document.getElementById("font-proto-next")!.addEventListener("click", () => cycle(1));
+
+  document.addEventListener("keydown", (e) => {
+    const active = document.activeElement;
+    const isTyping =
+      active instanceof HTMLElement &&
+      (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable);
+    if (isTyping) return;
+    if (e.key === "ArrowLeft") cycle(-1);
+    if (e.key === "ArrowRight") cycle(1);
+  });
+
+  apply(currentIndex());
+</script>
