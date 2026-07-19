@@ -20,3 +20,76 @@
 .spotlight-group:hover .spotlight-item:not(:hover) {
   opacity: 0.4;
 }
+
+/* Editor-chrome treatment for fenced code blocks: fake traffic-light
+   tab bar + a language label read off Shiki's own data-language
+   attribute. Applies to any Shiki-rendered <pre> site-wide, wherever
+   markdown gets rendered. */
+pre[data-language] {
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 2.5rem 1.25rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #1a1918 !important;
+  font-size: 0.85rem;
+}
+pre[data-language]::before {
+  content: "";
+  position: absolute;
+  top: 0.95rem;
+  left: 1.1rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.7);
+  box-shadow:
+    1.1rem 0 0 rgba(234, 179, 8, 0.7),
+    2.2rem 0 0 rgba(34, 197, 94, 0.7);
+}
+pre[data-language]::after {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.75rem;
+  right: 1.1rem;
+  font-family: monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Shared markdown-body prose styling, used by any rendered content
+   collection entry (blog posts, project case studies) via
+   DetailPage.astro. */
+.prose-body h1,
+.prose-body h2,
+.prose-body h3 {
+  color: white;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+.prose-body p {
+  margin-bottom: 1rem;
+}
+.prose-body ul,
+.prose-body ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+.prose-body a {
+  color: white;
+  text-decoration: underline;
+}
+.prose-body img {
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+}
+.prose-body p code,
+.prose-body li code {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+}
