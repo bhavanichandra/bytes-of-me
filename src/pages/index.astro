@@ -1,33 +1,21 @@
 ---
-// PROTOTYPE — this page temporarily hosts the font-pairing comparison
-// (Wayfinder ticket #16): three variants of monospace-accent/sans-prose
-// pairing, switchable via ?variant=a|b|c. Wrapper div, stylesheet import,
-// and switcher mount below are throwaway — drop them once #16 resolves.
 import Layout from "../layouts/Layout.astro";
 import Rail from "../components/Rail.astro";
 import RailNav from "../components/RailNav.astro";
 import PageIntro from "../components/PageIntro.astro";
 import BlogRow from "../components/BlogRow.astro";
 import Card from "../components/Card.astro";
-import FontPrototypeSwitcher from "../components/prototype/FontPrototypeSwitcher.astro";
-import "../styles/font-prototype.css";
 import { getRecentPosts, getSortedProjects, postDateFmt, projectDateFmt } from "../lib/content";
 
 const posts = await getRecentPosts(3);
 const currentProject = (await getSortedProjects())[0];
-
-const fontVariants = [
-  { key: "a", label: "Inter + JetBrains Mono (baseline)" },
-  { key: "b", label: "IBM Plex Sans + IBM Plex Mono (superfamily)" },
-  { key: "c", label: "Space Grotesk + Space Mono (retro-geometric)" },
-];
 ---
 
 <Layout
   title="Bhavani Chandra"
   description="Bhavani Chandra's personal site — blog posts and projects."
 >
-  <div class="font-proto flex flex-col md:grid md:grid-cols-[16rem_1fr] min-h-screen" data-variant="a">
+  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] min-h-screen">
     <Rail />
     <main class="contents">
       <div class="pt-20 px-8">
@@ -73,5 +61,4 @@ const fontVariants = [
       </div>
     </main>
   </div>
-  <FontPrototypeSwitcher variants={fontVariants} />
 </Layout>
