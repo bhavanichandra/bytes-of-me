@@ -20,14 +20,14 @@ curl -sfL --retry 3 --retry-delay 1 --connect-timeout 10 --max-time 120 "$REPO_U
 # parent-directory traversal, and symlink/hardlink entries. A compromised
 # upstream archive could otherwise write outside $TMP_DIR during extraction
 # itself, before any post-extraction check gets a chance to run.
-while IFS= read -r entry; do
-  case "$entry" in
-    /*|*..*)
-      echo "fetch-content: unsafe path in archive: $entry" >&2
-      exit 1
-      ;;
-  esac
-done < <(tar -tzf "$ARCHIVE")
+# (Uses a plain pipe + command substitution rather than process substitution
+# — some build containers, e.g. Vercel's, don't expose /dev/fd for <(...).)
+UNSAFE_ENTRIES="$(tar -tzf "$ARCHIVE" | grep -E '^/|\.\.' || true)"
+if [[ -n "$UNSAFE_ENTRIES" ]]; then
+  echo "fetch-content: unsafe path(s) in archive:" >&2
+  echo "$UNSAFE_ENTRIES" >&2
+  exit 1
+fi
 
 if tar -tvzf "$ARCHIVE" | awk '{print substr($1, 1, 1)}' | grep -qE '^[lh]$'; then
   echo "fetch-content: archive contains a symlink/hardlink entry, refusing to extract" >&2
