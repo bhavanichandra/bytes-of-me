@@ -1,9 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import BlogRow from "../components/BlogRow.astro";
-import CardGrid from "../components/CardGrid.astro";
-import Card from "../components/Card.astro";
-import { getRecentPosts, getSortedProjects, postDateFmt, projectDateFmt } from "../lib/content";
+import { getRecentPosts, getSortedProjects } from "../lib/content";
 
 const posts = await getRecentPosts();
 const projects = await getSortedProjects();
@@ -19,36 +16,15 @@ const projects = await getSortedProjects();
   <main class="max-w-3xl mx-auto px-6 pt-16 pb-24">
     <h1 class="text-3xl font-semibold text-white text-center mb-16">Quests</h1>
 
-    <div class="flex flex-col gap-16">
-      <section id="blogs">
-        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Blogs</h2>
-        <div class="rows-list spotlight-group flex flex-col">
-          {posts.map((post) => (
-            <BlogRow
-              href={`/blogs/${post.id}`}
-              title={post.data.title}
-              description={post.data.description}
-              date={postDateFmt.format(post.data.date)}
-              tags={post.data.tags}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section id="projects">
-        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Projects</h2>
-        <CardGrid>
-          {projects.map((project) => (
-            <Card
-              path={`~/projects/${project.id}`}
-              href={project.data.href}
-              title={project.data.title}
-              tag={project.data.tag}
-              date={projectDateFmt.format(project.data.date)}
-            />
-          ))}
-        </CardGrid>
-      </section>
+    <div class="spotlight-group grid grid-cols-1 md:grid-cols-2 gap-6">
+      <a href="/quests/blogs" class="spotlight-item group rounded-2xl bg-[#242220] border border-white/10 p-8 transition-opacity duration-300">
+        <h2 class="text-xl text-neutral-100 group-hover:text-white transition mb-2">Blogs</h2>
+        <p class="text-sm text-neutral-500">{posts.length} post{posts.length === 1 ? "" : "s"}</p>
+      </a>
+      <a href="/quests/projects" class="spotlight-item group rounded-2xl bg-[#242220] border border-white/10 p-8 transition-opacity duration-300">
+        <h2 class="text-xl text-neutral-100 group-hover:text-white transition mb-2">Projects</h2>
+        <p class="text-sm text-neutral-500">{projects.length} project{projects.length === 1 ? "" : "s"}</p>
+      </a>
     </div>
   </main>
 </Layout>

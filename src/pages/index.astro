@@ -23,7 +23,7 @@ const currentProject = (await getSortedProjects())[0];
         <section>
           <div class="flex items-center justify-between mb-5">
             <h2 class="text-xs uppercase tracking-widest text-neutral-500">Recent posts</h2>
-            <a href="/quests#blogs" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
+            <a href="/quests/blogs" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
           </div>
           <div class="rows-list spotlight-group flex flex-col">
             {posts.map((post) => (
@@ -42,7 +42,7 @@ const currentProject = (await getSortedProjects())[0];
           <section>
             <div class="flex items-center justify-between mb-5">
               <h2 class="text-xs uppercase tracking-widest text-neutral-500">Current project</h2>
-              <a href="/quests#projects" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
+              <a href="/quests/projects" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
             </div>
             <div class="max-w-sm">
               <Card

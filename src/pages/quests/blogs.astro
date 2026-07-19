@@ -1,0 +1,30 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BlogRow from "../../components/BlogRow.astro";
+import { getRecentPosts, postDateFmt } from "../../lib/content";
+
+const posts = await getRecentPosts();
+---
+
+<Layout title="Blogs — Bhavani Chandra">
+  <a
+    href="/quests"
+    class="fixed top-8 left-8 text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition z-50"
+  >
+    ← Quests
+  </a>
+  <main class="max-w-3xl mx-auto px-6 pt-16 pb-24">
+    <h1 class="text-3xl font-semibold text-white text-center mb-16">Blogs</h1>
+    <div class="rows-list spotlight-group flex flex-col">
+      {posts.map((post) => (
+        <BlogRow
+          href={`/blogs/${post.id}`}
+          title={post.data.title}
+          description={post.data.description}
+          date={postDateFmt.format(post.data.date)}
+          tags={post.data.tags}
+        />
+      ))}
+    </div>
+  </main>
+</Layout>
