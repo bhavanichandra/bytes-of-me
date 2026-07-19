@@ -28,7 +28,7 @@ const projects = await getSortedProjects();
           path={`~/projects/${project.id}`}
           href={`/projects/${project.id}`}
           title={project.data.title}
-          tag={project.data.tag}
+          tag={project.data.tags[0]}
           date={projectDateFmt.format(project.data.date)}
         />
       ))}
