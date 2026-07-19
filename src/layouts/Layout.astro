@@ -3,6 +3,8 @@
 // on every page.
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import PixelIcon from "../components/PixelIcon.astro";
+import { ARROW_DOWN } from "../lib/pixelIcons";
 
 interface Props {
   title: string;
@@ -47,13 +49,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <body class="grain-bg" style="background-color:#1a1918">
     <slot />
 
-    <div class="corner-panel relative mx-auto mt-16 mb-10 md:fixed md:bottom-8 md:left-8 md:mx-0 md:mt-0 md:mb-0 z-50 group flex flex-col items-center w-fit">
-      <div class="flex flex-col items-center gap-3 bg-[#242220] border border-white/10 rounded-full px-3 py-4 mb-3 opacity-0 translate-y-3 scale-95 origin-bottom pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-200 ease-out">
+    <div class="corner-panel fixed bottom-4 right-4 md:bottom-8 md:left-8 md:right-auto z-50 group w-fit">
+      <span
+        class="corner-arrow absolute bottom-full left-1/2 -translate-x-1/2 mb-1 opacity-70 pointer-events-none group-hover:opacity-0 transition-opacity duration-200"
+        aria-hidden="true"
+      >
+        <PixelIcon bitmap={ARROW_DOWN} color="#ffffff" size={2} />
+      </span>
+      <div class="absolute bottom-full left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 bg-[#242220] border border-white/10 rounded-full px-3 py-4 mb-3 opacity-0 translate-y-3 scale-95 origin-bottom pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-200 ease-out">
         <a href="mailto:bhavanichandra9+site@gmail.com" class="hover:opacity-80 transition"><img src="/email.svg" alt="Email" class="w-4 h-4" /></a>
         <a href="https://github.com/bhavanichandra" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition"><img src="/github.svg" alt="GitHub" class="w-4 h-4" /></a>
         <a href="https://www.linkedin.com/in/bhavanichandra/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition"><img src="/linkedin.svg" alt="LinkedIn" class="w-4 h-4" /></a>
       </div>
-      <a href="/about" class="block w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-white/50 transition">
+      <a href="/about" class="block w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-white/20 shadow-lg shadow-black/50 group-hover:border-white/50 transition">
         <img src="/my-photo.svg" alt="About" class="w-full h-full object-cover" />
       </a>
     </div>

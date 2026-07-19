@@ -16,11 +16,11 @@ const projects = await getSortedProjects();
   <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] min-h-screen">
     <Rail />
     <main class="contents">
-      <div class="pt-20 px-8">
+      <div class="pt-20 pl-8 pr-20 md:px-8">
         <h1 class="text-xs uppercase tracking-widest text-neutral-500">Projects</h1>
       </div>
       <RailNav current="projects" />
-      <div class="px-8 pb-24">
+      <div class="pl-8 pr-20 md:px-8 pb-24">
         <CardGrid>
           {projects.map((project) => (
             <Card

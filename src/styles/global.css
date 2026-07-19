@@ -23,9 +23,14 @@
 
 /* Spotlight hover for card/row groups: the hovered item stays sharp,
    its siblings dim. Apply .spotlight-group to the wrapper and
-   .spotlight-item to each hoverable child. */
-.spotlight-group:hover .spotlight-item:not(:hover) {
-  opacity: 0.4;
+   .spotlight-item to each hoverable child. Gated to devices with a
+   real hover state — touch browsers keep :hover engaged after a tap
+   with no matching "leave" event, which otherwise reads as every row
+   but the last-tapped one being stuck dimmed. */
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-group:hover .spotlight-item:not(:hover) {
+    opacity: 0.4;
+  }
 }
 
 /* Editor-chrome treatment for fenced code blocks: fake traffic-light
@@ -101,12 +106,26 @@ pre[data-language]::after {
   100% { opacity: 1; transform: scale(1); }
 }
 
+/* Idle bob on the pixel arrow pointing at the floating about-page
+   avatar (issue #35) — hard-stepped, not eased, per the motion
+   guidelines. */
+.corner-arrow {
+  animation: arrow-bob 1.4s steps(4, end) infinite;
+}
+@keyframes arrow-bob {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 4px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
   }
   .badge-blip {
+    animation: none;
+  }
+  .corner-arrow {
     animation: none;
   }
 }
