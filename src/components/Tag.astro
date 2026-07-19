@@ -8,4 +8,15 @@ const { label, size = "sm" } = Astro.props;
 const padding = size === "md" ? "px-2.5 py-1 text-xs" : "px-2 py-0.5 text-[11px]";
 ---
 
-<span class={`font-mono ${padding} rounded bg-[#1e1d1b] border border-white/10 text-pink-400`}>"{label}"</span>
+<span class={`tag-pixel font-mono ${padding} bg-[#1e1d1b] border border-white/10 text-pink-400`}>"{label}"</span>
+
+<style>
+  .tag-pixel {
+    clip-path: polygon(
+      0 3px, 3px 3px, 3px 0,
+      calc(100% - 3px) 0, calc(100% - 3px) 3px, 100% 3px,
+      100% calc(100% - 3px), calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) 100%,
+      3px 100%, 3px calc(100% - 3px), 0 calc(100% - 3px)
+    );
+  }
+</style>
