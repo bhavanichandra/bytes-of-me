@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "packageManager": "bun@1.3.11",
   "scripts": {
+    "predev": "bash scripts/fetch-content.sh",
     "dev": "astro dev",
+    "prebuild": "bash scripts/fetch-content.sh",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
