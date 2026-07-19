@@ -1,0 +1,29 @@
+---
+// Renders a bitmap as hard-edged pixels via a single box-shadow list
+// (no image assets needed).
+interface Props {
+  bitmap: string[];
+  color?: string;
+  size?: number; // px per pixel
+}
+
+const { bitmap, color = "currentColor", size = 2 } = Astro.props;
+
+const shadows: string[] = [];
+bitmap.forEach((row, y) => {
+  [...row].forEach((ch, x) => {
+    if (ch === "1") shadows.push(`${x * size}px ${y * size}px 0 ${color}`);
+  });
+});
+const width = Math.max(...bitmap.map((r) => r.length)) * size;
+const height = bitmap.length * size;
+---
+
+<span
+  aria-hidden="true"
+  style={`display:inline-block; width:${width}px; height:${height}px; position:relative; vertical-align:middle;`}
+>
+  <span
+    style={`position:absolute; top:0; left:0; width:${size}px; height:${size}px; box-shadow:${shadows.join(",")};`}
+  ></span>
+</span>
