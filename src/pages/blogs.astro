@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Rail from "../components/Rail.astro";
 import RailNav from "../components/RailNav.astro";
 import BlogRow from "../components/BlogRow.astro";
 import { getRecentPosts, postDateFmt } from "../lib/content";
@@ -13,7 +12,9 @@ const posts = await getRecentPosts();
   description="Blog posts by Bhavani Chandra."
 >
   <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] min-h-screen">
-    <Rail />
+    <div class="pt-20 pl-8 pr-20 md:pr-8">
+      <a href="/" class="text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition">← Home</a>
+    </div>
     <main class="contents">
       <div class="pt-20 pl-8 pr-20 md:px-8">
         <h1 class="text-xs uppercase tracking-widest text-neutral-500">Blogs</h1>
