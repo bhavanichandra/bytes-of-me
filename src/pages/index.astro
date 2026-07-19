@@ -1,22 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Rail from "../components/Rail.astro";
 import RailNav from "../components/RailNav.astro";
 import PageIntro from "../components/PageIntro.astro";
 import BlogRow from "../components/BlogRow.astro";
 import Card from "../components/Card.astro";
+import { getRecentPosts, getSortedProjects, postDateFmt, projectDateFmt } from "../lib/content";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
-
-const currentProject = (await getCollection("projects")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-)[0];
-
-const postDateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
-const projectDateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short" });
+const posts = await getRecentPosts(3);
+const currentProject = (await getSortedProjects())[0];
 ---
 
 <Layout title="Bhavani Chandra">

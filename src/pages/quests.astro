@@ -1,19 +1,12 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import BlogRow from "../components/BlogRow.astro";
 import CardGrid from "../components/CardGrid.astro";
 import Card from "../components/Card.astro";
+import { getRecentPosts, getSortedProjects, postDateFmt, projectDateFmt } from "../lib/content";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
-const projects = (await getCollection("projects")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
-
-const postDateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
-const projectDateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short" });
+const posts = await getRecentPosts();
+const projects = await getSortedProjects();
 ---
 
 <Layout title="Quests — Bhavani Chandra">
