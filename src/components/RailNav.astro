@@ -3,8 +3,10 @@
 // as Rail's identity block, so it lines up with wherever the matching
 // page content starts on the right (see page files for the shared
 // grid). transition:persist keeps it mounted across navigation.
+// Links straight to /blogs (the actively-growing content); /projects
+// is reachable via a cross-link on that page.
 interface Props {
-  current: "home" | "quests";
+  current: "home" | "blogs";
 }
 
 const { current } = Astro.props;
@@ -17,10 +19,10 @@ const { current } = Astro.props;
 >
   <a
     data-rail-pill
-    href="/quests"
+    href="/blogs"
     class:list={[
       "px-4 py-2 rounded-full border text-sm tracking-wide transition-colors",
-      current === "quests"
+      current === "blogs"
         ? "bg-white text-[#1a1918] border-white font-medium"
         : "border-transparent text-neutral-400 hover:text-white hover:border-white/20",
     ]}
