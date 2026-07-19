@@ -25,7 +25,7 @@ const currentProject = (await getSortedProjects())[0];
             <h2 class="text-xs uppercase tracking-widest text-neutral-500">Recent posts</h2>
             <a href="/quests#blogs" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
           </div>
-          <div class="rows-list spotlight-group flex flex-col gap-6">
+          <div class="rows-list spotlight-group flex flex-col">
             {posts.map((post) => (
               <BlogRow
                 href={`/blogs/${post.id}`}

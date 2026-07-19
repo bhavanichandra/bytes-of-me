@@ -22,7 +22,7 @@ const projects = await getSortedProjects();
     <div class="flex flex-col gap-16">
       <section id="blogs">
         <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Blogs</h2>
-        <div class="rows-list spotlight-group flex flex-col gap-6">
+        <div class="rows-list spotlight-group flex flex-col">
           {posts.map((post) => (
             <BlogRow
               href={`/blogs/${post.id}`}
