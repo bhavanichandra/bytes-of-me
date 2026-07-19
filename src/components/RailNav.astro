@@ -1,18 +1,13 @@
 ---
-// Blogs/Projects nav pills. Sits in the grid's second row, in the same
-// column as Rail's identity block, so it lines up with wherever the
-// matching page content starts on the right (see page files for the
-// shared grid). transition:persist keeps it mounted across navigation.
+// Quests nav pill. Sits in the grid's second row, in the same column
+// as Rail's identity block, so it lines up with wherever the matching
+// page content starts on the right (see page files for the shared
+// grid). transition:persist keeps it mounted across navigation.
 interface Props {
-  current: "home" | "blogs" | "projects";
+  current: "home" | "quests";
 }
 
 const { current } = Astro.props;
-
-const links = [
-  { href: "/blogs", label: "Blogs", key: "blogs" },
-  { href: "/projects", label: "Projects", key: "projects" },
-];
 ---
 
 <nav
@@ -20,20 +15,18 @@ const links = [
   transition:persist
   transition:name="rail-nav"
 >
-  {links.map((link) => (
-    <a
-      data-rail-pill
-      href={link.href}
-      class:list={[
-        "px-4 py-2 rounded-full border text-sm tracking-wide transition-colors",
-        current === link.key
-          ? "bg-white text-[#1a1918] border-white font-medium"
-          : "border-transparent text-neutral-400 hover:text-white hover:border-white/20",
-      ]}
-    >
-      {link.label}
-    </a>
-  ))}
+  <a
+    data-rail-pill
+    href="/quests"
+    class:list={[
+      "px-4 py-2 rounded-full border text-sm tracking-wide transition-colors",
+      current === "quests"
+        ? "bg-white text-[#1a1918] border-white font-medium"
+        : "border-transparent text-neutral-400 hover:text-white hover:border-white/20",
+    ]}
+  >
+    Quests
+  </a>
 </nav>
 
 <script>

@@ -5,12 +5,18 @@ import Rail from "../components/Rail.astro";
 import RailNav from "../components/RailNav.astro";
 import PageIntro from "../components/PageIntro.astro";
 import BlogRow from "../components/BlogRow.astro";
+import Card from "../components/Card.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
-const dateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
+const currentProject = (await getCollection("projects")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+)[0];
+
+const postDateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
+const projectDateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short" });
 ---
 
 <Layout title="Bhavani Chandra">
@@ -21,22 +27,42 @@ const dateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "shor
         <PageIntro />
       </div>
       <RailNav current="home" />
-      <div class="px-8 pb-24">
-        <div class="flex items-center justify-between mb-5">
-          <h2 class="text-xs uppercase tracking-widest text-neutral-500">Recent posts</h2>
-          <a href="/blogs" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
-        </div>
-        <div class="rows-list spotlight-group flex flex-col gap-6">
-          {posts.map((post) => (
-            <BlogRow
-              href={`/blogs/${post.id}`}
-              title={post.data.title}
-              description={post.data.description}
-              date={dateFmt.format(post.data.date)}
-              tags={post.data.tags}
-            />
-          ))}
-        </div>
+      <div class="px-8 pb-24 flex flex-col gap-16">
+        <section>
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xs uppercase tracking-widest text-neutral-500">Recent posts</h2>
+            <a href="/quests#blogs" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
+          </div>
+          <div class="rows-list spotlight-group flex flex-col gap-6">
+            {posts.map((post) => (
+              <BlogRow
+                href={`/blogs/${post.id}`}
+                title={post.data.title}
+                description={post.data.description}
+                date={postDateFmt.format(post.data.date)}
+                tags={post.data.tags}
+              />
+            ))}
+          </div>
+        </section>
+
+        {currentProject && (
+          <section>
+            <div class="flex items-center justify-between mb-5">
+              <h2 class="text-xs uppercase tracking-widest text-neutral-500">Current project</h2>
+              <a href="/quests#projects" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
+            </div>
+            <div class="max-w-sm">
+              <Card
+                id={currentProject.id}
+                href={currentProject.data.href}
+                title={currentProject.data.title}
+                tag={currentProject.data.tag}
+                date={projectDateFmt.format(currentProject.data.date)}
+              />
+            </div>
+          </section>
+        )}
       </div>
     </main>
   </div>
