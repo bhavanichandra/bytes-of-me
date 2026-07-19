@@ -1,8 +1,16 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Rail from "../components/Rail.astro";
 import RailNav from "../components/RailNav.astro";
 import PageIntro from "../components/PageIntro.astro";
+import BlogRow from "../components/BlogRow.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const dateFmt = new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric" });
 ---
 
 <Layout title="Bhavani Chandra">
@@ -13,7 +21,23 @@ import PageIntro from "../components/PageIntro.astro";
         <PageIntro />
       </div>
       <RailNav current="home" />
-      <div class="px-8 pb-24"></div>
+      <div class="px-8 pb-24">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="text-xs uppercase tracking-widest text-neutral-500">Recent posts</h2>
+          <a href="/blogs" class="text-xs text-neutral-400 hover:text-white transition">View all →</a>
+        </div>
+        <div class="rows-list spotlight-group flex flex-col gap-6">
+          {posts.map((post) => (
+            <BlogRow
+              href={`/blogs/${post.id}`}
+              title={post.data.title}
+              description={post.data.description}
+              date={dateFmt.format(post.data.date)}
+              tags={post.data.tags}
+            />
+          ))}
+        </div>
+      </div>
     </main>
   </div>
 </Layout>
