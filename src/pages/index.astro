@@ -46,7 +46,7 @@ const currentProject = (await getSortedProjects())[0];
             </div>
             <div class="max-w-sm">
               <Card
-                id={currentProject.id}
+                path={`~/projects/${currentProject.id}`}
                 href={currentProject.data.href}
                 title={currentProject.data.title}
                 tag={currentProject.data.tag}

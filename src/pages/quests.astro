@@ -40,7 +40,7 @@ const projects = await getSortedProjects();
         <CardGrid>
           {projects.map((project) => (
             <Card
-              id={project.id}
+              path={`~/projects/${project.id}`}
               href={project.data.href}
               title={project.data.title}
               tag={project.data.tag}
