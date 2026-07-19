@@ -36,6 +36,7 @@ const currentProject = (await getSortedProjects())[0];
                 description={post.data.description}
                 date={postDateFmt.format(post.data.date)}
                 tags={post.data.tags}
+                tier={post.data.tier}
               />
             ))}
           </div>
@@ -54,6 +55,7 @@ const currentProject = (await getSortedProjects())[0];
                 title={currentProject.data.title}
                 tag={currentProject.data.tags[0]}
                 date={projectDateFmt.format(currentProject.data.date)}
+                tier={currentProject.data.tier}
               />
             </div>
           </section>

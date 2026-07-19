@@ -33,6 +33,7 @@ const projects = await getSortedProjects();
           title={project.data.title}
           tag={project.data.tags[0]}
           date={projectDateFmt.format(project.data.date)}
+          tier={project.data.tier}
         />
       ))}
     </CardGrid>

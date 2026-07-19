@@ -2,6 +2,7 @@
 // Shared blog list-row: used on both /blogs (full list) and Home
 // (recent posts preview).
 import Tag from "./Tag.astro";
+import { TIER_COLORS } from "../lib/rarity";
 
 interface Props {
   href: string;
@@ -9,12 +10,18 @@ interface Props {
   description: string;
   date: string;
   tags: string[];
+  tier?: "common" | "rare" | "epic";
 }
 
-const { href, title, description, date, tags } = Astro.props;
+const { href, title, description, date, tags, tier = "common" } = Astro.props;
+const color = TIER_COLORS[tier];
 ---
 
-<a href={href} class="row spotlight-item group flex items-start justify-between gap-6 py-6 first:pt-0 border-b border-white/5 transition-opacity duration-300">
+<a
+  href={href}
+  class={`row spotlight-item group flex items-start justify-between gap-6 py-6 first:pt-0 border-b border-white/5 transition-opacity duration-300 ${color ? "row--framed" : ""}`}
+  style={color ? `--tier-color: ${color};` : undefined}
+>
   <div class="flex flex-col gap-2">
     <h3 class="text-lg text-neutral-100 group-hover:text-white transition leading-snug">{title}</h3>
     <p class="text-sm text-neutral-500 leading-relaxed max-w-md">{description}</p>
@@ -28,3 +35,22 @@ const { href, title, description, date, tags } = Astro.props;
     </span>
   </div>
 </a>
+
+<style>
+  .row--framed {
+    position: relative;
+    padding-left: 1rem;
+    border-left: 3px solid var(--tier-color);
+  }
+  .row--framed::before,
+  .row--framed::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    width: 6px;
+    height: 6px;
+    background: var(--tier-color);
+  }
+  .row--framed::before { top: 1.5rem; }
+  .row--framed::after { bottom: 1.5rem; }
+</style>
