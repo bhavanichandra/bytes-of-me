@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Pulls the latest blogs/projects content from themuler-blogs (public, no auth)
 # into src/content/{blogs,projects} at build/dev time. Never committed here —
-# see .gitignore. Design: https://github.com/bhavanichandra/bytes-of-me/issues/7
+# see .gitignore.
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_URL="https://github.com/bhavanichandra/themuler-blogs/archive/refs/heads/main.tar.gz"
