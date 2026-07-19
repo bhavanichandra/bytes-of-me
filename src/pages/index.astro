@@ -49,7 +49,7 @@ const currentProject = (await getSortedProjects())[0];
                 path={`~/projects/${currentProject.id}`}
                 href={`/projects/${currentProject.id}`}
                 title={currentProject.data.title}
-                tag={currentProject.data.tag}
+                tag={currentProject.data.tags[0]}
                 date={projectDateFmt.format(currentProject.data.date)}
               />
             </div>
