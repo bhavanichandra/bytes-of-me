@@ -1,0 +1,81 @@
+---
+// PROTOTYPE (wayfinder ticket #17) — Variant B: cartridge-label strip
+// + chip tag with pixel flag icon, mint accent. Throwaway.
+import PixelIcon from "./PixelIcon.astro";
+import { FLAG } from "./pixelIcons";
+
+interface Props {
+  path: string;
+  href: string;
+  title: string;
+  tag: string;
+  date: string;
+  image?: string;
+}
+
+const { path, href, title, tag, date, image } = Astro.props;
+---
+
+<a href={href} class="pixel-b-card group flex flex-col gap-4 transition-opacity duration-300">
+  <div class="pixel-b-strip"></div>
+  <div class="relative rounded-2xl bg-[#242220] h-40 flex items-center justify-center overflow-hidden">
+    {image ? (
+      <img src={image} alt={title} class="w-full h-full object-cover" />
+    ) : (
+      <span class="text-3xl opacity-30 group-hover:opacity-50 transition">✦</span>
+    )}
+    <div class="pixel-b-scanlines"></div>
+  </div>
+  <div class="flex flex-col gap-2">
+    <div class="font-mono text-[11px] text-neutral-500">{path}</div>
+    <span class="pixel-b-chip font-mono">
+      <PixelIcon bitmap={FLAG} color="#0e1613" size={1.5} />
+      {tag}
+    </span>
+    <h3 class="text-lg text-neutral-100 leading-snug group-hover:text-white transition">{title}</h3>
+    <span class="text-xs text-neutral-500">{date}</span>
+  </div>
+</a>
+
+<style>
+  .pixel-b-card {
+    padding: 0.75rem;
+    border: 1px solid rgba(95, 214, 192, 0.25);
+    border-radius: 0.5rem;
+  }
+  .pixel-b-strip {
+    height: 6px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      #5fd6c0 0px,
+      #5fd6c0 6px,
+      transparent 6px,
+      transparent 12px
+    );
+    opacity: 0.7;
+  }
+  .pixel-b-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.25) 0px,
+      rgba(0, 0, 0, 0.25) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    opacity: 0.35;
+  }
+  .pixel-b-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: fit-content;
+    padding: 0.2rem 0.6rem 0.2rem 0.4rem;
+    font-size: 11px;
+    color: #0e1613;
+    background: #5fd6c0;
+    border-radius: 2px 8px 2px 8px;
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+// PROTOTYPE (wayfinder ticket #17) — Variant C: RPG rarity double-frame
+// + shield pill tag, driven by the content's `tier` frontmatter field.
+// "common" (the default) renders the plain existing Card look — the
+// frame is reserved for rare/epic content, kept restrained by default.
+// Solid full-opacity border/dots (not translucent): a translucent warm
+// amber border disappears against the warm-brown base, while the same
+// translucency reads fine for the cooler violet — solid color keeps
+// contrast consistent across tiers regardless of hue.
+import Tag from "../Tag.astro";
+import PixelIcon from "./PixelIcon.astro";
+import { SHIELD } from "./pixelIcons";
+import { TIER_COLORS } from "./rarity";
+
+interface Props {
+  path: string;
+  href: string;
+  title: string;
+  tag: string;
+  date: string;
+  image?: string;
+  tier?: "common" | "rare" | "epic";
+}
+
+const { path, href, title, tag, date, image, tier = "common" } = Astro.props;
+const color = TIER_COLORS[tier];
+---
+
+<a
+  href={href}
+  class={`pixel-c-card group flex flex-col gap-4 transition-opacity duration-300 ${color ? "pixel-c-card--framed" : ""}`}
+  style={color ? `--tier-color: ${color};` : undefined}
+>
+  {color && (
+    <>
+      <span class="pixel-c-corner pixel-c-corner--tl"></span>
+      <span class="pixel-c-corner pixel-c-corner--tr"></span>
+      <span class="pixel-c-corner pixel-c-corner--bl"></span>
+      <span class="pixel-c-corner pixel-c-corner--br"></span>
+    </>
+  )}
+  <div class="relative rounded-2xl bg-[#242220] h-40 flex items-center justify-center overflow-hidden">
+    {image ? (
+      <img src={image} alt={title} class="w-full h-full object-cover" />
+    ) : (
+      <span class="text-3xl opacity-30 group-hover:opacity-50 transition">✦</span>
+    )}
+  </div>
+  <div class="flex flex-col gap-2">
+    <div class="font-mono text-[11px] text-neutral-500">{path}</div>
+    {color ? (
+      <span class="pixel-c-pill font-mono">
+        <PixelIcon bitmap={SHIELD} color={color} size={1.5} />
+        {tag}
+      </span>
+    ) : (
+      <Tag label={tag} size="md" />
+    )}
+    <h3 class="text-lg text-neutral-100 leading-snug group-hover:text-white transition">{title}</h3>
+    <span class="text-xs text-neutral-500">{date}</span>
+  </div>
+</a>
+
+<style>
+  .pixel-c-card--framed {
+    position: relative;
+    padding: 0.9rem;
+    border: 2px solid var(--tier-color);
+  }
+  .pixel-c-corner {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--tier-color);
+  }
+  .pixel-c-corner--tl { top: -3px; left: -3px; }
+  .pixel-c-corner--tr { top: -3px; right: -3px; }
+  .pixel-c-corner--bl { bottom: -3px; left: -3px; }
+  .pixel-c-corner--br { bottom: -3px; right: -3px; }
+  .pixel-c-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: fit-content;
+    padding: 0.2rem 0.6rem;
+    font-size: 11px;
+    color: var(--tier-color);
+    background: color-mix(in srgb, var(--tier-color) 12%, transparent);
+    border: 1px solid var(--tier-color);
+    border-radius: 999px;
+  }
+</style>

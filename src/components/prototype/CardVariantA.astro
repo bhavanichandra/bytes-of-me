@@ -1,0 +1,72 @@
+---
+// PROTOTYPE (wayfinder ticket #17) — Variant A: pixel-notched card
+// corners + bracket-style gold tag. Throwaway; not for production use.
+import PixelIcon from "./PixelIcon.astro";
+import { GEM } from "./pixelIcons";
+
+interface Props {
+  path: string;
+  href: string;
+  title: string;
+  tag: string;
+  date: string;
+  image?: string;
+}
+
+const { path, href, title, tag, date, image } = Astro.props;
+---
+
+<a href={href} class="pixel-a-card group flex flex-col gap-4 transition-opacity duration-300">
+  <div class="relative rounded-2xl bg-[#242220] h-40 flex items-center justify-center overflow-hidden">
+    {image ? (
+      <img src={image} alt={title} class="w-full h-full object-cover" />
+    ) : (
+      <span class="text-3xl opacity-30 group-hover:opacity-50 transition">✦</span>
+    )}
+    <span class="pixel-a-badge">
+      <PixelIcon bitmap={GEM} color="#e3a63e" size={2} />
+    </span>
+  </div>
+  <div class="flex flex-col gap-2">
+    <div class="font-mono text-[11px] text-neutral-500">{path}</div>
+    <span class="pixel-a-tag font-mono">
+      <PixelIcon bitmap={GEM} color="#e3a63e" size={1.5} />
+      [{tag}]
+    </span>
+    <h3 class="text-lg text-neutral-100 leading-snug group-hover:text-white transition">{title}</h3>
+    <span class="text-xs text-neutral-500">{date}</span>
+  </div>
+</a>
+
+<style>
+  .pixel-a-card {
+    padding: 0.75rem;
+    border: 1px solid rgba(227, 166, 62, 0.35);
+    clip-path: polygon(
+      0 12px, 12px 12px, 12px 0,
+      calc(100% - 12px) 0, calc(100% - 12px) 12px, 100% 12px,
+      100% calc(100% - 12px), calc(100% - 12px) calc(100% - 12px), calc(100% - 12px) 100%,
+      12px 100%, 12px calc(100% - 12px), 0 calc(100% - 12px)
+    );
+  }
+  .pixel-a-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background: rgba(26, 25, 24, 0.85);
+    border: 1px solid rgba(227, 166, 62, 0.5);
+    padding: 0.25rem;
+    display: flex;
+  }
+  .pixel-a-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: fit-content;
+    padding: 0.15rem 0.5rem;
+    font-size: 11px;
+    color: #e3a63e;
+    background: #1e1d1b;
+    border: 1px solid rgba(227, 166, 62, 0.4);
+  }
+</style>

@@ -4,6 +4,26 @@ import CardGrid from "../components/CardGrid.astro";
 import Card from "../components/Card.astro";
 import { getSortedProjects, projectDateFmt } from "../lib/content";
 
+// PROTOTYPE (wayfinder ticket #17) — pixel-art motif variants,
+// switchable via ?variant=. Throwaway: fold the winner into Card.astro
+// and Tag.astro, then drop this block and the /prototype components.
+export const prerender = false;
+import CardVariantA from "../components/prototype/CardVariantA.astro";
+import CardVariantB from "../components/prototype/CardVariantB.astro";
+import CardVariantC from "../components/prototype/CardVariantC.astro";
+import CardVariantH from "../components/prototype/CardVariantH.astro";
+import PrototypeSwitcher from "../components/prototype/PrototypeSwitcher.astro";
+
+const variants = ["A", "B", "C", "H"];
+const variantNames = {
+  A: "Pixel-notch corners + gold bracket tag",
+  B: "Cartridge strip + mint chip tag",
+  C: "RPG rarity frame + violet shield tag",
+  H: "Hybrid — notch corners + corner dots + amber chip",
+};
+const requested = Astro.url.searchParams.get("variant");
+const variant = variants.includes(requested ?? "") ? (requested as string) : null;
+
 const projects = await getSortedProjects();
 ---
 
@@ -26,15 +46,22 @@ const projects = await getSortedProjects();
   <main class="max-w-3xl mx-auto px-6 pt-16 pb-24">
     <h1 class="text-3xl font-semibold text-white text-center mb-16">Projects</h1>
     <CardGrid>
-      {projects.map((project) => (
-        <Card
-          path={`~/projects/${project.id}`}
-          href={`/projects/${project.id}`}
-          title={project.data.title}
-          tag={project.data.tags[0]}
-          date={projectDateFmt.format(project.data.date)}
-        />
-      ))}
+      {projects.map((project) => {
+        const cardProps = {
+          path: `~/projects/${project.id}`,
+          href: `/projects/${project.id}`,
+          title: project.data.title,
+          tag: project.data.tags[0],
+          date: projectDateFmt.format(project.data.date),
+          tier: project.data.tier,
+        };
+        if (variant === "A") return <CardVariantA {...cardProps} />;
+        if (variant === "B") return <CardVariantB {...cardProps} />;
+        if (variant === "C") return <CardVariantC {...cardProps} />;
+        if (variant === "H") return <CardVariantH {...cardProps} />;
+        return <Card {...cardProps} />;
+      })}
     </CardGrid>
   </main>
+  {variant && <PrototypeSwitcher current={variant} variants={variants} names={variantNames} />}
 </Layout>

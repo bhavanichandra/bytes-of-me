@@ -3,6 +3,13 @@ import Layout from "../layouts/Layout.astro";
 import BlogRow from "../components/BlogRow.astro";
 import { getRecentPosts, postDateFmt } from "../lib/content";
 
+// PROTOTYPE (wayfinder ticket #17) — rarity-frame motif, driven by the
+// post's `tier` frontmatter field, switchable via ?variant=C. Throwaway:
+// fold into BlogRow.astro directly if it's kept, then drop this block.
+export const prerender = false;
+import BlogRowVariantC from "../components/prototype/BlogRowVariantC.astro";
+const variant = Astro.url.searchParams.get("variant") === "C" ? "C" : null;
+
 const posts = await getRecentPosts();
 ---
 
@@ -25,15 +32,20 @@ const posts = await getRecentPosts();
   <main class="max-w-3xl mx-auto px-6 pt-16 pb-24">
     <h1 class="text-3xl font-semibold text-white text-center mb-16">Blogs</h1>
     <div class="rows-list spotlight-group flex flex-col">
-      {posts.map((post) => (
-        <BlogRow
-          href={`/blogs/${post.id}`}
-          title={post.data.title}
-          description={post.data.description}
-          date={postDateFmt.format(post.data.date)}
-          tags={post.data.tags}
-        />
-      ))}
+      {posts.map((post) => {
+        const rowProps = {
+          href: `/blogs/${post.id}`,
+          title: post.data.title,
+          description: post.data.description,
+          date: postDateFmt.format(post.data.date),
+          tags: post.data.tags,
+        };
+        return variant === "C" ? (
+          <BlogRowVariantC {...rowProps} tier={post.data.tier} />
+        ) : (
+          <BlogRow {...rowProps} />
+        );
+      })}
     </div>
   </main>
 </Layout>
