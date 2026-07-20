@@ -52,8 +52,8 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
     ← {backLabel}
   </a>
 
-  <main class="max-w-6xl mx-auto pl-6 pr-20 md:px-6 pt-20 pb-24">
-    <div class="max-w-2xl mx-auto text-center mb-16">
+  <main class="pl-6 pr-20 md:pl-8 md:pr-12 pt-20 pb-24">
+    <div class="max-w-3xl mx-auto text-center mb-16">
       {color && (
         <span class="detail-pill font-mono badge-blip mb-4" style={`--tier-color: ${color};`}>
           <PixelIcon bitmap={SHIELD} color={color} size={1.5} />
@@ -87,10 +87,10 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-12">
+    <div class="flex flex-col md:flex-row md:justify-center gap-12">
       {sectionHeadings.length > 0 && (
         <nav class="md:w-48 shrink-0">
-          <div class="flex flex-row md:flex-col gap-3 md:gap-2 flex-wrap md:sticky md:top-20">
+          <div class="flex flex-row md:flex-col gap-3 md:gap-2 flex-wrap md:fixed md:top-24 md:left-8 md:w-48 md:z-40">
             {sectionHeadings.map((h) => (
               <a
                 href={`#${h.slug}`}
@@ -102,7 +102,7 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
           </div>
         </nav>
       )}
-      <article class="prose-body text-neutral-200 leading-relaxed flex-1 min-w-0">
+      <article class="prose-body text-neutral-200 leading-relaxed flex-1 min-w-0 max-w-4xl">
         <slot />
       </article>
     </div>
