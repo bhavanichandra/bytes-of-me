@@ -1,49 +1,50 @@
 ---
 import "../styles/global.css";
+import PixelFrame from "./PixelFrame.astro";
 ---
 
 <section class="w-full text-white">
   <div class="max-w-5xl mx-auto px-6 pb-20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-      <div class="md:col-span-2 rounded-2xl bg-[#242220] p-8 hover:brightness-110 transition">
-        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3">Bio</h2>
+      <PixelFrame class="md:col-span-2 bg-[#242220] p-8 hover:border-white/30 transition">
+        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3 font-mono">Bio</h2>
         <p class="text-lg leading-relaxed text-neutral-100">
           Full-stack software engineer based in Hyderabad, India, building things end to end —
           from infra to interface. Into integration projects, API work, and open-source
           contributions, with a growing pull toward AI/ML.
         </p>
-      </div>
+      </PixelFrame>
 
-      <div class="rounded-2xl bg-[#242220] p-8 hover:brightness-110 transition">
-        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3">Where I work</h2>
+      <PixelFrame class="bg-[#242220] p-8 hover:border-white/30 transition">
+        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3 font-mono">Where I work</h2>
         <p class="text-lg text-neutral-100">
           <span class="text-red-500">GE Vernova</span> — Senior Software Engineer.
         </p>
-      </div>
+      </PixelFrame>
 
-      <div class="rounded-2xl bg-[#242220] p-8 hover:brightness-110 transition">
-        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3">This month</h2>
+      <PixelFrame class="bg-[#242220] p-8 hover:border-white/30 transition">
+        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3 font-mono">This month</h2>
         <p class="text-lg text-neutral-100">
           Working through AI/ML and system design courses.
         </p>
-      </div>
+      </PixelFrame>
 
-      <div class="rounded-2xl bg-[#242220] p-8 hover:brightness-110 transition">
-        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3">Current projects</h2>
-        <ul class="flex flex-col gap-2 text-lg text-neutral-100">
+      <PixelFrame class="bg-[#242220] p-8 hover:border-white/30 transition">
+        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3 font-mono">Current projects</h2>
+        <ul class="flex flex-col gap-2 text-lg text-neutral-100 font-mono">
           <li>→ bytes-of-me</li>
           <li>→ LLM fine-tuning</li>
           <li>→ Something new — sharing soon</li>
         </ul>
-      </div>
+      </PixelFrame>
 
-      <div class="rounded-2xl bg-[#242220] p-8 hover:brightness-110 transition">
-        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3">Current hackathons</h2>
+      <PixelFrame class="bg-[#242220] p-8 hover:border-white/30 transition">
+        <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-3 font-mono">Current hackathons</h2>
         <p class="text-lg text-neutral-100">
           <span class="text-blue-400">OpenAI Build Week</span> — hosted by Dev.to.
         </p>
-      </div>
+      </PixelFrame>
 
     </div>
   </div>
