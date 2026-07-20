@@ -18,10 +18,12 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-// The floating corner menu exists to get you to About + socials from
-// anywhere; on the About page itself it's redundant (LanyardCard has
-// its own social links there), so skip rendering it entirely.
-const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about";
+// The floating corner menu is a distraction while reading a blog post
+// or project write-up, and it's redundant on the About page itself
+// (LanyardCard has its own social links there) — so it only shows on
+// the three list/landing surfaces; readers can always tap back Home.
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const showCornerPanel = path === "/" || path === "/blogs" || path === "/projects";
 ---
 
 <html lang="en" class="text-white">
@@ -54,7 +56,7 @@ const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about";
   <body class="grain-bg" style="background-color:#1a1918">
     <slot />
 
-    {!isAboutPage && (
+    {showCornerPanel && (
       <div id="corner-panel" class="corner-panel fixed bottom-4 right-4 md:bottom-8 md:left-8 md:right-auto z-50 group w-fit">
         <span
           class="corner-arrow absolute bottom-full left-1/2 -translate-x-1/2 mb-1 opacity-70 pointer-events-none group-hover:opacity-0 group-[.is-open]:opacity-0 transition-opacity duration-200"
