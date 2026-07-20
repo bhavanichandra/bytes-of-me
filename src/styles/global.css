@@ -158,9 +158,12 @@ pre[data-language]::after {
   border-radius: 0.75rem;
   margin: 1rem 0;
 }
-.prose-body p code,
-.prose-body li code {
-  background: rgba(255, 255, 255, 0.05);
+.prose-body :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: #f472b6;
+  background-color: #1a1918;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.15rem 0.4rem;
-  border-radius: 0.25rem;
+  border-radius: 0.35rem;
 }
