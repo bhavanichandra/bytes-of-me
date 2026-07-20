@@ -4,7 +4,7 @@
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import PixelIcon from "../components/PixelIcon.astro";
-import { ARROW_DOWN, EMAIL, GITHUB, LINKEDIN } from "../lib/pixelIcons";
+import { ARROW_DOWN, EMAIL, GITHUB, LINKEDIN, PROFILE } from "../lib/pixelIcons";
 
 interface Props {
   title: string;
@@ -18,9 +18,8 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-// On the About page itself, an arrow hinting "click to view profile"
-// and a link back to the page you're already on are both dead weight —
-// point the avatar home instead and drop the hint.
+// On the About page itself, a menu item linking back to the page
+// you're already on is dead weight — point it home instead.
 const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about";
 ---
 
@@ -55,46 +54,41 @@ const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about";
     <slot />
 
     <div id="corner-panel" class="corner-panel fixed bottom-4 right-4 md:bottom-8 md:left-8 md:right-auto z-50 group w-fit">
-      {!isAboutPage && (
-        <span
-          class="corner-arrow absolute bottom-full left-1/2 -translate-x-1/2 mb-1 opacity-70 pointer-events-none group-hover:opacity-0 group-[.is-open]:opacity-0 transition-opacity duration-200"
-          aria-hidden="true"
-        >
-          <PixelIcon bitmap={ARROW_DOWN} color="#ffffff" size={3} />
-        </span>
-      )}
+      <span
+        class="corner-arrow absolute bottom-full left-1/2 -translate-x-1/2 mb-1 opacity-70 pointer-events-none group-hover:opacity-0 group-[.is-open]:opacity-0 transition-opacity duration-200"
+        aria-hidden="true"
+      >
+        <PixelIcon bitmap={ARROW_DOWN} color="#ffffff" size={3} />
+      </span>
       <div class="absolute bottom-full left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 bg-[#242220] border border-white/10 rounded-full px-3 pt-4 pb-6 opacity-0 translate-y-3 scale-95 origin-bottom pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto group-[.is-open]:opacity-100 group-[.is-open]:translate-y-0 group-[.is-open]:scale-100 group-[.is-open]:pointer-events-auto transition-all duration-200 ease-out">
+        <a href={isAboutPage ? "/" : "/about"} class="hover:opacity-80 transition" aria-label={isAboutPage ? "Home" : "About"}><PixelIcon bitmap={PROFILE} color="#ffffff" size={2} /></a>
         <a href="mailto:bhavanichandra9+site@gmail.com" class="hover:opacity-80 transition" aria-label="Email"><PixelIcon bitmap={EMAIL} color="#ffffff" size={2} /></a>
         <a href="https://github.com/bhavanichandra" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" aria-label="GitHub"><PixelIcon bitmap={GITHUB} color="#ffffff" size={2} /></a>
         <a href="https://www.linkedin.com/in/bhavanichandra/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" aria-label="LinkedIn"><PixelIcon bitmap={LINKEDIN} color="#ffffff" size={2} /></a>
       </div>
-      <a
-        href={isAboutPage ? "/" : "/about"}
+      <button
+        type="button"
         class="corner-avatar block w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-white/20 shadow-lg shadow-black/50 group-hover:border-white/50 group-[.is-open]:border-white/50 transition"
-        aria-label={isAboutPage ? "Home" : "About"}
+        aria-label="Open menu"
+        aria-haspopup="true"
       >
         <img src="/my-photo.svg" alt="Profile" class="w-full h-full object-cover" />
-      </a>
+      </button>
     </div>
 
     <script>
-      // Hover has no touch equivalent, so on devices without a real
-      // hover state the avatar's first tap opens the social popup
-      // (instead of navigating) and a tap outside closes it again; a
-      // second tap on the avatar goes through to the link as normal.
+      // The menu previews on hover on devices that have one; the avatar
+      // button also toggles it via click/tap so touch devices (which
+      // have no hover state) can open it in a single tap. A tap/click
+      // outside the panel closes it again.
       function initCornerPanel() {
         const panel = document.getElementById("corner-panel");
-        const avatar = panel?.querySelector<HTMLAnchorElement>(".corner-avatar");
+        const avatar = panel?.querySelector<HTMLButtonElement>(".corner-avatar");
         if (!panel || !avatar || panel.dataset.bound === "true") return;
         panel.dataset.bound = "true";
 
-        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-
-        avatar.addEventListener("click", (e) => {
-          if (!panel.classList.contains("is-open")) {
-            e.preventDefault();
-            panel.classList.add("is-open");
-          }
+        avatar.addEventListener("click", () => {
+          panel.classList.toggle("is-open");
         });
         document.addEventListener("click", (e) => {
           if (!panel.contains(e.target as Node)) panel.classList.remove("is-open");
