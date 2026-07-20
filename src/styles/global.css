@@ -23,9 +23,14 @@
 
 /* Spotlight hover for card/row groups: the hovered item stays sharp,
    its siblings dim. Apply .spotlight-group to the wrapper and
-   .spotlight-item to each hoverable child. */
-.spotlight-group:hover .spotlight-item:not(:hover) {
-  opacity: 0.4;
+   .spotlight-item to each hoverable child. Gated to devices with a
+   real hover state — touch browsers keep :hover engaged after a tap
+   with no matching "leave" event, which otherwise reads as every row
+   but the last-tapped one being stuck dimmed. */
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-group:hover .spotlight-item:not(:hover) {
+    opacity: 0.4;
+  }
 }
 
 /* Editor-chrome treatment for fenced code blocks: fake traffic-light
@@ -66,6 +71,65 @@ pre[data-language]::after {
   color: rgba(255, 255, 255, 0.35);
 }
 
+/* Universal page-transition: replaces Astro's default root crossfade
+   with a hard-stepped pixel-dissolve (~320ms), per the motion
+   guidelines (issue #19). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.32s;
+  animation-timing-function: steps(6, end);
+}
+::view-transition-old(root) {
+  animation-name: pixel-dissolve-out;
+}
+::view-transition-new(root) {
+  animation-name: pixel-dissolve-in;
+}
+@keyframes pixel-dissolve-out {
+  from { opacity: 1; filter: blur(0); }
+  to { opacity: 0; filter: blur(6px); }
+}
+@keyframes pixel-dissolve-in {
+  from { opacity: 0; filter: blur(6px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+/* Hard-stepped retro "blip" reveal for rare/epic tier badges (issue
+   #19) — applied once on mount, never on hover. */
+.badge-blip {
+  animation: badge-blip 0.4s steps(4, end);
+}
+@keyframes badge-blip {
+  0% { opacity: 0; transform: scale(0.6); }
+  40% { opacity: 1; transform: scale(1.15); }
+  70% { transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Idle bob on the pixel arrow pointing at the floating about-page
+   avatar (issue #35) — hard-stepped, not eased, per the motion
+   guidelines. */
+.corner-arrow {
+  animation: arrow-bob 1.4s steps(4, end) infinite;
+}
+@keyframes arrow-bob {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+  .badge-blip {
+    animation: none;
+  }
+  .corner-arrow {
+    animation: none;
+  }
+}
+
 /* Shared markdown-body prose styling, used by any rendered content
    collection entry (blog posts, project case studies) via
    DetailPage.astro. */
@@ -94,9 +158,12 @@ pre[data-language]::after {
   border-radius: 0.75rem;
   margin: 1rem 0;
 }
-.prose-body p code,
-.prose-body li code {
-  background: rgba(255, 255, 255, 0.05);
+.prose-body :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: #f472b6;
+  background-color: #1a1918;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.15rem 0.4rem;
-  border-radius: 0.25rem;
+  border-radius: 0.35rem;
 }

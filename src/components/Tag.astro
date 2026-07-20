@@ -8,4 +8,31 @@ const { label, size = "sm" } = Astro.props;
 const padding = size === "md" ? "px-2.5 py-1 text-xs" : "px-2 py-0.5 text-[11px]";
 ---
 
-<span class={`font-mono ${padding} rounded bg-[#1e1d1b] border border-white/10 text-pink-400`}>"{label}"</span>
+<span class={`tag-pixel relative inline-flex items-center font-mono uppercase tracking-wide ${padding} bg-[#1e1d1b] border border-pink-400/50 text-pink-400`}>
+  <span class="tag-corner tag-corner--tl"></span>
+  <span class="tag-corner tag-corner--tr"></span>
+  <span class="tag-corner tag-corner--bl"></span>
+  <span class="tag-corner tag-corner--br"></span>
+  {label}
+</span>
+
+<style>
+  .tag-pixel {
+    clip-path: polygon(
+      0 5px, 5px 5px, 5px 0,
+      calc(100% - 5px) 0, calc(100% - 5px) 5px, 100% 5px,
+      100% calc(100% - 5px), calc(100% - 5px) calc(100% - 5px), calc(100% - 5px) 100%,
+      5px 100%, 5px calc(100% - 5px), 0 calc(100% - 5px)
+    );
+  }
+  .tag-corner {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #f472b6;
+  }
+  .tag-corner--tl { top: -2px; left: 2px; }
+  .tag-corner--tr { top: -2px; right: 2px; }
+  .tag-corner--bl { bottom: -2px; left: 2px; }
+  .tag-corner--br { bottom: -2px; right: 2px; }
+</style>

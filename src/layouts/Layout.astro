@@ -3,6 +3,8 @@
 // on every page.
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import PixelIcon from "../components/PixelIcon.astro";
+import { ARROW_DOWN, EMAIL, GITHUB, LINKEDIN, PROFILE } from "../lib/pixelIcons";
 
 interface Props {
   title: string;
@@ -15,6 +17,11 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// The floating corner menu exists to get you to About + socials from
+// anywhere; on the About page itself it's redundant (LanyardCard has
+// its own social links there), so skip rendering it entirely.
+const isAboutPage = Astro.url.pathname.replace(/\/$/, "") === "/about";
 ---
 
 <html lang="en" class="text-white">
@@ -47,15 +54,52 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <body class="grain-bg" style="background-color:#1a1918">
     <slot />
 
-    <div class="corner-panel fixed bottom-8 left-8 z-50 group flex flex-col items-center">
-      <div class="flex flex-col items-center gap-3 bg-[#242220] border border-white/10 rounded-full px-3 py-4 mb-3 opacity-0 translate-y-3 scale-95 origin-bottom pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-200 ease-out">
-        <a href="mailto:bhavanichandra9+site@gmail.com" class="hover:opacity-80 transition"><img src="/email.svg" alt="Email" class="w-4 h-4" /></a>
-        <a href="https://github.com/bhavanichandra" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition"><img src="/github.svg" alt="GitHub" class="w-4 h-4" /></a>
-        <a href="https://www.linkedin.com/in/bhavanichandra/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition"><img src="/linkedin.svg" alt="LinkedIn" class="w-4 h-4" /></a>
+    {!isAboutPage && (
+      <div id="corner-panel" class="corner-panel fixed bottom-4 right-4 md:bottom-8 md:left-8 md:right-auto z-50 group w-fit">
+        <span
+          class="corner-arrow absolute bottom-full left-1/2 -translate-x-1/2 mb-1 opacity-70 pointer-events-none group-hover:opacity-0 group-[.is-open]:opacity-0 transition-opacity duration-200"
+          aria-hidden="true"
+        >
+          <PixelIcon bitmap={ARROW_DOWN} color="#ffffff" size={3} />
+        </span>
+        <div class="absolute bottom-full left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 bg-[#242220] border border-white/10 rounded-full px-3 pt-4 pb-6 opacity-0 translate-y-3 scale-95 origin-bottom pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto group-[.is-open]:opacity-100 group-[.is-open]:translate-y-0 group-[.is-open]:scale-100 group-[.is-open]:pointer-events-auto transition-all duration-200 ease-out">
+          <a href="/about" class="hover:opacity-80 transition" aria-label="About"><PixelIcon bitmap={PROFILE} color="#ffffff" size={2} /></a>
+          <a href="mailto:bhavanichandra9+site@gmail.com" class="hover:opacity-80 transition" aria-label="Email"><PixelIcon bitmap={EMAIL} color="#ffffff" size={2} /></a>
+          <a href="https://github.com/bhavanichandra" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" aria-label="GitHub"><PixelIcon bitmap={GITHUB} color="#ffffff" size={2} /></a>
+          <a href="https://www.linkedin.com/in/bhavanichandra/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" aria-label="LinkedIn"><PixelIcon bitmap={LINKEDIN} color="#ffffff" size={2} /></a>
+        </div>
+        <button
+          type="button"
+          class="corner-avatar block w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-white/20 shadow-lg shadow-black/50 group-hover:border-white/50 group-[.is-open]:border-white/50 transition"
+          aria-label="Open menu"
+          aria-haspopup="true"
+        >
+          <img src="/my-photo.svg" alt="Profile" class="w-full h-full object-cover" />
+        </button>
       </div>
-      <a href="/about" class="block w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-white/50 transition">
-        <img src="/my-photo.svg" alt="About" class="w-full h-full object-cover" />
-      </a>
-    </div>
+
+      <script>
+        // The menu previews on hover on devices that have one; the avatar
+        // button also toggles it via click/tap so touch devices (which
+        // have no hover state) can open it in a single tap. A tap/click
+        // outside the panel closes it again.
+        function initCornerPanel() {
+          const panel = document.getElementById("corner-panel");
+          const avatar = panel?.querySelector<HTMLButtonElement>(".corner-avatar");
+          if (!panel || !avatar || panel.dataset.bound === "true") return;
+          panel.dataset.bound = "true";
+
+          avatar.addEventListener("click", () => {
+            panel.classList.toggle("is-open");
+          });
+          document.addEventListener("click", (e) => {
+            if (!panel.contains(e.target as Node)) panel.classList.remove("is-open");
+          });
+        }
+
+        document.addEventListener("astro:page-load", initCornerPanel);
+        initCornerPanel();
+      </script>
+    )}
   </body>
 </html>

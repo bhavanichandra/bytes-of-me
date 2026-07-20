@@ -20,6 +20,7 @@ const { Content, headings } = await render(post);
   description={post.data.description}
   date={postDateFmt.format(post.data.date)}
   tags={post.data.tags}
+  tier={post.data.tier}
   backHref="/blogs"
   backLabel="Blogs"
   headings={headings}

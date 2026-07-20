@@ -1,5 +1,8 @@
 ---
 import Image from "astro/components/Image.astro";
+import PixelFrame from "../PixelFrame.astro";
+import PixelIcon from "../PixelIcon.astro";
+import { EMAIL, GITHUB, LINKEDIN } from "../../lib/pixelIcons";
 
 // Drop more photos here — the card auto-cycles through all of them
 // (crossfade) once there's more than one.
@@ -13,14 +16,13 @@ const photos = ["/my-photo.svg"];
       <rect x="0" y="38" width="16" height="14" rx="4" fill="#3a3733" stroke="rgba(255,255,255,0.2)" />
     </svg>
 
-    <div
-      data-lanyard-card
-      class="w-80 rounded-2xl bg-[#242220] border border-white/10 overflow-hidden flex"
+    <PixelFrame
+      class="w-80 bg-[#242220] overflow-hidden flex"
       style="box-shadow: 0 20px 40px -12px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.35);"
     >
       <div class="w-8 shrink-0 flex items-center justify-center bg-black/20 border-r border-white/10">
         <span
-          class="text-[10px] tracking-widest uppercase text-neutral-500 whitespace-nowrap"
+          class="text-[10px] tracking-widest uppercase text-neutral-500 whitespace-nowrap font-mono"
           style="writing-mode: vertical-rl; transform: rotate(180deg);"
         >
           Research &amp; Development
@@ -44,28 +46,67 @@ const photos = ["/my-photo.svg"];
           </div>
           <div class="flex flex-col">
             <div class="text-lg font-semibold text-white">Bhavani Chandra</div>
-            <div class="text-xs text-neutral-400">Senior Software Engineer @ GE Vernova</div>
+            <div class="text-xs text-neutral-400 font-mono">Senior Software Engineer @ GE Vernova</div>
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 mt-5">
-          <span class="flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/15 text-xs text-neutral-300">
+        <div class="flex flex-col gap-2 mt-5">
+          <span class="tag-pixel relative flex items-center gap-1.5 px-3 py-1.5 font-mono uppercase tracking-wide text-[11px] bg-[#1e1d1b] border border-white/20 text-neutral-300">
+            <span class="tag-corner tag-corner--tl"></span>
+            <span class="tag-corner tag-corner--tr"></span>
+            <span class="tag-corner tag-corner--bl"></span>
+            <span class="tag-corner tag-corner--br"></span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="4"/><circle cx="7" cy="12" r="0.8" fill="currentColor" stroke="none"/><path d="M6 10.5v3M4.5 12h3"/><circle cx="16" cy="10.8" r="0.9" fill="currentColor" stroke="none"/><circle cx="18.2" cy="13" r="0.9" fill="currentColor" stroke="none"/></svg>
             Gamer
           </span>
-          <span class="flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/15 text-xs text-neutral-300">
+          <span class="tag-pixel relative flex items-center gap-1.5 px-3 py-1.5 font-mono uppercase tracking-wide text-[11px] bg-[#1e1d1b] border border-white/20 text-neutral-300">
+            <span class="tag-corner tag-corner--tl"></span>
+            <span class="tag-corner tag-corner--tr"></span>
+            <span class="tag-corner tag-corner--bl"></span>
+            <span class="tag-corner tag-corner--br"></span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 4.6L18 8l-4.2 1.4L12 14l-1.8-4.6L6 8l4.2-1.4z"/><path d="M19 14l0.9 2.3L22 17l-2.1 0.7L19 20l-0.9-2.3L16 17l2.1-0.7z"/></svg>
             AI Enthusiast
           </span>
-          <span class="flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/15 text-xs text-neutral-300">
+          <span class="tag-pixel relative flex items-center gap-1.5 px-3 py-1.5 font-mono uppercase tracking-wide text-[11px] bg-[#1e1d1b] border border-white/20 text-neutral-300">
+            <span class="tag-corner tag-corner--tl"></span>
+            <span class="tag-corner tag-corner--tr"></span>
+            <span class="tag-corner tag-corner--bl"></span>
+            <span class="tag-corner tag-corner--br"></span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
             Hyderabad, India
           </span>
         </div>
+
+        <div class="flex items-center gap-5 mt-5">
+          <a href="mailto:bhavanichandra9+site@gmail.com" class="hover:opacity-80 transition" aria-label="Email"><PixelIcon bitmap={EMAIL} color="#ffffff" size={2} /></a>
+          <a href="https://github.com/bhavanichandra" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" aria-label="GitHub"><PixelIcon bitmap={GITHUB} color="#ffffff" size={2} /></a>
+          <a href="https://www.linkedin.com/in/bhavanichandra/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" aria-label="LinkedIn"><PixelIcon bitmap={LINKEDIN} color="#ffffff" size={2} /></a>
+        </div>
       </div>
-    </div>
+    </PixelFrame>
   </div>
 </div>
+
+<style>
+  .tag-pixel {
+    clip-path: polygon(
+      0 5px, 5px 5px, 5px 0,
+      calc(100% - 5px) 0, calc(100% - 5px) 5px, 100% 5px,
+      100% calc(100% - 5px), calc(100% - 5px) calc(100% - 5px), calc(100% - 5px) 100%,
+      5px 100%, 5px calc(100% - 5px), 0 calc(100% - 5px)
+    );
+  }
+  .tag-corner {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+  .tag-corner--tl { top: -2px; left: 2px; }
+  .tag-corner--tr { top: -2px; right: 2px; }
+  .tag-corner--bl { bottom: -2px; left: 2px; }
+  .tag-corner--br { bottom: -2px; right: 2px; }
+</style>
 
 <script>
   import { gsap } from "gsap";

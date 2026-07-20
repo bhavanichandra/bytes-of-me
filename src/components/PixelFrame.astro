@@ -1,0 +1,32 @@
+---
+// Neutral pixel-corner frame used on non-tiered surfaces (About page
+// panels) so they carry the same corner-bracket motif as the
+// tier-framed Card/BlogRow/Tag components elsewhere on the site.
+interface Props {
+  color?: string;
+  class?: string;
+  style?: string;
+}
+const { color = "rgba(255,255,255,0.35)", class: className = "", style = "", ...rest } = Astro.props;
+---
+
+<div class={`pixel-frame relative border border-white/10 ${className}`} style={`--frame-color: ${color}; ${style}`} {...rest}>
+  <span class="pixel-frame-corner pixel-frame-corner--tl"></span>
+  <span class="pixel-frame-corner pixel-frame-corner--tr"></span>
+  <span class="pixel-frame-corner pixel-frame-corner--bl"></span>
+  <span class="pixel-frame-corner pixel-frame-corner--br"></span>
+  <slot />
+</div>
+
+<style>
+  .pixel-frame-corner {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: var(--frame-color);
+  }
+  .pixel-frame-corner--tl { top: -2px; left: -2px; }
+  .pixel-frame-corner--tr { top: -2px; right: -2px; }
+  .pixel-frame-corner--bl { bottom: -2px; left: -2px; }
+  .pixel-frame-corner--br { bottom: -2px; right: -2px; }
+</style>

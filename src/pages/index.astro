@@ -15,14 +15,14 @@ const currentProject = (await getSortedProjects())[0];
   title="Bhavani Chandra"
   description="Bhavani Chandra's personal site — blog posts and projects."
 >
-  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] min-h-screen">
+  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] md:content-start min-h-screen">
     <Rail />
     <main class="contents">
-      <div class="pt-20 px-8">
+      <div class="pt-20 pl-8 pr-20 md:px-8">
         <PageIntro />
       </div>
       <RailNav current="home" />
-      <div class="px-8 pb-24 flex flex-col gap-16">
+      <div class="pl-8 pr-20 md:px-8 pb-24 flex flex-col gap-16">
         <section>
           <div class="flex items-center justify-between mb-5">
             <h2 class="text-xs uppercase tracking-widest text-neutral-500">Recent posts</h2>

@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import RailNav from "../components/RailNav.astro";
 import CardGrid from "../components/CardGrid.astro";
 import Card from "../components/Card.astro";
 import { getSortedProjects, projectDateFmt } from "../lib/content";
@@ -11,31 +12,29 @@ const projects = await getSortedProjects();
   title="Projects — Bhavani Chandra"
   description="Projects by Bhavani Chandra."
 >
-  <a
-    href="/"
-    class="fixed top-8 left-8 text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition z-50"
-  >
-    ← Home
-  </a>
-  <a
-    href="/blogs"
-    class="fixed top-8 right-8 text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition z-50"
-  >
-    ← Blogs
-  </a>
-  <main class="max-w-3xl mx-auto px-6 pt-16 pb-24">
-    <h1 class="text-3xl font-semibold text-white text-center mb-16">Projects</h1>
-    <CardGrid>
-      {projects.map((project) => (
-        <Card
-          path={`~/projects/${project.id}`}
-          href={`/projects/${project.id}`}
-          title={project.data.title}
-          tag={project.data.tags[0]}
-          date={projectDateFmt.format(project.data.date)}
-          tier={project.data.tier}
-        />
-      ))}
-    </CardGrid>
-  </main>
+  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] md:content-start min-h-screen">
+    <div class="pt-20 pb-3 pl-8 pr-20 md:pr-8">
+      <a href="/" class="text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition">← Home</a>
+    </div>
+    <main class="contents">
+      <div class="pt-20 pl-8 pr-20 md:px-8">
+        <h1 class="text-xs uppercase tracking-widest text-neutral-500">Projects</h1>
+      </div>
+      <RailNav current="projects" />
+      <div class="pl-8 pr-20 md:px-8 pb-24">
+        <CardGrid>
+          {projects.map((project) => (
+            <Card
+              path={`~/projects/${project.id}`}
+              href={`/projects/${project.id}`}
+              title={project.data.title}
+              tag={project.data.tags[0]}
+              date={projectDateFmt.format(project.data.date)}
+              tier={project.data.tier}
+            />
+          ))}
+        </CardGrid>
+      </div>
+    </main>
+  </div>
 </Layout>

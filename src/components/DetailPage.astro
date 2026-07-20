@@ -6,6 +6,9 @@
 // new entry gets the same treatment automatically, no per-page setup.
 import Layout from "../layouts/Layout.astro";
 import Tag from "./Tag.astro";
+import PixelIcon from "./PixelIcon.astro";
+import { SHIELD } from "../lib/pixelIcons";
+import { TIER_COLORS } from "../lib/rarity";
 
 interface Heading {
   depth: number;
@@ -18,6 +21,7 @@ interface Props {
   description?: string;
   date: string;
   tags?: string[];
+  tier?: "common" | "rare" | "epic";
   href?: string;
   backHref: string;
   backLabel: string;
@@ -29,12 +33,14 @@ const {
   description,
   date,
   tags = [],
+  tier = "common",
   href,
   backHref,
   backLabel,
   headings = [],
 } = Astro.props;
 
+const color = TIER_COLORS[tier];
 const sectionHeadings = headings.filter((h) => h.depth === 2);
 ---
 
@@ -46,11 +52,30 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
     ← {backLabel}
   </a>
 
-  <main class="max-w-4xl mx-auto px-6 pt-20 pb-24">
-    <div class="max-w-2xl mx-auto text-center mb-16">
+  {sectionHeadings.length > 0 && (
+    <nav class="hidden lg:flex lg:flex-col lg:gap-2 lg:fixed lg:top-24 lg:left-8 lg:w-48 lg:z-40">
+      {sectionHeadings.map((h) => (
+        <a
+          href={`#${h.slug}`}
+          class="text-sm text-neutral-500 hover:text-white transition"
+        >
+          {h.text}
+        </a>
+      ))}
+    </nav>
+  )}
+
+  <main class="pl-6 pr-14 md:pl-8 md:pr-12 pt-20 pb-24">
+    <div class="max-w-3xl mx-auto text-center mb-16">
+      {color && (
+        <span class="detail-pill font-mono badge-blip mb-4" style={`--tier-color: ${color};`}>
+          <PixelIcon bitmap={SHIELD} color={color} size={1.5} />
+          {tier}
+        </span>
+      )}
       <h1 class="text-3xl text-white mb-3 leading-snug">{title}</h1>
       {description && <p class="text-neutral-400 leading-relaxed">{description}</p>}
-      <div class="flex items-center justify-center gap-3 mt-6">
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
         <span class="text-xs text-neutral-500">{date}</span>
         {href && (
           <>
@@ -75,9 +100,9 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-12">
+    <div class="flex flex-col md:flex-row lg:justify-center gap-12">
       {sectionHeadings.length > 0 && (
-        <nav class="md:w-48 shrink-0">
+        <nav class="md:w-48 shrink-0 lg:hidden">
           <div class="flex flex-row md:flex-col gap-3 md:gap-2 flex-wrap md:sticky md:top-20">
             {sectionHeadings.map((h) => (
               <a
@@ -90,9 +115,25 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
           </div>
         </nav>
       )}
-      <article class="prose-body text-neutral-200 leading-relaxed flex-1 min-w-0">
+      <article class="prose-body text-neutral-200 leading-relaxed flex-1 min-w-0 max-w-4xl">
         <slot />
       </article>
     </div>
   </main>
 </Layout>
+
+<style>
+  .detail-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.7rem;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--tier-color);
+    background: color-mix(in srgb, var(--tier-color) 12%, transparent);
+    border: 1px solid var(--tier-color);
+    border-radius: 999px;
+  }
+</style>
