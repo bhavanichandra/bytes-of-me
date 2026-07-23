@@ -1,0 +1,129 @@
+---
+// PROTOTYPE — dedicated page for the winning "journey/log" direction
+// (Variant A from prototype-journey-log.astro): grid takes the page,
+// log entries with blog links sit below. Still throwaway — mock data,
+// not wired to the real curriculum/blog pipeline yet.
+import Layout from "../layouts/Layout.astro";
+import Rail from "../components/Rail.astro";
+import PageIntro from "../components/PageIntro.astro";
+import PixelFrame from "../components/PixelFrame.astro";
+import { buildMockDays, currentStreak, bestStreak, CAMPAIGNS, type JourneyDay } from "../lib/prototype/journeyMockData";
+import { getCollection } from "astro:content";
+
+const days = buildMockDays(182);
+const weeks: JourneyDay[][] = [];
+for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
+const monthLabels = weeks.map((w) => {
+  const d = new Date(w[0].date);
+  return d.getDate() <= 7 ? d.toLocaleDateString("en-US", { month: "short" }) : "";
+});
+
+const blogPosts = await getCollection("blog");
+const noted = days.filter((d) => d.note);
+noted.forEach((d, i) => {
+  (d as JourneyDay & { blogId?: string }).blogId = blogPosts[i % blogPosts.length]?.id;
+});
+const entries = days.filter((d) => d.worked).slice().reverse() as (JourneyDay & { blogId?: string })[];
+---
+
+<Layout title="Journey — Bhavani Chandra" description="Daily log of curriculum progress.">
+  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] md:content-start min-h-screen">
+    <Rail />
+    <main class="contents">
+      <div class="md:col-start-2 pt-20 pl-8 pr-20 md:px-8">
+        <PageIntro />
+      </div>
+
+      <div class="md:col-start-2 pl-8 pr-8 md:pr-16 pb-24 flex flex-col gap-12 w-full">
+        <section>
+          <div class="flex items-center justify-between mb-4 flex-wrap gap-4">
+            <div class="font-mono text-xs text-neutral-600">$ cat journey.log</div>
+            <div class="flex gap-4 flex-wrap">
+              <PixelFrame class="px-4 py-3 bg-[#1e1d1b]">
+                <div class="text-2xl font-semibold text-white">{currentStreak(days)}</div>
+                <div class="text-[10px] uppercase tracking-widest text-neutral-500">Current streak</div>
+              </PixelFrame>
+              <PixelFrame class="px-4 py-3 bg-[#1e1d1b]">
+                <div class="text-2xl font-semibold text-white">{bestStreak(days)}</div>
+                <div class="text-[10px] uppercase tracking-widest text-neutral-500">Best streak</div>
+              </PixelFrame>
+              <PixelFrame class="px-4 py-3 bg-[#f472b6]/10 border-pink-400/40">
+                <div class="text-2xl font-semibold text-pink-400">{entries.length}</div>
+                <div class="text-[10px] uppercase tracking-widest text-pink-400/70">Total days</div>
+              </PixelFrame>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto pb-2 border border-white/10 rounded-lg bg-[#161514] p-8 w-full">
+            <div class="flex gap-[6px] min-w-max">
+              {weeks.map((week, wi) => (
+                <div class="flex flex-col gap-[6px]" title={monthLabels[wi]}>
+                  <div class="h-4 text-[10px] text-neutral-600">{monthLabels[wi]}</div>
+                  {week.map((day) => (
+                    <button
+                      type="button"
+                      data-day-cell
+                      data-date={day.date}
+                      class:list={[
+                        "w-5 h-5 rounded-[3px] border transition hover:scale-125 hover:z-10 relative",
+                        day.worked ? "bg-pink-400 border-pink-300" : "bg-white/5 border-white/10",
+                      ]}
+                      aria-label={`${day.date}${day.worked ? " — worked" : ""}`}
+                    ></button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-xs uppercase tracking-widest text-neutral-500 mb-5">Log</h2>
+          <div class="flex flex-col gap-6">
+            {entries.map((entry) => {
+              const post = entry.blogId ? blogPosts.find((p) => p.id === entry.blogId) : undefined;
+              return (
+                <div id={`entry-${entry.date}`} data-entry class="border-l-2 pl-4 py-1 transition rounded-r" style={`border-color:${entry.campaign ? CAMPAIGNS[entry.campaign].color : "rgba(255,255,255,0.15)"}`}>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="font-mono text-xs text-neutral-500">{entry.date}</span>
+                    {entry.campaign && (
+                      <span class="text-[10px] uppercase tracking-wide font-mono" style={`color:${CAMPAIGNS[entry.campaign].color}`}>
+                        {CAMPAIGNS[entry.campaign].label}
+                      </span>
+                    )}
+                  </div>
+                  <p class="text-sm text-neutral-300 leading-relaxed mb-1">
+                    {entry.note ?? `Worked on ${entry.quest}.`}
+                  </p>
+                  {post && (
+                    <a href={`/blogs/${post.id}`} class="text-xs text-pink-400 hover:text-pink-300 transition inline-flex items-center gap-1">
+                      Read the post: {post.data.title} →
+                    </a>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  function init() {
+    document.querySelectorAll<HTMLButtonElement>("[data-day-cell]").forEach((cell) => {
+      if (cell.dataset.bound === "true") return;
+      cell.dataset.bound = "true";
+      cell.addEventListener("click", () => {
+        const target = document.getElementById(`entry-${cell.dataset.date}`);
+        if (!target) return;
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.classList.add("bg-white/5");
+        setTimeout(() => target.classList.remove("bg-white/5"), 900);
+      });
+    });
+  }
+  document.addEventListener("astro:page-load", init);
+  init();
+</script>

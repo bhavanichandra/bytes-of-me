@@ -1,0 +1,99 @@
+---
+// PROTOTYPE — Variant A: heatmap grid + click-to-open note panel.
+// Grid is the primary surface; notes are a secondary drawer, optional per day.
+import PixelFrame from "../PixelFrame.astro";
+import { buildMockDays, currentStreak, bestStreak, type JourneyDay } from "../../lib/prototype/journeyMockData";
+
+const days = buildMockDays(182);
+const weeks: JourneyDay[][] = [];
+for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
+const monthLabels = weeks.map((w) => {
+  const d = new Date(w[0].date);
+  return d.getDate() <= 7 ? d.toLocaleDateString("en-US", { month: "short" }) : "";
+});
+---
+
+<div class="font-mono text-xs text-neutral-600 mb-2">$ cat journey.log --view=heatmap</div>
+
+<div class="flex gap-4 mb-8">
+  <PixelFrame class="px-4 py-3 bg-[#1e1d1b]">
+    <div class="text-2xl font-semibold text-white">{currentStreak(days)}</div>
+    <div class="text-[10px] uppercase tracking-widest text-neutral-500">Current streak</div>
+  </PixelFrame>
+  <PixelFrame class="px-4 py-3 bg-[#1e1d1b]">
+    <div class="text-2xl font-semibold text-white">{bestStreak(days)}</div>
+    <div class="text-[10px] uppercase tracking-widest text-neutral-500">Best streak</div>
+  </PixelFrame>
+  <PixelFrame class="px-4 py-3 bg-[#f472b6]/10 border-pink-400/40">
+    <div class="text-2xl font-semibold text-pink-400">{days.filter((d) => d.worked).length}</div>
+    <div class="text-[10px] uppercase tracking-widest text-pink-400/70">Total days</div>
+  </PixelFrame>
+</div>
+
+<div class="overflow-x-auto pb-2">
+  <div class="flex gap-[3px]">
+    {weeks.map((week, wi) => (
+      <div class="flex flex-col gap-[3px]" title={monthLabels[wi]}>
+        <div class="h-3 text-[9px] text-neutral-600">{monthLabels[wi]}</div>
+        {week.map((day) => (
+          <button
+            type="button"
+            data-day-cell
+            data-date={day.date}
+            data-note={day.note ?? ""}
+            data-worked={String(day.worked)}
+            class:list={[
+              "w-3 h-3 rounded-[2px] border transition hover:scale-125 hover:z-10 relative",
+              day.worked
+                ? "bg-pink-400 border-pink-300"
+                : "bg-white/5 border-white/10",
+            ]}
+            aria-label={`${day.date}${day.worked ? " — worked" : ""}`}
+          ></button>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<div
+  id="note-panel"
+  class="fixed top-0 right-0 h-full w-full max-w-sm bg-[#161514] border-l border-white/10 z-[900] translate-x-full transition-transform duration-300 ease-out p-6 flex flex-col gap-4"
+>
+  <button data-panel-close class="self-end text-neutral-500 hover:text-white text-xs font-mono">close ✕</button>
+  <div class="font-mono text-xs text-neutral-600" data-panel-date>—</div>
+  <textarea
+    data-panel-note
+    rows="8"
+    placeholder="What did you work on today?"
+    class="bg-[#1e1d1b] border border-white/10 rounded-md p-3 text-sm text-neutral-200 resize-none focus:outline-none focus:border-pink-400/50"
+  ></textarea>
+  <button data-panel-save class="self-start bg-pink-400 text-black text-xs font-mono px-4 py-2 rounded-full hover:bg-pink-300 transition">Save note</button>
+</div>
+
+<script>
+  function init() {
+    const panel = document.getElementById("note-panel");
+    if (!panel || (panel as HTMLElement).dataset.bound === "true") return;
+    (panel as HTMLElement).dataset.bound = "true";
+
+    document.querySelectorAll<HTMLButtonElement>("[data-day-cell]").forEach((cell) => {
+      cell.addEventListener("click", () => {
+        const dateEl = panel.querySelector("[data-panel-date]")!;
+        const noteEl = panel.querySelector<HTMLTextAreaElement>("[data-panel-note]")!;
+        dateEl.textContent = cell.dataset.date ?? "";
+        noteEl.value = cell.dataset.note ?? "";
+        panel.classList.remove("translate-x-full");
+      });
+    });
+
+    panel.querySelector("[data-panel-close]")?.addEventListener("click", () => {
+      panel.classList.add("translate-x-full");
+    });
+    panel.querySelector("[data-panel-save]")?.addEventListener("click", () => {
+      panel.classList.add("translate-x-full");
+    });
+  }
+  document.addEventListener("astro:page-load", init);
+  init();
+</script>

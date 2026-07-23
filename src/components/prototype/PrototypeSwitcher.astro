@@ -1,0 +1,57 @@
+---
+// PROTOTYPE-ONLY. Floating bottom-centre variant switcher for the
+// journey/log grid exploration (see src/pages/prototype-journey-log.astro).
+// Not meant to ever reach main.
+interface Props {
+  variants: { key: string; label: string }[];
+  current: string;
+}
+const { variants, current } = Astro.props;
+---
+
+{import.meta.env.DEV && (
+  <div
+    id="prototype-switcher"
+    class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-3 bg-black text-white border border-pink-400/60 rounded-full px-4 py-2 font-mono text-xs shadow-xl shadow-black/60"
+    data-variants={variants.map((v) => v.key).join(",")}
+  >
+    <button data-proto-prev aria-label="Previous variant" class="hover:text-pink-400 transition px-1">←</button>
+    <span data-proto-label class="min-w-[9rem] text-center">
+      {current} — {variants.find((v) => v.key === current)?.label}
+    </span>
+    <button data-proto-next aria-label="Next variant" class="hover:text-pink-400 transition px-1">→</button>
+  </div>
+)}
+
+<script>
+  function initSwitcher() {
+    const bar = document.getElementById("prototype-switcher");
+    if (!bar || (bar as HTMLElement).dataset.bound === "true") return;
+    (bar as HTMLElement).dataset.bound = "true";
+
+    const keys = (bar.dataset.variants ?? "").split(",").filter(Boolean);
+    const params = new URLSearchParams(location.search);
+    const current = params.get("variant") ?? keys[0];
+
+    function go(delta: number) {
+      const idx = keys.indexOf(current);
+      const next = keys[(idx + delta + keys.length) % keys.length];
+      const url = new URL(location.href);
+      url.searchParams.set("variant", next);
+      location.href = url.toString();
+    }
+
+    bar.querySelector("[data-proto-prev]")?.addEventListener("click", () => go(-1));
+    bar.querySelector("[data-proto-next]")?.addEventListener("click", () => go(1));
+
+    document.addEventListener("keydown", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("input, textarea, [contenteditable]")) return;
+      if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "ArrowRight") go(1);
+    });
+  }
+
+  document.addEventListener("astro:page-load", initSwitcher);
+  initSwitcher();
+</script>

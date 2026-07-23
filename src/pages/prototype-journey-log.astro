@@ -1,0 +1,40 @@
+---
+// PROTOTYPE route — throwaway. Three variants of a "journey/log" day-grid
+// concept, switchable via ?variant=. See PrototypeSwitcher.astro.
+// Not linked from nav; not meant to reach main.
+import Layout from "../layouts/Layout.astro";
+import Rail from "../components/Rail.astro";
+import PageIntro from "../components/PageIntro.astro";
+import PrototypeSwitcher from "../components/prototype/PrototypeSwitcher.astro";
+import JourneyGridVariantA from "../components/prototype/JourneyGridVariantA.astro";
+import JourneyGridVariantB from "../components/prototype/JourneyGridVariantB.astro";
+import JourneyGridVariantC from "../components/prototype/JourneyGridVariantC.astro";
+
+// PROTOTYPE-only route: needs per-request query params to switch variants,
+// which the site's static output mode strips by default in dev.
+export const prerender = false;
+
+const variants = [
+  { key: "A", label: "Heatmap + note panel" },
+  { key: "B", label: "Quest-context grid" },
+  { key: "C", label: "Journal-first" },
+];
+const variant = Astro.url.searchParams.get("variant") ?? "A";
+---
+
+<Layout title="Prototype — Journey Log" description="Throwaway prototype, not a real page.">
+  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] md:content-start min-h-screen">
+    <Rail />
+    <main class="contents">
+      <div class="pt-20 pl-8 pr-20 md:px-8">
+        <PageIntro />
+      </div>
+      <div class="pl-8 pr-20 md:px-8 pb-24">
+        {variant === "A" && <JourneyGridVariantA />}
+        {variant === "B" && <JourneyGridVariantB />}
+        {variant === "C" && <JourneyGridVariantC />}
+      </div>
+    </main>
+  </div>
+  <PrototypeSwitcher variants={variants} current={variant} />
+</Layout>
