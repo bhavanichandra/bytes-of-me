@@ -1,0 +1,38 @@
+---
+// PROTOTYPE — sits in the narrow left rail below RailNav, not the wide
+// content column. Shows the last ~35 days as a small wrapped grid (fits
+// the ~16rem rail width) plus current streak, linking to /journey.
+import { buildMockDays, currentStreak, CAMPAIGNS, type JourneyDay } from "../../lib/prototype/journeyMockData";
+
+const allDays = buildMockDays(2026);
+const daysToDate = allDays.filter((d) => d.date <= "2026-07-24") as JourneyDay[];
+const recentDays = daysToDate.slice(-35); // last 5 weeks, 7 per row
+const streak = currentStreak(daysToDate);
+---
+
+<a
+  href="/journey"
+  class="group block w-full"
+>
+  <div class="font-mono text-[10px] uppercase tracking-widest text-neutral-600 mb-2">Journey</div>
+
+  <div class="grid grid-cols-7 gap-[3px] mb-2">
+    {recentDays.map((day) => (
+      <span
+        class:list={[
+          "w-full aspect-square rounded-[1.5px] border border-white/10",
+          day.worked && day.campaign ? "" : "bg-white/5",
+        ]}
+        style={day.worked && day.campaign ? `background:${CAMPAIGNS[day.campaign].color}` : ""}
+      ></span>
+    ))}
+  </div>
+
+  <div class="flex items-center justify-between">
+    <span class="text-xs">
+      <span class="text-pink-400 font-semibold">{streak}</span>
+      <span class="text-neutral-500"> day streak</span>
+    </span>
+    <span class="text-[10px] text-neutral-500 group-hover:text-pink-400 transition">View →</span>
+  </div>
+</a>

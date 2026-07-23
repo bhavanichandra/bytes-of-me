@@ -5,6 +5,7 @@ import RailNav from "../components/RailNav.astro";
 import PageIntro from "../components/PageIntro.astro";
 import BlogRow from "../components/BlogRow.astro";
 import Card from "../components/Card.astro";
+import JourneyTeaser from "../components/prototype/JourneyTeaser.astro";
 import { getRecentPosts, getSortedProjects, postDateFmt, projectDateFmt } from "../lib/content";
 
 const posts = await getRecentPosts(3);
@@ -22,7 +23,10 @@ const currentProject = (await getSortedProjects())[0];
         <PageIntro />
       </div>
       <RailNav current="home" />
-      <div class="pl-8 pr-20 md:px-8 pb-24 flex flex-col gap-16">
+      <div class="md:col-start-1 w-full px-8 pb-8">
+        <JourneyTeaser />
+      </div>
+      <div class="md:col-start-2 pl-8 pr-20 md:px-8 pb-24 flex flex-col gap-16">
         <section>
           <div class="flex items-center justify-between mb-5">
             <h2 class="text-xs uppercase tracking-widest text-neutral-500">Recent posts</h2>
