@@ -1,0 +1,61 @@
+---
+import { formatDuration, formatDate, beardLevelFor, BEARD_MAX_LEVEL, type CareerEntry } from "../lib/career";
+import PixelAvatar from "./PixelAvatar.astro";
+interface Props {
+  entry: CareerEntry;
+  active: boolean;
+  align?: "left" | "right";
+}
+const { entry, active, align = "left" } = Astro.props;
+---
+
+<div>
+  <div class:list={["flex items-start gap-4 flex-wrap mb-2", align === "right" ? "justify-end flex-row-reverse text-right" : "justify-between"]}>
+    <div class:list={["flex items-center gap-3", align === "right" && "flex-row-reverse"]}>
+      <PixelAvatar level={beardLevelFor(entry)} maxLevel={BEARD_MAX_LEVEL} size={5} />
+      <div>
+        <h3 class="text-lg text-white font-semibold">{entry.title}</h3>
+        <p class="text-sm text-neutral-400">{entry.company}</p>
+      </div>
+    </div>
+    <span
+      class="text-[10px] uppercase tracking-widest font-mono px-2 py-1 border shrink-0"
+      style={
+        active
+          ? `color: ${entry.color}; border-color: ${entry.color}66; background: ${entry.color}1a;`
+          : "color: rgb(115 115 115); border-color: rgb(255 255 255 / 0.1);"
+      }
+    >
+      {active ? "Active" : "Complete"}
+    </span>
+  </div>
+
+  <p class:list={["text-xs font-mono text-neutral-500 mb-3", align === "right" && "text-right"]}>
+    {formatDate(entry.start)} — {entry.end ? formatDate(entry.end) : "present"}
+    <span class="text-neutral-600"> · {formatDuration(entry.start, entry.end)}</span>
+  </p>
+
+  <p class="text-sm leading-relaxed text-neutral-200 mb-4">{entry.blurb}</p>
+
+  {entry.tags.length > 0 && (
+    <div class:list={["flex flex-wrap gap-2 mb-4", align === "right" && "justify-end"]}>
+      {entry.tags.map((tag) => (
+        <span
+          class="text-[10px] font-mono uppercase tracking-wide text-neutral-300 border px-2 py-1"
+          style={`background: ${entry.color}14; border-color: ${entry.color}33;`}
+        >
+          {tag}
+        </span>
+      ))}
+    </div>
+  )}
+
+  {entry.promotion && (
+    <div class:list={["text-xs font-mono border-t border-white/10 pt-3", align === "right" && "text-right"]}>
+      <div class="text-emerald-400 whitespace-nowrap">
+        ▲ level up → <span class="text-neutral-200">{entry.promotion.title}</span>
+      </div>
+      <div class="text-neutral-600 mt-1">{entry.promotion.note}</div>
+    </div>
+  )}
+</div>
