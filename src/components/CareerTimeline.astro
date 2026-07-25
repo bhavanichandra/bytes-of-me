@@ -1,0 +1,48 @@
+---
+import PixelFrame from "./PixelFrame.astro";
+import CareerEntryCard from "./CareerEntryCard.astro";
+import { CAREER } from "../lib/career";
+---
+
+<section class="w-full text-white">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="font-mono text-xs text-neutral-600 mb-10 text-center">$ cat career.log --sort=desc</div>
+
+    <div class="relative">
+      <div class="absolute left-1/2 -translate-x-1/2 top-2 bottom-2 w-px bg-white/10 hidden md:block"></div>
+
+      <div class="flex flex-col gap-10">
+        {CAREER.map((entry, i) => {
+          const rightSide = i % 2 === 0;
+          return (
+            <>
+              <slot name={`before-${i}`} />
+              <div class="relative grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-start">
+              <span
+                class="hidden md:block absolute left-1/2 -translate-x-1/2 top-2 w-[10px] h-[10px] z-10"
+                style={`background: ${i === 0 ? entry.color : "rgba(255,255,255,0.3)"};`}
+              ></span>
+
+              {rightSide ? (
+                <>
+                  <PixelFrame class="bg-[#242220] p-6 hover:border-white/30 transition md:col-start-1" color={`${entry.color}55`}>
+                    <CareerEntryCard entry={entry} active={i === 0} align="right" />
+                  </PixelFrame>
+                  <div class="hidden md:block md:col-start-2"></div>
+                </>
+              ) : (
+                <>
+                  <div class="hidden md:block md:col-start-1"></div>
+                  <PixelFrame class="bg-[#242220] p-6 hover:border-white/30 transition md:col-start-2" color={`${entry.color}55`}>
+                    <CareerEntryCard entry={entry} active={i === 0} align="left" />
+                  </PixelFrame>
+                </>
+              )}
+              </div>
+            </>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+---
+// Small pixel-art face whose beard grows with career level. `level`
+// (0..maxLevel) progressively reveals the grid's beard rows, one row per
+// level, so it scales to however many stages the data defines.
+interface Props {
+  level: number;
+  maxLevel: number;
+  size?: number;
+  class?: string;
+}
+const { level, maxLevel, size = 7, class: className = "" } = Astro.props;
+
+const GRID = [
+  "...HHHHH...",
+  "..HHHHHHH..",
+  ".HHHHHHHHH.",
+  ".HSSSSSSSH.",
+  "HSSSSSSSSSH",
+  "HSSESSSESSH",
+  "HSSSSSSSSSH",
+  "HSSSSMSSSSH",
+  ".BBBBBBBBB.",
+  "..BBBBBBB..",
+  "...BBBBB...",
+  "....BBB....",
+];
+const BEARD_ROWS = [8, 9, 10, 11]; // rows in GRID marked 'B'
+
+const COLORS: Record<string, string> = {
+  H: "#1c1512",
+  S: "#e8b88a",
+  E: "#100d0c",
+  M: "#b9784a",
+};
+const BEARD = "#1c1512";
+
+// At max level the beard is "done growing" (solid); below max, the newest
+// row is drawn at reduced opacity to read as still-growing stubble.
+const revealed = level >= maxLevel ? BEARD_ROWS.length : Math.min(level, BEARD_ROWS.length);
+const atMax = level >= maxLevel;
+
+function cellColor(ch: string, rowIndex: number): string | null {
+  if (ch === ".") return null;
+  if (ch === "B") {
+    const beardIndex = BEARD_ROWS.indexOf(rowIndex);
+    if (beardIndex === -1 || beardIndex >= revealed) return COLORS.S;
+    const isNewestRow = beardIndex === revealed - 1;
+    return isNewestRow && !atMax ? `${BEARD}b3` : BEARD;
+  }
+  return COLORS[ch] ?? null;
+}
+---
+
+<div
+  class={`inline-grid shrink-0 ${className}`}
+  style={`grid-template-columns: repeat(11, ${size}px); grid-auto-rows: ${size}px;`}
+>
+  {GRID.map((row, r) =>
+    row.split("").map((ch) => {
+      const color = cellColor(ch, r);
+      return <span style={color ? `background:${color};` : ""} />;
+    })
+  )}
+</div>

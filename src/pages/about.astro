@@ -1,7 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import MeCards from "../components/MeCards.astro";
 import LanyardCard from "../components/lanyard/LanyardCard.astro";
+import NowLog from "../components/NowLog.astro";
+import CareerTimeline from "../components/CareerTimeline.astro";
 ---
 
 <Layout
@@ -15,8 +16,16 @@ import LanyardCard from "../components/lanyard/LanyardCard.astro";
     ← Home
   </a>
 
-  <div class="pt-16 mb-16">
+  <div class="relative pt-16 mb-16">
     <LanyardCard />
+    <NowLog class="hidden lg:block absolute top-24 right-1/2 mr-[184px] w-full max-w-md z-10" />
   </div>
-  <MeCards />
+
+  <div class="lg:hidden px-6 mb-16">
+    <NowLog />
+  </div>
+
+  <div class="pb-20">
+    <CareerTimeline />
+  </div>
 </Layout>

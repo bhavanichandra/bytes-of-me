@@ -1,0 +1,28 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+
+// Dim, desaturated tones (like a muted terminal color scheme, e.g.
+// journalctl/syslog level coloring) rather than bright UI accent colors —
+// reads as incidental output, not a designed color code.
+const LOG_LINES = [
+  { tag: "BIO", color: "#a6924f", value: "Full-stack engineer, Hyderabad. Infra to interface." },
+  { tag: "THIS_MONTH", color: "#5f8a9c", value: "Working through AI/ML and system design courses." },
+  { tag: "PROJECTS", color: "#9c6f8e", value: "bytes-of-me, LLM fine-tuning, something new (soon)" },
+  { tag: "HACKATHON", color: "#6f9c6f", value: "OpenAI Build Week — hosted by Dev.to" },
+];
+---
+
+<div class={`font-mono text-xs ${className}`}>
+  <div class="text-neutral-600 mb-3">$ cat now.log</div>
+  <div class="grid gap-y-2" style="grid-template-columns: max-content 1fr;">
+    {LOG_LINES.map((line) => (
+      <>
+        <span class="pr-3" style={`color: ${line.color};`}>[{line.tag}]</span>
+        <span class="text-neutral-300 leading-relaxed">{line.value}</span>
+      </>
+    ))}
+  </div>
+</div>
