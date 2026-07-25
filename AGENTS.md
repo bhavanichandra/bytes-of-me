@@ -63,6 +63,20 @@ The site should feel personal, opinionated, and intentional rather than generic 
 - Never delete or revert unrelated modifications.
 - Keep `.gitignore` aligned with generated files and dependencies.
 
+## Agent skills
+
+### Issue tracker
+
+Issues live as GitHub issues in this repo (`bhavanichandra/bytes-of-me`), managed via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Uses the five canonical triage labels as-is: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout: one `CONTEXT.md` + `docs/adr/` at the repo root (created lazily as needed). See `docs/agents/domain.md`.
+
 ## Future Work
 - Content such as About-page bio/career/now-log data (`src/lib/career.ts`,
   `src/components/NowLog.astro`) is currently hardcoded in typed Astro/TS
