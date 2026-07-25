@@ -62,3 +62,12 @@ The site should feel personal, opinionated, and intentional rather than generic 
 - Respect existing user changes.
 - Never delete or revert unrelated modifications.
 - Keep `.gitignore` aligned with generated files and dependencies.
+
+## Future Work
+- Content such as About-page bio/career/now-log data (`src/lib/career.ts`,
+  `src/components/NowLog.astro`) is currently hardcoded in typed Astro/TS
+  files rather than sourced from a CMS, unlike blogs/projects (fetched from
+  `themuler-blogs` at build time via `scripts/fetch-content.sh`). It's
+  already structured as plain data objects, so migrating it later mainly
+  means schema design plus fetch/parse wiring, not restructuring the data.
+  Not planned for now — revisit if this content starts changing often.
