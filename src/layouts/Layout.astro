@@ -9,14 +9,17 @@ import { ARROW_DOWN, EMAIL, GITHUB, LINKEDIN, PROFILE } from "../lib/pixelIcons"
 interface Props {
   title: string;
   description?: string;
+  image?: ImageMetadata;
 }
 
 const {
   title,
   description = "Bhavani Chandra's personal site — blog posts and projects.",
+  image,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = image ? new URL(image.src, Astro.site) : undefined;
 
 // The floating corner menu is a distraction while reading a blog post
 // or project write-up, and it's redundant on the About page itself
@@ -46,10 +49,12 @@ const showCornerPanel = path === "/" || path === "/blogs" || path === "/projects
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
+    {ogImageURL && <meta property="og:image" content={ogImageURL} />}
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content={ogImageURL ? "summary_large_image" : "summary"} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {ogImageURL && <meta name="twitter:image" content={ogImageURL} />}
 
     <ClientRouter />
   </head>
