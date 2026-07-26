@@ -23,6 +23,7 @@ interface Props {
   tags?: string[];
   tier?: "common" | "rare" | "epic";
   href?: string;
+  cover?: ImageMetadata;
   backHref: string;
   backLabel: string;
   headings?: Heading[];
@@ -35,6 +36,7 @@ const {
   tags = [],
   tier = "common",
   href,
+  cover,
   backHref,
   backLabel,
   headings = [],
@@ -44,7 +46,7 @@ const color = TIER_COLORS[tier];
 const sectionHeadings = headings.filter((h) => h.depth === 2);
 ---
 
-<Layout title={`${title} — Bhavani Chandra`} description={description}>
+<Layout title={`${title} — Bhavani Chandra`} description={description} image={cover}>
   <a
     href={backHref}
     class="fixed top-8 left-8 text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition z-50"
