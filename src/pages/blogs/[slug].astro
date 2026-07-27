@@ -25,6 +25,7 @@ const { Content, headings } = await render(post);
   backHref="/blogs"
   backLabel="Blogs"
   headings={headings}
+  commentsTerm={post.id}
 >
   <Content />
 </DetailPage>

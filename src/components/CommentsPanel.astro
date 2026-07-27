@@ -1,0 +1,101 @@
+---
+// Giscus discussion, closed by default, revealed via a terminal-style CTA.
+// Reveal is hard-stepped (steps()), not eased, per the motion guidelines —
+// unlike the Quest Debrief panel's sheet-reveal, this is a "hard" UI beat.
+import { GISCUS_REPO, GISCUS_REPO_ID, GISCUS_CATEGORY, GISCUS_CATEGORY_ID } from "../lib/giscus";
+
+interface Props {
+  term: string;
+}
+
+const { term } = Astro.props;
+---
+
+<div class="mt-16 pt-8 border-t border-white/10 font-mono text-xs text-neutral-500">
+  <button type="button" data-comments-open class="hover:text-pink-400 transition">
+    $ open comments --thread
+  </button>
+</div>
+
+<div
+  id="comments-backdrop"
+  class="fixed inset-0 bg-black/60 z-[900] opacity-0 pointer-events-none transition-opacity duration-200"
+></div>
+
+<div
+  id="comments-panel"
+  class="fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-lg z-[901] bg-[#1a1918] border-l border-white/10 overflow-y-auto comments-panel"
+  data-term={term}
+>
+  <div class="flex items-center justify-between p-6 border-b border-white/10">
+    <div class="font-mono text-[10px] uppercase tracking-widest text-pink-400/80">Comments</div>
+    <button data-comments-close class="text-neutral-500 hover:text-white text-xs font-mono">close ✕</button>
+  </div>
+  <div class="p-6" data-giscus-mount data-repo={GISCUS_REPO} data-repo-id={GISCUS_REPO_ID} data-category={GISCUS_CATEGORY} data-category-id={GISCUS_CATEGORY_ID}></div>
+</div>
+
+<script>
+  function init() {
+    const panel = document.getElementById("comments-panel");
+    const backdrop = document.getElementById("comments-backdrop");
+    const openBtn = document.querySelector<HTMLButtonElement>("[data-comments-open]");
+    if (!panel || !backdrop || !openBtn || panel.dataset.bound === "true") return;
+    panel.dataset.bound = "true";
+
+    let loaded = false;
+    function loadGiscus() {
+      if (loaded) return;
+      loaded = true;
+      const mount = panel!.querySelector<HTMLElement>("[data-giscus-mount]");
+      if (!mount) return;
+      const script = document.createElement("script");
+      script.src = "https://giscus.app/client.js";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.setAttribute("data-repo", mount.dataset.repo ?? "");
+      script.setAttribute("data-repo-id", mount.dataset.repoId ?? "");
+      script.setAttribute("data-category", mount.dataset.category ?? "");
+      script.setAttribute("data-category-id", mount.dataset.categoryId ?? "");
+      script.setAttribute("data-mapping", "specific");
+      script.setAttribute("data-term", panel!.dataset.term ?? "");
+      script.setAttribute("data-reactions-enabled", "1");
+      script.setAttribute("data-emit-metadata", "0");
+      script.setAttribute("data-input-position", "top");
+      script.setAttribute("data-theme", `${window.location.origin}/giscus-theme.css`);
+      script.setAttribute("data-lang", "en");
+      mount.appendChild(script);
+    }
+
+    function open() {
+      loadGiscus();
+      panel!.classList.remove("translate-x-full");
+      backdrop!.classList.remove("opacity-0", "pointer-events-none");
+    }
+
+    function close() {
+      panel!.classList.add("translate-x-full");
+      backdrop!.classList.add("opacity-0", "pointer-events-none");
+    }
+
+    openBtn.addEventListener("click", open);
+    panel.querySelector("[data-comments-close]")?.addEventListener("click", close);
+    backdrop.addEventListener("click", close);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+    });
+  }
+
+  document.addEventListener("astro:page-load", init);
+  init();
+</script>
+
+<style>
+  .comments-panel {
+    transition: transform 0.35s steps(6, end);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .comments-panel {
+      transition: none;
+    }
+  }
+</style>
