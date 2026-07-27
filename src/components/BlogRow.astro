@@ -1,6 +1,7 @@
 ---
 // Shared blog list-row: used on both /blogs (full list) and Home
 // (recent posts preview).
+import { Image } from "astro:assets";
 import Tag from "./Tag.astro";
 import { TIER_COLORS } from "../lib/rarity";
 
@@ -11,9 +12,10 @@ interface Props {
   date: string;
   tags: string[];
   tier?: "common" | "rare" | "epic";
+  cover?: ImageMetadata;
 }
 
-const { href, title, description, date, tags, tier = "common" } = Astro.props;
+const { href, title, description, date, tags, tier = "common", cover } = Astro.props;
 const color = TIER_COLORS[tier];
 ---
 
@@ -22,9 +24,20 @@ const color = TIER_COLORS[tier];
   class={`row spotlight-item group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 py-6 first:pt-0 border-b border-white/5 transition-opacity duration-300 ${color ? "row--framed" : ""}`}
   style={color ? `--tier-color: ${color};` : undefined}
 >
-  <div class="flex flex-col gap-2">
-    <h3 class="text-lg text-neutral-100 group-hover:text-white transition leading-snug">{title}</h3>
-    <p class="text-sm text-neutral-500 leading-relaxed max-w-md">{description}</p>
+  <div class="flex items-start gap-4 min-w-0">
+    {cover && (
+      <Image
+        src={cover}
+        alt=""
+        width={96}
+        height={96}
+        class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover shrink-0"
+      />
+    )}
+    <div class="flex flex-col gap-2 min-w-0">
+      <h3 class="text-lg text-neutral-100 group-hover:text-white transition leading-snug">{title}</h3>
+      <p class="text-sm text-neutral-500 leading-relaxed max-w-md">{description}</p>
+    </div>
   </div>
   <div class="flex flex-row md:flex-col items-center md:items-end gap-2 shrink-0">
     <span class="text-xs text-neutral-500">{date}</span>
