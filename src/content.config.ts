@@ -21,7 +21,12 @@ const baseSchema = ({ image }: { image: () => z.ZodType<ImageMetadata> }) =>
 
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/blogs" }),
-  schema: baseSchema,
+  schema: (context) => baseSchema(context).extend({
+    // Matches a journey entry's `quest` value for build-time auto-linking
+    // between a Journey day and the blog post covering that work.
+    quest: z.string().optional(),
+    enableComments: z.boolean().default(false),
+  }),
 });
 
 const projects = defineCollection({
@@ -31,4 +36,14 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { blog, projects };
+const journey = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/journey" }),
+  schema: z.object({
+    date: z.coerce.date(),
+    campaign: z.string(),
+    quest: z.string(),
+    quest_type: z.enum(["sub", "side"]),
+  }),
+});
+
+export const collections = { blog, projects, journey };

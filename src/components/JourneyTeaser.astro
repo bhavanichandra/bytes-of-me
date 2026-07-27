@@ -1,0 +1,45 @@
+---
+// Sits in the narrow left rail below RailNav's Blogs/Projects pills, not
+// the wide content column. No rail-nav pill entry exists for Journey —
+// discovery is exclusively through this teaser, per the Journey PRD.
+import { buildDays, currentStreak, campaignColor } from "../lib/journey";
+import { getCollection } from "astro:content";
+
+const journeyEntries = await getCollection("journey");
+const entries = journeyEntries.map((e) => ({
+  date: `${e.data.date.getFullYear()}-${String(e.data.date.getMonth() + 1).padStart(2, "0")}-${String(e.data.date.getDate()).padStart(2, "0")}`,
+  campaign: e.data.campaign,
+  quest: e.data.quest,
+  questType: e.data.quest_type,
+  note: e.body ?? "",
+}));
+
+const today = new Date();
+const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+const rangeStart = new Date(today);
+rangeStart.setDate(rangeStart.getDate() - 34);
+const days = buildDays(entries, [], rangeStart, today);
+const streak = currentStreak(days, todayStr);
+---
+
+<a href="/journey" class="group block w-full">
+  <div class="font-mono text-[10px] uppercase tracking-widest text-neutral-600 mb-2">Journey</div>
+
+  <div class="grid grid-cols-7 gap-[3px] mb-2">
+    {days.map((day) => (
+      <span
+        class:list={["w-full aspect-square rounded-[1.5px] border border-white/10", !day.entry && "bg-white/5"]}
+        style={day.entry ? `background:${campaignColor(day.entry.campaign)}` : ""}
+      ></span>
+    ))}
+  </div>
+
+  <div class="flex items-center justify-between">
+    <span class="text-xs">
+      <span class="text-pink-400 font-semibold">{streak}</span>
+      <span class="text-neutral-500"> day streak</span>
+    </span>
+    <span class="text-[10px] text-neutral-500 group-hover:text-pink-400 transition">View →</span>
+  </div>
+</a>

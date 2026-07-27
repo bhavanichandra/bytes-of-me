@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Pulls the latest blogs/projects content from themuler-blogs (public, no auth)
-# into src/content/{blogs,projects} at build/dev time. Never committed here —
-# see .gitignore.
+# Pulls the latest blogs/projects/journey content from themuler-blogs (public,
+# no auth) into src/content/{blogs,projects,journey} at build/dev time. Never
+# committed here — see .gitignore.
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_URL="https://github.com/bhavanichandra/themuler-blogs/archive/refs/heads/main.tar.gz"
@@ -43,12 +43,23 @@ for dir in blogs projects; do
   fi
 done
 
+# journey/ is optional — no entries may have been authored yet.
+if [[ -L "$TMP_DIR/journey" ]]; then
+  echo "fetch-content: 'journey' is a symlink in fetched archive, refusing to extract" >&2
+  exit 1
+fi
+
 # Stage the whole content tree and swap it into place with a single rename,
 # so a failure anywhere above never leaves src/content partially replaced.
 rm -rf "$STAGE_DIR"
 mkdir -p "$STAGE_DIR"
 cp -R -P "$TMP_DIR/blogs" "$STAGE_DIR/blogs"
 cp -R -P "$TMP_DIR/projects" "$STAGE_DIR/projects"
+if [[ -d "$TMP_DIR/journey" ]]; then
+  cp -R -P "$TMP_DIR/journey" "$STAGE_DIR/journey"
+else
+  mkdir -p "$STAGE_DIR/journey"
+fi
 
 rm -rf "$BACKUP_DIR"
 if [[ -d "$ROOT_DIR/src/content" ]]; then
@@ -56,4 +67,4 @@ if [[ -d "$ROOT_DIR/src/content" ]]; then
 fi
 mv "$STAGE_DIR" "$ROOT_DIR/src/content"
 
-echo "Fetched content from themuler-blogs@main into src/content/{blogs,projects}"
+echo "Fetched content from themuler-blogs@main into src/content/{blogs,projects,journey}"
