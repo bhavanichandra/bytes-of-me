@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Rail from "../components/Rail.astro";
 import PixelFrame from "../components/PixelFrame.astro";
 import PixelIcon from "../components/PixelIcon.astro";
 import { SHIELD, BOOK, FOLDER } from "../lib/pixelIcons";
@@ -50,14 +49,12 @@ function dominantColor(month: JourneyMonth): string {
 ---
 
 <Layout title="Journey — Bhavani Chandra" description="Daily log of curriculum progress.">
-  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] md:content-start min-h-screen">
-    <Rail />
-    <main class="contents">
-      <div class="md:col-start-2 pt-20 pl-8 pr-8 md:pr-16 pb-24 flex flex-col gap-12 w-full">
-        <a href="/" class="font-mono text-xs text-neutral-500 hover:text-white transition inline-flex items-center gap-1 w-fit -mt-8 mb-4">
-          ← back
-        </a>
-        <section>
+  <div class="min-h-screen">
+    <main class="pt-20 pl-8 pr-8 md:pr-16 pb-24 flex flex-col gap-12 w-full max-w-5xl mx-auto">
+      <a href="/" class="font-mono text-xs text-neutral-500 hover:text-white transition inline-flex items-center gap-1 w-fit -mt-8 mb-4">
+        ← back
+      </a>
+      <section>
           <div class="flex items-center justify-between mb-4 flex-wrap gap-4">
             <div class="font-mono text-xs text-neutral-600">$ cat journey.log</div>
             <div class="flex gap-4 flex-wrap">
@@ -154,7 +151,6 @@ function dominantColor(month: JourneyMonth): string {
           </div>
           <p class="text-xs text-neutral-600 mt-3 font-mono">click a month to select it, click a day to open its quest debrief</p>
         </section>
-      </div>
     </main>
   </div>
 
