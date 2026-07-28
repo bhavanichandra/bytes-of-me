@@ -7,6 +7,7 @@
 import Layout from "../layouts/Layout.astro";
 import Tag from "./Tag.astro";
 import PixelIcon from "./PixelIcon.astro";
+import CommentsPanel from "./CommentsPanel.astro";
 import { SHIELD } from "../lib/pixelIcons";
 import { TIER_COLORS } from "../lib/rarity";
 
@@ -27,6 +28,8 @@ interface Props {
   backHref: string;
   backLabel: string;
   headings?: Heading[];
+  /** Giscus `term` — pass a fixed frontmatter slug, only from blog posts. */
+  commentsTerm?: string;
 }
 
 const {
@@ -40,6 +43,7 @@ const {
   backHref,
   backLabel,
   headings = [],
+  commentsTerm,
 } = Astro.props;
 
 const color = TIER_COLORS[tier];
@@ -119,6 +123,7 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
       )}
       <article class="prose-body text-neutral-200 leading-relaxed flex-1 min-w-0 max-w-4xl">
         <slot />
+        {commentsTerm && <CommentsPanel term={commentsTerm} />}
       </article>
     </div>
   </main>

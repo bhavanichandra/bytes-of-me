@@ -9,7 +9,8 @@
     "prebuild": "bash scripts/fetch-content.sh",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "bun test"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

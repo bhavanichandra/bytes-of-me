@@ -1,0 +1,46 @@
+/* Custom Giscus theme matching the site's warm-dark + grain palette. */
+.gsc-homepage-bg {
+  background-color: #1a1918 !important;
+}
+
+body {
+  background-color: transparent !important;
+  color: #e5e5e5 !important;
+  font-family: "Space Grotesk", sans-serif !important;
+}
+
+.gsc-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.gsc-comment-box,
+.gsc-comment {
+  background-color: #1e1d1b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.gsc-comment-box-textarea {
+  background-color: #161514 !important;
+  color: #e5e5e5 !important;
+}
+
+a,
+.gsc-comment-author-link {
+  color: #f472b6 !important;
+}
+
+.gsc-social-reaction-summary-item {
+  background-color: #1e1d1b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e5e5e5 !important;
+}
+
+button.gsc-comment-box-buttons-post {
+  background-color: #f472b6 !important;
+  border-color: #f472b6 !important;
+  color: #1a1918 !important;
+}
+
+.gsc-loading-image {
+  filter: grayscale(1) brightness(1.4);
+}
