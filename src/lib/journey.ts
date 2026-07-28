@@ -33,11 +33,7 @@ function toDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-/**
- * Builds one JourneyDay per calendar day from `start` to `end` (inclusive),
- * absence of a matching entry meaning "unworked" — per the PRD's decision
- * not to persist explicit `worked: false` records.
- */
+/** Absence of an entry for a date means unworked — no explicit `worked: false` records. */
 export function buildDays(entries: JourneyEntry[], blogs: BlogRef[], start: Date, end: Date): JourneyDay[] {
   const byDate = new Map(entries.map((e) => [e.date, e]));
   const blogByQuest = new Map(blogs.filter((b) => b.quest).map((b) => [b.quest as string, b]));
@@ -99,11 +95,7 @@ export function monthHasLogs(month: JourneyMonth): boolean {
   return month.weeks.flat().some((d) => d?.worked);
 }
 
-/**
- * A streak breaks on any unworked day. `days` is expected to run through
- * today. If today itself has no entry yet, it's dropped before counting —
- * an unstarted "today" must not read as breaking an otherwise-live streak.
- */
+/** An unlogged "today" is dropped before counting — it must not read as breaking a live streak. */
 export function currentStreak(days: JourneyDay[], todayDate: string): number {
   let list = days;
   const last = list[list.length - 1];

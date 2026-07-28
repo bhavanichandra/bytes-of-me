@@ -22,8 +22,7 @@ const baseSchema = ({ image }: { image: () => z.ZodType<ImageMetadata> }) =>
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/blogs" }),
   schema: (context) => baseSchema(context).extend({
-    // Matches a journey entry's `quest` value for build-time auto-linking
-    // between a Journey day and the blog post covering that work.
+    // Matches a journey entry's `quest` for build-time auto-linking.
     quest: z.string().optional(),
     enableComments: z.boolean().default(false),
   }),
