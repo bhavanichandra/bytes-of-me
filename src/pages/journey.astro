@@ -114,7 +114,7 @@ function dominantColor(month: JourneyMonth): string {
                     data-month-label={month.label}
                     class:list={["w-full", mi !== currentMonthIndex && "hidden"]}
                   >
-                    <div class="grid grid-cols-7 gap-2 md:gap-3 text-center w-full max-w-2xl">
+                    <div class="grid grid-cols-7 gap-2 md:gap-3 text-center w-full max-w-3xl">
                       {WEEKDAY_LABELS.map((label) => (
                         <div class="text-[10px] md:text-xs text-neutral-600 font-mono">{label}</div>
                       ))}
