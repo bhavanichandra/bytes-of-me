@@ -16,12 +16,11 @@ trap cleanup EXIT
 ARCHIVE="$TMP_DIR/content.tar.gz"
 curl -sfL --retry 3 --retry-delay 1 --connect-timeout 10 --max-time 120 "$REPO_URL" -o "$ARCHIVE"
 
-# Validate archive members before extracting anything: refuse absolute paths,
-# parent-directory traversal, and symlink/hardlink entries. A compromised
-# upstream archive could otherwise write outside $TMP_DIR during extraction
-# itself, before any post-extraction check gets a chance to run.
-# (Uses a plain pipe + command substitution rather than process substitution
-# — some build containers, e.g. Vercel's, don't expose /dev/fd for <(...).)
+# Validate before extracting: refuse absolute paths, parent-directory
+# traversal, and symlink/hardlink entries — a compromised upstream archive
+# could otherwise write outside $TMP_DIR during extraction itself.
+# (Plain pipe, not process substitution — some build containers don't
+# expose /dev/fd for <(...).)
 UNSAFE_ENTRIES="$(tar -tzf "$ARCHIVE" | grep -E '^/|\.\.' || true)"
 if [[ -n "$UNSAFE_ENTRIES" ]]; then
   echo "fetch-content: unsafe path(s) in archive:" >&2

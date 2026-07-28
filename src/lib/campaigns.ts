@@ -1,8 +1,6 @@
-// Hand-maintained Campaign slug -> { label, color } lookup, per the Journey
-// PRD's explicit decision not to fetch stackcraft/curriculum/ at build time.
-// Keep this in sync by hand when campaigns are added/renamed in stackcraft.
-// themuler-cms maintains its own copy of this table for authoring; this one
-// is bytes-of-me's separate copy for rendering.
+// Hand-maintained, not fetched from stackcraft/curriculum/ at build time.
+// themuler-cms keeps its own copy for authoring; update both when campaigns
+// change.
 export interface Campaign {
   slug: string;
   label: string;

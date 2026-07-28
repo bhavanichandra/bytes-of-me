@@ -1,5 +1,5 @@
-// GitHub Discussions is enabled on this repo with a "Blog Comments"
-// Announcement-format category — values from https://giscus.app.
+// Category is Announcement format so only maintainers/giscus can start
+// threads — visitors can only reply.
 export const GISCUS_REPO = "bhavanichandra/bytes-of-me";
 export const GISCUS_REPO_ID = "R_kgDOQD2b_w";
 export const GISCUS_CATEGORY = "Blog Comments";
