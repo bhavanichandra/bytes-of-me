@@ -20,13 +20,8 @@ const { term } = Astro.props;
 </button>
 
 <div
-  id="comments-backdrop"
-  class="fixed inset-0 bg-black/60 z-[900] opacity-0 pointer-events-none transition-opacity duration-200"
-></div>
-
-<div
   id="comments-panel"
-  class="fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-lg z-[901] bg-[#1a1918] border-l border-white/10 overflow-y-auto comments-panel"
+  class="fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-lg z-[901] bg-[#1a1918] border-l border-white/10 shadow-2xl shadow-black/60 overflow-y-auto comments-panel"
   data-term={term}
 >
   <div class="flex items-center justify-between p-6 border-b border-white/10">
@@ -39,9 +34,8 @@ const { term } = Astro.props;
 <script>
   function init() {
     const panel = document.getElementById("comments-panel");
-    const backdrop = document.getElementById("comments-backdrop");
     const openBtn = document.querySelector<HTMLButtonElement>("[data-comments-open]");
-    if (!panel || !backdrop || !openBtn || panel.dataset.bound === "true") return;
+    if (!panel || !openBtn || panel.dataset.bound === "true") return;
     panel.dataset.bound = "true";
 
     let loaded = false;
@@ -71,19 +65,16 @@ const { term } = Astro.props;
     function open() {
       loadGiscus();
       panel!.classList.remove("translate-x-full");
-      backdrop!.classList.remove("opacity-0", "pointer-events-none");
       openBtn!.classList.add("opacity-0", "pointer-events-none");
     }
 
     function close() {
       panel!.classList.add("translate-x-full");
-      backdrop!.classList.add("opacity-0", "pointer-events-none");
       openBtn!.classList.remove("opacity-0", "pointer-events-none");
     }
 
     openBtn.addEventListener("click", open);
     panel.querySelector("[data-comments-close]")?.addEventListener("click", close);
-    backdrop.addEventListener("click", close);
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
     });
