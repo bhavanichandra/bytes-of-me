@@ -11,11 +11,13 @@ interface Props {
 const { term } = Astro.props;
 ---
 
-<div class="mt-16 pt-8 border-t border-white/10 font-mono text-xs text-neutral-500">
-  <button type="button" data-comments-open class="hover:text-pink-400 transition">
-    $ open comments --thread
-  </button>
-</div>
+<button
+  type="button"
+  data-comments-open
+  class="comments-trigger fixed bottom-6 right-6 z-[899] font-mono text-xs text-neutral-300 bg-[#1e1d1b] border border-white/10 rounded-full px-4 py-2.5 shadow-lg shadow-black/40 hover:text-pink-400 hover:border-pink-400/40 transition"
+>
+  $ open comments --thread
+</button>
 
 <div
   id="comments-backdrop"
@@ -70,11 +72,13 @@ const { term } = Astro.props;
       loadGiscus();
       panel!.classList.remove("translate-x-full");
       backdrop!.classList.remove("opacity-0", "pointer-events-none");
+      openBtn!.classList.add("opacity-0", "pointer-events-none");
     }
 
     function close() {
       panel!.classList.add("translate-x-full");
       backdrop!.classList.add("opacity-0", "pointer-events-none");
+      openBtn!.classList.remove("opacity-0", "pointer-events-none");
     }
 
     openBtn.addEventListener("click", open);
