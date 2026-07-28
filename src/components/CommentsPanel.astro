@@ -2,6 +2,8 @@
 // Giscus discussion, closed by default, revealed via a terminal-style CTA.
 // Reveal is hard-stepped (steps()), not eased, per the motion guidelines —
 // unlike the Quest Debrief panel's sheet-reveal, this is a "hard" UI beat.
+import PixelIcon from "./PixelIcon.astro";
+import { COMMENT } from "../lib/pixelIcons";
 import { GISCUS_REPO, GISCUS_REPO_ID, GISCUS_CATEGORY, GISCUS_CATEGORY_ID } from "../lib/giscus";
 
 interface Props {
@@ -14,9 +16,11 @@ const { term } = Astro.props;
 <button
   type="button"
   data-comments-open
-  class="comments-trigger fixed bottom-6 right-6 z-[899] font-mono text-xs text-neutral-300 bg-[#1e1d1b] border border-white/10 rounded-full px-4 py-2.5 shadow-lg shadow-black/40 hover:text-pink-400 hover:border-pink-400/40 cursor-pointer transition"
+  aria-label="Open comments"
+  title="Comments"
+  class="comments-trigger fixed bottom-6 right-6 z-[899] w-12 h-12 rounded-full flex items-center justify-center bg-[#1e1d1b] border-2 border-white/20 shadow-lg shadow-black/40 hover:border-pink-400/50 cursor-pointer transition"
 >
-  $ open comments --thread
+  <PixelIcon bitmap={COMMENT} color="#f472b6" size={2.5} />
 </button>
 
 <div
