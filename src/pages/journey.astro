@@ -50,7 +50,7 @@ function dominantColor(month: JourneyMonth): string {
 
 <Layout title="Journey — Bhavani Chandra" description="Daily log of curriculum progress.">
   <div class="min-h-screen">
-    <main class="pt-20 pl-8 pr-8 md:pr-16 pb-24 flex flex-col gap-12 w-full max-w-5xl mx-auto">
+    <main class="pt-20 pl-4 pr-4 md:pl-8 md:pr-8 lg:pr-16 pb-24 flex flex-col gap-12 w-full max-w-5xl mx-auto">
       <a href="/" class="font-mono text-xs text-neutral-500 hover:text-white transition inline-flex items-center gap-1 w-fit -mt-8 mb-4">
         ← back
       </a>
@@ -73,7 +73,7 @@ function dominantColor(month: JourneyMonth): string {
             </div>
           </div>
 
-          <div class="border border-white/10 rounded-lg bg-[#161514] p-6 md:p-8 w-full">
+          <div class="border border-white/10 rounded-lg bg-[#161514] p-3 md:p-8 w-full">
             <div class="flex items-center gap-3 mb-6">
               <span class="relative inline-flex items-center font-mono uppercase tracking-wide text-xs px-3 py-1 bg-[#1e1d1b] border border-pink-400/50 text-pink-400">{year}</span>
               <span class="text-[10px] uppercase tracking-widest text-neutral-600">Full year timeline</span>
@@ -114,9 +114,9 @@ function dominantColor(month: JourneyMonth): string {
                     data-month-label={month.label}
                     class:list={["w-full", mi !== currentMonthIndex && "hidden"]}
                   >
-                    <div class="grid grid-cols-7 gap-3 md:gap-4 text-center w-full">
+                    <div class="grid grid-cols-7 gap-1.5 md:gap-4 text-center w-full">
                       {WEEKDAY_LABELS.map((label) => (
-                        <div class="text-xs md:text-sm text-neutral-600 font-mono">{label}</div>
+                        <div class="text-[10px] md:text-sm text-neutral-600 font-mono">{label}</div>
                       ))}
                       {month.weeks.flat().map((day) => {
                         if (!day) return <div class="w-full aspect-square"></div>;
