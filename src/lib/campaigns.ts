@@ -9,6 +9,7 @@ export interface Campaign {
 
 export const campaigns: Campaign[] = [
   { slug: "example-campaign", label: "Example Campaign", color: "#f472b6" },
+  { slug: "daily-learnings", label: "Daily Learnings", color: "#22d3ee" },
 ];
 
 export function campaignLabel(slug: string): string {
