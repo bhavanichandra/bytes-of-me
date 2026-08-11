@@ -1,0 +1,96 @@
+---
+interface Props {
+  tags: string[];
+  label: string;
+}
+
+const { tags, label } = Astro.props;
+---
+
+<div class="listing-filters mt-4 w-full max-w-xs font-mono text-xs" data-listing-filters>
+  <label class="flex flex-col gap-2 text-neutral-500">
+    <span class="uppercase tracking-widest">Search {label}</span>
+    <input
+      data-filter-search
+      type="search"
+      placeholder="search..."
+      class="border border-white/10 bg-[#1a1918] px-3 py-2 text-sm text-white outline-none placeholder:text-neutral-600 focus:border-cyan-400/60"
+    />
+  </label>
+  <div class="mt-4 flex flex-wrap gap-2">
+    {tags.map((tag) => (
+      <button
+        type="button"
+        data-filter-tag={tag}
+        class="border border-white/10 px-2 py-1 text-neutral-400 transition-colors hover:border-white/30 hover:text-white"
+      >
+        #{tag}
+      </button>
+    ))}
+  </div>
+</div>
+
+<style>
+  .listing-filters [data-filter-tag].is-active {
+    border-color: rgba(34, 211, 238, 0.7);
+    color: #67e8f9;
+  }
+</style>
+
+<script>
+  function parseTags(value: string | null) {
+    return new Set((value ?? "").split(",").map((tag) => tag.trim()).filter(Boolean));
+  }
+
+  function syncFilters(root: HTMLElement) {
+    const search = root.querySelector<HTMLInputElement>("[data-filter-search]");
+    const tagButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-filter-tag]"));
+    if (!search || root.dataset.bound) return;
+    root.dataset.bound = "true";
+
+    const params = new URLSearchParams(window.location.search);
+    const activeTags = parseTags(params.get("tags"));
+    search.value = params.get("q") ?? "";
+
+    function render() {
+      const q = search!.value.trim().toLowerCase();
+      const selected = Array.from(activeTags);
+      tagButtons.forEach((button) => {
+        const active = activeTags.has(button.dataset.filterTag ?? "");
+        button.classList.toggle("is-active", active);
+      });
+
+      document.querySelectorAll<HTMLElement>("[data-filter-item]").forEach((item) => {
+        const text = item.dataset.filterText ?? "";
+        const tags = (item.dataset.filterTags ?? "").split(",");
+        const matchesSearch = !q || text.includes(q);
+        const matchesTags = selected.length === 0 || selected.some((tag) => tags.includes(tag));
+        item.hidden = !(matchesSearch && matchesTags);
+      });
+
+      const next = new URLSearchParams(window.location.search);
+      search!.value.trim() ? next.set("q", search!.value.trim()) : next.delete("q");
+      selected.length ? next.set("tags", selected.join(",")) : next.delete("tags");
+      const query = next.toString();
+      history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+    }
+
+    search.addEventListener("input", render);
+    tagButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const tag = button.dataset.filterTag;
+        if (!tag) return;
+        activeTags.has(tag) ? activeTags.delete(tag) : activeTags.add(tag);
+        render();
+      });
+    });
+    render();
+  }
+
+  function bindListingFilters() {
+    document.querySelectorAll<HTMLElement>("[data-listing-filters]").forEach(syncFilters);
+  }
+
+  document.addEventListener("astro:page-load", bindListingFilters);
+  bindListingFilters();
+</script>

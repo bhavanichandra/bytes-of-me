@@ -3,9 +3,11 @@ import Layout from "../layouts/Layout.astro";
 import RailNav from "../components/RailNav.astro";
 import CardGrid from "../components/CardGrid.astro";
 import Card from "../components/Card.astro";
+import ListingFilters from "../components/ListingFilters.astro";
 import { getSortedProjects, projectDateFmt } from "../lib/content";
 
 const projects = await getSortedProjects();
+const tags = [...new Set(projects.flatMap((project) => project.data.tags))].sort();
 ---
 
 <Layout
@@ -20,18 +22,26 @@ const projects = await getSortedProjects();
       <div class="pt-0 md:pt-20 pb-3 md:pb-0 pl-8 pr-20 md:px-8">
         <h1 class="text-xs uppercase tracking-widest text-neutral-500">Projects</h1>
       </div>
-      <RailNav current="projects" />
+      <RailNav current="projects">
+        <ListingFilters tags={tags} label="projects" />
+      </RailNav>
       <div class="pl-8 pr-20 md:px-8 pb-24">
         <CardGrid>
           {projects.map((project) => (
-            <Card
-              path={`~/projects/${project.id}`}
-              href={`/projects/${project.id}`}
-              title={project.data.title}
-              tag={project.data.tags[0]}
-              date={projectDateFmt.format(project.data.date)}
-              tier={project.data.tier}
-            />
+            <div
+              data-filter-item
+              data-filter-text={`${project.data.title} ${project.data.description} ${project.data.tags.join(" ")}`.toLowerCase()}
+              data-filter-tags={project.data.tags.join(",")}
+            >
+              <Card
+                path={`~/projects/${project.id}`}
+                href={`/projects/${project.id}`}
+                title={project.data.title}
+                tag={project.data.tags[0]}
+                date={projectDateFmt.format(project.data.date)}
+                tier={project.data.tier}
+              />
+            </div>
           ))}
         </CardGrid>
       </div>

@@ -2,9 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import RailNav from "../components/RailNav.astro";
 import BlogRow from "../components/BlogRow.astro";
+import ListingFilters from "../components/ListingFilters.astro";
 import { getRecentPosts, postDateFmt } from "../lib/content";
 
 const posts = await getRecentPosts();
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
 ---
 
 <Layout
@@ -19,19 +21,27 @@ const posts = await getRecentPosts();
       <div class="pt-0 md:pt-20 pb-3 md:pb-0 pl-8 pr-20 md:px-8">
         <h1 class="text-xs uppercase tracking-widest text-neutral-500">Blogs</h1>
       </div>
-      <RailNav current="blogs" />
+      <RailNav current="blogs">
+        <ListingFilters tags={tags} label="blogs" />
+      </RailNav>
       <div class="pl-8 pr-20 md:px-8 pb-24">
         <div class="rows-list spotlight-group flex flex-col">
           {posts.map((post) => (
-            <BlogRow
-              href={`/blogs/${post.id}`}
-              title={post.data.title}
-              description={post.data.description}
-              date={postDateFmt.format(post.data.date)}
-              tags={post.data.tags}
-              tier={post.data.tier}
-              cover={post.data.cover}
-            />
+            <div
+              data-filter-item
+              data-filter-text={`${post.data.title} ${post.data.description} ${post.data.tags.join(" ")}`.toLowerCase()}
+              data-filter-tags={post.data.tags.join(",")}
+            >
+              <BlogRow
+                href={`/blogs/${post.id}`}
+                title={post.data.title}
+                description={post.data.description}
+                date={postDateFmt.format(post.data.date)}
+                tags={post.data.tags}
+                tier={post.data.tier}
+                cover={post.data.cover}
+              />
+            </div>
           ))}
         </div>
       </div>
