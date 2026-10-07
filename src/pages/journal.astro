@@ -9,46 +9,30 @@ import {
   currentStreak,
   bestStreak,
   totalDays,
-  dominantCampaign,
   monthHasLogs,
-  campaignLabel,
-  campaignColor,
+  toDateStr,
   WEEKDAY_LABELS,
-  type JourneyMonth,
-} from "../lib/journey";
-import { getCollection } from "astro:content";
+} from "../lib/journal";
+import { getJournalEntries } from "../lib/content";
 
 const MONTH_ICONS = [SHIELD, BOOK, FOLDER];
+const ACCENT = "#f472b6";
+const MUTED = "rgba(255,255,255,0.35)";
 
 const today = new Date();
-const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+const todayStr = toDateStr(today);
 
-const journeyEntries = await getCollection("journey");
-const entries = journeyEntries.map((e) => ({
-  date: `${e.data.date.getFullYear()}-${String(e.data.date.getMonth() + 1).padStart(2, "0")}-${String(e.data.date.getDate()).padStart(2, "0")}`,
-  campaign: e.data.campaign,
-  quest: e.data.quest,
-  questType: e.data.quest_type,
-  note: e.body ?? "",
-}));
-
-const blogPosts = await getCollection("blog", ({ data }) => !data.draft);
-const blogRefs = blogPosts.map((p) => ({ id: p.id, title: p.data.title, quest: p.data.quest }));
+const entries = await getJournalEntries();
 
 const year = today.getFullYear();
-const days = buildDays(entries, blogRefs, new Date(year, 0, 1), new Date(year, 11, 31));
+const days = buildDays(entries, new Date(year, 0, 1), new Date(year, 11, 31));
 const daysToDate = days.filter((d) => d.date <= todayStr);
 
 const months = groupByMonth(days);
 const currentMonthIndex = Math.max(0, months.findIndex((m) => m.key === todayStr.slice(0, 7)));
-
-function dominantColor(month: JourneyMonth): string {
-  const slug = dominantCampaign(month);
-  return slug ? campaignColor(slug) : "rgba(255,255,255,0.35)";
-}
 ---
 
-<Layout title="Journey — Bhavani Chandra" description="Daily log of curriculum progress.">
+<Layout title="Journal — Bhavani Chandra" description="A daily journal.">
   <div class="min-h-screen">
     <main class="pt-20 pl-4 pr-4 md:pl-8 md:pr-8 lg:pr-16 pb-24 flex flex-col gap-12 w-full max-w-5xl mx-auto">
       <a href="/" class="font-mono text-xs text-neutral-500 hover:text-white transition inline-flex items-center gap-1 w-fit -mt-8 mb-4">
@@ -56,7 +40,7 @@ function dominantColor(month: JourneyMonth): string {
       </a>
       <section>
           <div class="flex items-center justify-between mb-4 flex-wrap gap-4">
-            <div class="font-mono text-xs text-neutral-600">$ cat journey.log</div>
+            <div class="font-mono text-xs text-neutral-600">$ cat journal.log</div>
             <div class="flex gap-4 flex-wrap">
               <PixelFrame class="px-4 py-3 bg-[#1e1d1b]">
                 <div class="text-2xl font-semibold text-white">{currentStreak(daysToDate, todayStr)}</div>
@@ -96,10 +80,10 @@ function dominantColor(month: JourneyMonth): string {
                       ]}
                     >
                       <span data-month-select-marker class:list={["shrink-0 text-pink-400 font-mono text-xs leading-6", mi !== currentMonthIndex && "opacity-0"]}>▶</span>
-                      <span class="shrink-0"><PixelIcon bitmap={MONTH_ICONS[mi % MONTH_ICONS.length]} color={dominantColor(month)} size={2.5} /></span>
+                      <span class="shrink-0"><PixelIcon bitmap={MONTH_ICONS[mi % MONTH_ICONS.length]} color={hasLogs ? ACCENT : MUTED} size={2.5} /></span>
                       <span class="flex flex-col min-w-0 gap-0.5">
                         <span class="font-mono text-[11px] uppercase tracking-wide text-neutral-300 leading-tight break-words">{month.label}</span>
-                        {!hasLogs && <span class="font-mono text-[9px] uppercase tracking-wide text-neutral-600 leading-tight">No logs yet</span>}
+                        {!hasLogs && <span class="font-mono text-[9px] uppercase tracking-wide text-neutral-600 leading-tight">No entries yet</span>}
                       </span>
                     </button>
                   );
@@ -125,13 +109,8 @@ function dominantColor(month: JourneyMonth): string {
                             type="button"
                             data-day-cell
                             data-date={day.date}
-                            data-campaign-label={day.entry ? campaignLabel(day.entry.campaign) : ""}
-                            data-campaign-color={day.entry ? campaignColor(day.entry.campaign) : ""}
-                            data-quest={day.entry?.quest ?? ""}
-                            data-quest-type={day.entry?.questType === "side" ? "Side Quest" : "Sub Quest"}
+                            data-title={day.entry?.title ?? ""}
                             data-note={day.entry?.note ?? ""}
-                            data-blog-title={day.blog?.title ?? ""}
-                            data-blog-href={day.blog ? `/blogs/${day.blog.id}` : ""}
                             disabled={!day.worked}
                             class:list={[
                               "w-full aspect-square rounded-[4px] border transition relative flex items-center justify-center font-mono text-sm md:text-base",
@@ -139,7 +118,7 @@ function dominantColor(month: JourneyMonth): string {
                                 ? "bg-pink-400 border-pink-300 text-black/70 hover:scale-105 hover:z-10 cursor-pointer"
                                 : "bg-white/5 border-white/10 text-neutral-600 cursor-default",
                             ]}
-                            aria-label={`${day.date}${day.worked ? " — worked" : ""}`}
+                            aria-label={`${day.date}${day.worked ? " — entry" : ""}`}
                           >{Number(day.date.slice(-2))}</button>
                         );
                       })}
@@ -149,18 +128,18 @@ function dominantColor(month: JourneyMonth): string {
               </div>
             </div>
           </div>
-          <p class="text-xs text-neutral-600 mt-3 font-mono">click a month to select it, click a day to open its quest debrief</p>
+          <p class="text-xs text-neutral-600 mt-3 font-mono">click a month to select it, click a day to read its entry</p>
         </section>
     </main>
   </div>
 
   <div
-    id="quest-board-backdrop"
+    id="entry-board-backdrop"
     class="fixed inset-0 bg-black/60 z-[900] opacity-0 pointer-events-none transition-opacity duration-300"
   ></div>
 
   <div
-    id="quest-board"
+    id="entry-board"
     class="fixed left-1/2 bottom-0 -translate-x-1/2 translate-y-full w-full max-w-lg z-[901] transition-transform duration-300 ease-out"
   >
     <div class="relative mx-4 mb-4 border-2 border-pink-400/50 rounded-t-lg bg-[#1a1918] p-6">
@@ -168,55 +147,33 @@ function dominantColor(month: JourneyMonth): string {
       <span class="absolute w-2.5 h-2.5 bg-pink-400/70 -top-[5px] -right-[5px]"></span>
 
       <div class="flex items-center justify-between mb-4">
-        <div class="font-mono text-[10px] uppercase tracking-widest text-pink-400/80">Quest Debrief</div>
+        <div class="font-mono text-[10px] uppercase tracking-widest text-pink-400/80">Journal entry</div>
         <button data-board-close class="text-neutral-500 hover:text-white text-xs font-mono">close ✕</button>
       </div>
 
       <div class="font-mono text-xs text-neutral-500 mb-2" data-board-date>—</div>
-      <div class="flex items-center gap-2 mb-1 flex-wrap">
-        <span data-board-campaign class="text-sm font-medium text-white"></span>
-        <span data-board-quest-type class="text-[10px] uppercase tracking-wide font-mono px-1.5 py-0.5 border border-white/15 rounded text-neutral-400"></span>
-      </div>
-      <div data-board-quest class="text-sm text-neutral-400 mb-4"></div>
-      <p data-board-note class="text-sm text-neutral-300 leading-relaxed mb-5"></p>
-      <a
-        data-board-blog-link
-        href="#"
-        class="hidden text-xs text-pink-400 hover:text-pink-300 transition items-center gap-1 font-mono"
-      >
-        Field notes →
-      </a>
+      <div data-board-title class="hidden text-sm font-medium text-white mb-3"></div>
+      <p data-board-note class="text-sm text-neutral-300 leading-relaxed whitespace-pre-line"></p>
     </div>
   </div>
 </Layout>
 
 <script>
   function init() {
-    const board = document.getElementById("quest-board");
-    const backdrop = document.getElementById("quest-board-backdrop");
+    const board = document.getElementById("entry-board");
+    const backdrop = document.getElementById("entry-board-backdrop");
     if (!board || !backdrop || board.dataset.bound === "true") return;
     board.dataset.bound = "true";
 
     function open(cell: HTMLElement) {
       (board!.querySelector("[data-board-date]") as HTMLElement).textContent = cell.dataset.date ?? "";
-      const campaignEl = board!.querySelector("[data-board-campaign]") as HTMLElement;
-      campaignEl.textContent = cell.dataset.campaignLabel ?? "";
-      campaignEl.style.color = cell.dataset.campaignColor || "white";
-      (board!.querySelector("[data-board-quest-type]") as HTMLElement).textContent = cell.dataset.questType ?? "";
-      (board!.querySelector("[data-board-quest]") as HTMLElement).textContent = cell.dataset.quest ?? "";
-      (board!.querySelector("[data-board-note]") as HTMLElement).textContent =
-        cell.dataset.note || `Worked on ${cell.dataset.quest}.`;
 
-      const link = board!.querySelector("[data-board-blog-link]") as HTMLAnchorElement;
-      if (cell.dataset.blogHref) {
-        link.href = cell.dataset.blogHref;
-        link.textContent = `Field notes: ${cell.dataset.blogTitle} →`;
-        link.classList.remove("hidden");
-        link.classList.add("inline-flex");
-      } else {
-        link.classList.add("hidden");
-        link.classList.remove("inline-flex");
-      }
+      const titleEl = board!.querySelector("[data-board-title]") as HTMLElement;
+      titleEl.textContent = cell.dataset.title ?? "";
+      titleEl.classList.toggle("hidden", !cell.dataset.title);
+
+      (board!.querySelector("[data-board-note]") as HTMLElement).textContent =
+        cell.dataset.note || "No note for this day.";
 
       board!.classList.remove("translate-y-full");
       backdrop!.classList.remove("opacity-0", "pointer-events-none");

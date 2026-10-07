@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Pulls the latest blogs/projects/journey content from themuler-blogs (public,
-# no auth) into src/content/{blogs,projects,journey} at build/dev time. Never
+# Pulls the latest blogs/projects/journal content from themuler-blogs (public,
+# no auth) into src/content/{blogs,projects,journal} at build/dev time. Never
 # committed here — see .gitignore.
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -42,9 +42,9 @@ for dir in blogs projects; do
   fi
 done
 
-# journey/ is optional — no entries may have been authored yet.
-if [[ -L "$TMP_DIR/journey" ]]; then
-  echo "fetch-content: 'journey' is a symlink in fetched archive, refusing to extract" >&2
+# journal/ is optional — no entries may have been authored yet.
+if [[ -L "$TMP_DIR/journal" ]]; then
+  echo "fetch-content: 'journal' is a symlink in fetched archive, refusing to extract" >&2
   exit 1
 fi
 
@@ -54,10 +54,10 @@ rm -rf "$STAGE_DIR"
 mkdir -p "$STAGE_DIR"
 cp -R -P "$TMP_DIR/blogs" "$STAGE_DIR/blogs"
 cp -R -P "$TMP_DIR/projects" "$STAGE_DIR/projects"
-if [[ -d "$TMP_DIR/journey" ]]; then
-  cp -R -P "$TMP_DIR/journey" "$STAGE_DIR/journey"
+if [[ -d "$TMP_DIR/journal" ]]; then
+  cp -R -P "$TMP_DIR/journal" "$STAGE_DIR/journal"
 else
-  mkdir -p "$STAGE_DIR/journey"
+  mkdir -p "$STAGE_DIR/journal"
 fi
 
 rm -rf "$BACKUP_DIR"
@@ -66,4 +66,4 @@ if [[ -d "$ROOT_DIR/src/content" ]]; then
 fi
 mv "$STAGE_DIR" "$ROOT_DIR/src/content"
 
-echo "Fetched content from themuler-blogs@main into src/content/{blogs,projects,journey}"
+echo "Fetched content from themuler-blogs@main into src/content/{blogs,projects,journal}"

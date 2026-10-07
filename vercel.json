@@ -3,5 +3,8 @@
     "deploymentEnabled": {
       "prototype/*": false
     }
-  }
+  },
+  "redirects": [
+    { "source": "/journey", "destination": "/journal", "permanent": true }
+  ]
 }

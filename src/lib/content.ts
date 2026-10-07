@@ -1,4 +1,13 @@
 import { getCollection } from "astro:content";
+import type { JournalEntry } from "./journal";
+
+export async function getJournalEntries(): Promise<JournalEntry[]> {
+  return (await getCollection("journal")).map((e) => ({
+    date: e.data.date.toISOString().slice(0, 10),
+    title: e.data.title,
+    note: e.body ?? "",
+  }));
+}
 
 export async function getRecentPosts(limit?: number) {
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
