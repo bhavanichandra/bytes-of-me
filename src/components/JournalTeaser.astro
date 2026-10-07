@@ -1,0 +1,33 @@
+---
+// Discovery for /journal is teaser-only — no rail-nav pill.
+import { buildDays, currentStreak, toDateStr } from "../lib/journal";
+import { getJournalEntries } from "../lib/content";
+
+const entries = await getJournalEntries();
+
+const today = new Date();
+const rangeStart = new Date(today);
+rangeStart.setDate(rangeStart.getDate() - 34);
+const days = buildDays(entries, rangeStart, today);
+const streak = currentStreak(days, toDateStr(today));
+---
+
+<a href="/journal" class="group block w-full">
+  <div class="font-mono text-[10px] uppercase tracking-widest text-neutral-600 mb-2">Journal</div>
+
+  <div class="grid grid-cols-7 gap-[3px] mb-2">
+    {days.map((day) => (
+      <span
+        class:list={["w-full aspect-square rounded-[1.5px] border", day.entry ? "bg-pink-400 border-pink-300/40" : "bg-white/5 border-white/10"]}
+      ></span>
+    ))}
+  </div>
+
+  <div class="flex items-center justify-between">
+    <span class="text-xs">
+      <span class="text-pink-400 font-semibold">{streak}</span>
+      <span class="text-neutral-500"> day streak</span>
+    </span>
+    <span class="text-[10px] text-neutral-500 group-hover:text-pink-400 transition">View →</span>
+  </div>
+</a>

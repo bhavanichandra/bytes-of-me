@@ -6,6 +6,7 @@ dist/
 # blog/project content — fetched from themuler-blogs at build time (see #7, #13), never committed here
 src/content/blogs/
 src/content/projects/
+src/content/journal/
 src/.content-staging-*/
 src/.content-backup-*/
 
