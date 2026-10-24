@@ -12,8 +12,7 @@
   transition:name="rail"
 >
   <a id="rail-name" href="/" class="text-2xl font-semibold hover:text-neutral-300 transition">Bhavani Chandra</a>
-  <div id="rail-tagline" class="text-neutral-300 text-lg tracking-wide">Laziness is the mother of progress</div>
-  <div id="rail-role" class="text-neutral-400 text-sm tracking-wide">Senior Software Engineer @ GE Vernova</div>
+  <div id="rail-role" class="text-neutral-300 text-base tracking-wide max-w-[14rem]">Eight years wiring systems together. Now AI's one of them.</div>
 </aside>
 
 <script>
@@ -27,7 +26,7 @@
   function animateRail() {
     const rail = document.querySelector(".rail");
     if (!rail) return;
-    const lines = rail.querySelectorAll("#rail-name, #rail-tagline, #rail-role");
+    const lines = rail.querySelectorAll("#rail-name, #rail-role");
 
     if (sessionStorage.getItem(ANIMATED_KEY)) {
       gsap.set(lines, { opacity: 1, x: 0 });

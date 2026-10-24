@@ -3,7 +3,6 @@
 // (recent posts preview).
 import { Image } from "astro:assets";
 import Tag from "./Tag.astro";
-import { TIER_COLORS } from "../lib/rarity";
 
 interface Props {
   href: string;
@@ -11,18 +10,15 @@ interface Props {
   description: string;
   date: string;
   tags: string[];
-  tier?: "common" | "rare" | "epic";
   cover?: ImageMetadata;
 }
 
-const { href, title, description, date, tags, tier = "common", cover } = Astro.props;
-const color = TIER_COLORS[tier];
+const { href, title, description, date, tags, cover } = Astro.props;
 ---
 
 <a
   href={href}
-  class={`row spotlight-item group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 py-6 first:pt-0 border-b border-white/5 transition-opacity duration-300 ${color ? "row--framed" : ""}`}
-  style={color ? `--tier-color: ${color};` : undefined}
+  class="row spotlight-item group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 py-6 first:pt-0 border-b border-white/5 transition-opacity duration-300"
 >
   <div class="flex items-start gap-4 min-w-0">
     {cover && (
@@ -48,43 +44,3 @@ const color = TIER_COLORS[tier];
     </span>
   </div>
 </a>
-
-<style>
-  .row--framed {
-    position: relative;
-    padding-left: 1rem;
-    border-left: 3px solid var(--tier-color);
-  }
-  .row--framed::before,
-  .row--framed::after {
-    content: "";
-    position: absolute;
-    left: -3px;
-    width: 6px;
-    height: 6px;
-    background: var(--tier-color);
-    animation: badge-blip 0.4s steps(4, end);
-  }
-  .row--framed::before { top: 1.5rem; }
-  .row--framed::after { bottom: 1.5rem; }
-</style>
-
-<script>
-  // Tier-gated click motion (issue #19): common rows get the plain
-  // CSS hover above only; rare/epic (".row--framed") also get a
-  // squash-stretch press + elastic bounce-back on click.
-  import { gsap } from "gsap";
-
-  function bindFramedRows() {
-    document.querySelectorAll<HTMLElement>(".row--framed").forEach((row) => {
-      if (row.dataset.motionBound) return;
-      row.dataset.motionBound = "true";
-      row.addEventListener("mousedown", () => gsap.to(row, { scaleX: 1.02, scaleY: 0.97, duration: 0.12, ease: "power2.out" }));
-      row.addEventListener("mouseup", () => gsap.to(row, { scaleX: 1, scaleY: 1, duration: 0.6, ease: "elastic.out(1, 0.4)" }));
-      row.addEventListener("mouseleave", () => gsap.to(row, { scaleX: 1, scaleY: 1, duration: 0.4, ease: "power2.out" }));
-    });
-  }
-
-  document.addEventListener("astro:page-load", bindFramedRows);
-  bindFramedRows();
-</script>
