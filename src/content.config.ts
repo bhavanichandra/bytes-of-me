@@ -14,9 +14,6 @@ const baseSchema = ({ image }: { image: () => z.ZodType<ImageMetadata> }) =>
     tags: z.array(z.string()),
     draft: z.boolean().default(false),
     cover: image().optional(),
-    // Drives the rarity-frame accent border. "common" (the default)
-    // renders no special frame.
-    tier: z.enum(["common", "rare", "epic"]).default("common"),
   });
 
 const blog = defineCollection({
