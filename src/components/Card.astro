@@ -1,9 +1,6 @@
 ---
 // Shared card for /projects. Used inside <CardGrid>.
 import Tag from "./Tag.astro";
-import PixelIcon from "./PixelIcon.astro";
-import { SHIELD } from "../lib/pixelIcons";
-import { TIER_COLORS } from "../lib/rarity";
 
 interface Props {
   path: string;
@@ -12,27 +9,16 @@ interface Props {
   tag: string;
   date: string;
   image?: string;
-  tier?: "common" | "rare" | "epic";
 }
 
-const { path, href, title, tag, date, image, tier = "common" } = Astro.props;
-const color = TIER_COLORS[tier];
+const { path, href, title, tag, date, image } = Astro.props;
 ---
 
 <a
   href={href}
-  class={`card spotlight-item group flex flex-col gap-4 transition-opacity duration-300 ${color ? "card--framed" : ""}`}
-  style={color ? `--tier-color: ${color};` : undefined}
+  class="card spotlight-item group flex flex-col gap-4 p-3 border border-white/10 rounded-2xl transition-opacity duration-300"
 >
-  {color && (
-    <>
-      <span class="card-corner card-corner--tl"></span>
-      <span class="card-corner card-corner--tr"></span>
-      <span class="card-corner card-corner--bl"></span>
-      <span class="card-corner card-corner--br"></span>
-    </>
-  )}
-  <div class="relative rounded-2xl bg-[#242220] h-40 flex items-center justify-center overflow-hidden">
+  <div class="relative rounded-xl bg-[#242220] h-40 flex items-center justify-center overflow-hidden">
     {image ? (
       <img src={image} alt={title} class="w-full h-full object-cover" />
     ) : (
@@ -40,66 +26,9 @@ const color = TIER_COLORS[tier];
     )}
   </div>
   <div class="flex flex-col gap-2">
-    <div class="font-mono text-[11px] text-neutral-500">{path}</div>
-    {color ? (
-      <span class="card-pill font-mono badge-blip">
-        <PixelIcon bitmap={SHIELD} color={color} size={1.5} />
-        {tag}
-      </span>
-    ) : (
-      <Tag label={tag} size="md" />
-    )}
+    <div class="text-[11px] text-neutral-500">{path}</div>
+    <Tag label={tag} size="md" />
     <h3 class="text-lg text-neutral-100 leading-snug group-hover:text-white transition">{title}</h3>
     <span class="text-xs text-neutral-500">{date}</span>
   </div>
 </a>
-
-<style>
-  .card--framed {
-    position: relative;
-    padding: 0.9rem;
-    border: 2px solid var(--tier-color);
-  }
-  .card-corner {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: var(--tier-color);
-  }
-  .card-corner--tl { top: -3px; left: -3px; }
-  .card-corner--tr { top: -3px; right: -3px; }
-  .card-corner--bl { bottom: -3px; left: -3px; }
-  .card-corner--br { bottom: -3px; right: -3px; }
-  .card-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    width: fit-content;
-    padding: 0.2rem 0.6rem;
-    font-size: 11px;
-    color: var(--tier-color);
-    background: color-mix(in srgb, var(--tier-color) 12%, transparent);
-    border: 1px solid var(--tier-color);
-    border-radius: 999px;
-  }
-</style>
-
-<script>
-  // Tier-gated click motion (issue #19): common cards get the plain
-  // CSS hover above only; rare/epic (".card--framed") also get a
-  // squash-stretch press + elastic bounce-back on click.
-  import { gsap } from "gsap";
-
-  function bindFramedCards() {
-    document.querySelectorAll<HTMLElement>(".card--framed").forEach((card) => {
-      if (card.dataset.motionBound) return;
-      card.dataset.motionBound = "true";
-      card.addEventListener("mousedown", () => gsap.to(card, { scaleX: 1.05, scaleY: 0.94, duration: 0.12, ease: "power2.out" }));
-      card.addEventListener("mouseup", () => gsap.to(card, { scaleX: 1, scaleY: 1, duration: 0.6, ease: "elastic.out(1, 0.4)" }));
-      card.addEventListener("mouseleave", () => gsap.to(card, { scaleX: 1, scaleY: 1, duration: 0.4, ease: "power2.out" }));
-    });
-  }
-
-  document.addEventListener("astro:page-load", bindFramedCards);
-  bindFramedCards();
-</script>

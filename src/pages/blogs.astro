@@ -38,7 +38,6 @@ const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
                 description={post.data.description}
                 date={postDateFmt.format(post.data.date)}
                 tags={post.data.tags}
-                tier={post.data.tier}
                 cover={post.data.cover}
               />
             </div>

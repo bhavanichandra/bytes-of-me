@@ -3,10 +3,7 @@
 // auto-derived from h2 headings, no per-page setup needed.
 import Layout from "../layouts/Layout.astro";
 import Tag from "./Tag.astro";
-import PixelIcon from "./PixelIcon.astro";
 import CommentsPanel from "./CommentsPanel.astro";
-import { SHIELD } from "../lib/pixelIcons";
-import { TIER_COLORS } from "../lib/rarity";
 
 interface Heading {
   depth: number;
@@ -19,7 +16,6 @@ interface Props {
   description?: string;
   date: string;
   tags?: string[];
-  tier?: "common" | "rare" | "epic";
   href?: string;
   cover?: ImageMetadata;
   backHref: string;
@@ -34,7 +30,6 @@ const {
   description,
   date,
   tags = [],
-  tier = "common",
   href,
   cover,
   backHref,
@@ -43,7 +38,6 @@ const {
   commentsTerm,
 } = Astro.props;
 
-const color = TIER_COLORS[tier];
 const sectionHeadings = headings.filter((h) => h.depth === 2);
 ---
 
@@ -70,12 +64,6 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
 
   <main class="pl-6 pr-14 md:pl-8 md:pr-12 pt-20 pb-24">
     <div class="max-w-3xl mx-auto text-center mb-16">
-      {color && (
-        <span class="detail-pill font-mono badge-blip mb-4" style={`--tier-color: ${color};`}>
-          <PixelIcon bitmap={SHIELD} color={color} size={1.5} />
-          {tier}
-        </span>
-      )}
       <h1 class="text-3xl text-white mb-3 leading-snug">{title}</h1>
       {description && <p class="text-neutral-400 leading-relaxed">{description}</p>}
       <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
@@ -125,19 +113,3 @@ const sectionHeadings = headings.filter((h) => h.depth === 2);
     </div>
   </main>
 </Layout>
-
-<style>
-  .detail-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.25rem 0.7rem;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--tier-color);
-    background: color-mix(in srgb, var(--tier-color) 12%, transparent);
-    border: 1px solid var(--tier-color);
-    border-radius: 999px;
-  }
-</style>

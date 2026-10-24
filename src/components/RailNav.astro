@@ -16,16 +16,12 @@ const { current } = Astro.props;
   transition:persist
   transition:name="rail-nav"
 >
-  <div class="nav-frame flex">
-    <span class="nav-corner nav-corner--tl"></span>
-    <span class="nav-corner nav-corner--tr"></span>
-    <span class="nav-corner nav-corner--bl"></span>
-    <span class="nav-corner nav-corner--br"></span>
+  <div class="nav-frame flex border border-white/10 rounded-lg bg-[#1a1918]">
     <a
       data-rail-pill
       href="/blogs"
       class:list={[
-        "font-mono flex items-center gap-2 px-4 py-2 text-sm tracking-wide transition-colors",
+        "flex items-center gap-2 px-4 py-2 text-sm tracking-wide transition-colors",
         current === "blogs" ? "text-white" : "text-neutral-400 hover:text-white",
       ]}
     >
@@ -37,7 +33,7 @@ const { current } = Astro.props;
       data-rail-pill
       href="/projects"
       class:list={[
-        "font-mono flex items-center gap-2 px-4 py-2 text-sm tracking-wide transition-colors",
+        "flex items-center gap-2 px-4 py-2 text-sm tracking-wide transition-colors",
         current === "projects" ? "text-white" : "text-neutral-400 hover:text-white",
       ]}
     >
@@ -49,27 +45,6 @@ const { current } = Astro.props;
 </nav>
 
 <style>
-  .nav-frame {
-    position: relative;
-    border: 2px solid rgba(255, 255, 255, 0.16);
-    background: #1a1918;
-    clip-path: polygon(
-      0 8px, 8px 8px, 8px 0,
-      calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
-      100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
-      8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
-    );
-  }
-  .nav-corner {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.35);
-  }
-  .nav-corner--tl { top: -2.5px; left: 5.5px; }
-  .nav-corner--tr { top: -2.5px; right: 5.5px; }
-  .nav-corner--bl { bottom: -2.5px; left: 5.5px; }
-  .nav-corner--br { bottom: -2.5px; right: 5.5px; }
   .nav-divider {
     width: 1px;
     background: rgba(255, 255, 255, 0.12);

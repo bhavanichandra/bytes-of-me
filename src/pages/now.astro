@@ -1,0 +1,50 @@
+---
+// /now page — https://nownownow.com convention: what I'm actually focused
+// on right now, updated occasionally by hand. Source of truth for the
+// content below is stackcraft/PLAN.md; update both when priorities shift.
+import Layout from "../layouts/Layout.astro";
+
+const UPDATED = "October 2026";
+
+const FOCUS = [
+  {
+    heading: "Go fundamentals",
+    body: "Finishing the boot.dev Go course — enough to write a small concurrent program (goroutines, channels, a TCP listener) without looking things up.",
+  },
+  {
+    heading: "Strangler facade",
+    body: "A reverse proxy in front of a legacy JSP product, routing some paths to new services. Timeboxed to 2–3 weeks, ends with a written design critique: failure modes, capacity numbers, what I'd change.",
+  },
+  {
+    heading: "The rule I'm working under",
+    body: "Hand-write in any language I can't yet review confidently (Go, Kotlin, Rust, Swift). Let agents write where I can (Java, Spring). The skill that matters isn't typing code faster than an agent — it's being able to read what one produced and say whether it's right.",
+  },
+];
+---
+
+<Layout title="Now — Bhavani Chandra" description="What Bhavani Chandra is focused on right now.">
+  <a
+    href="/"
+    class="fixed top-8 left-8 text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition z-50"
+  >
+    ← Home
+  </a>
+
+  <main class="max-w-2xl mx-auto pt-24 pb-24 px-6">
+    <h1 class="text-2xl text-white font-semibold mb-2">Now</h1>
+    <p class="text-xs text-neutral-500 mb-12">Updated {UPDATED}. What I'm actually spending time on, not the highlight reel.</p>
+
+    <div class="flex flex-col gap-10">
+      {FOCUS.map((item) => (
+        <div class="border-b border-white/5 pb-8 last:border-b-0">
+          <h2 class="text-sm text-neutral-200 font-medium mb-2">{item.heading}</h2>
+          <p class="text-sm text-neutral-400 leading-relaxed">{item.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="text-xs text-neutral-600 mt-4">
+      This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer" class="underline hover:text-neutral-400 transition">now page</a>.
+    </p>
+  </main>
+</Layout>
