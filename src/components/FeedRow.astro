@@ -3,7 +3,6 @@
 // entry, told apart only by a small stroke icon (the retro flare that
 // stays). Journal entries have no detail page, so they render as a plain
 // row with the note inline instead of a link.
-import { Image } from "astro:assets";
 import Tag from "./Tag.astro";
 import PixelIcon from "./PixelIcon.astro";
 import { POST_TYPE_META, type UnifiedPost } from "../lib/content";
@@ -22,22 +21,19 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
   data-filter-item
   data-filter-date={post.dateIso}
   data-filter-text={filterText}
-  class={`row spotlight-item group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 py-6 first:pt-0 border-b border-[var(--border)] transition-opacity duration-300 ${post.href ? "" : "cursor-default"}`}
+  class:list={[
+    "row group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6",
+    "-mx-3 md:-mx-4 px-3 md:px-4 py-4 rounded-xl",
+    "border border-transparent hover:border-[var(--border-hover)]",
+    "transition-colors duration-100 ease-out",
+    post.href ? "cursor-pointer" : "cursor-default",
+  ]}
 >
   <div class="flex items-start gap-4 min-w-0">
-    {post.cover && (
-      <Image
-        src={post.cover}
-        alt=""
-        width={96}
-        height={96}
-        class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover shrink-0"
-      />
-    )}
     <div class="flex flex-col gap-2 min-w-0">
-      <h3 class="flex items-center gap-2 font-serif text-lg text-[var(--ink)] transition-colors leading-snug">
+      <h3 class="flex items-center gap-2 font-serif font-medium text-lg text-[var(--ink)] leading-snug">
         <span
-          class="w-1.5 h-1.5 rounded-full shrink-0 opacity-0 group-hover:opacity-100 transition"
+          class="w-1.5 h-1.5 rounded-full shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-100"
           style={`background: ${POST_TYPE_META[post.type].color};`}
         ></span>
         <PixelIcon bitmap={POST_TYPE_META[post.type].icon} color={POST_TYPE_META[post.type].color} size={1.5} />
@@ -51,7 +47,7 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
     </div>
   </div>
   <div class="flex flex-row md:flex-col items-center md:items-end gap-2 shrink-0">
-    <span class="text-xs font-pixel text-[var(--ink-faint)]">{post.dateLabel}</span>
+    <span class="text-xs font-pixel text-[var(--ink-faint)] group-hover:text-[var(--ink-muted)] transition-colors duration-100">{post.dateLabel}</span>
     {post.tags && post.tags.length > 0 && (
       <span class="flex gap-1.5">
         {post.tags.slice(0, 2).map((tag) => (

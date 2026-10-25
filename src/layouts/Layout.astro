@@ -2,7 +2,6 @@
 // Shared page layout: theme (light/dark), grain background, sticky-note
 // corner panel on every page.
 import "../styles/global.css";
-import { ClientRouter } from "astro:transitions";
 import PixelIcon from "../components/PixelIcon.astro";
 import TagPanel from "../components/TagPanel.astro";
 import { CLOCK, EMAIL, GITHUB, LINKEDIN } from "../lib/pixelIcons";
@@ -53,19 +52,14 @@ const ogImageURL = image ? new URL(image.src, Astro.site) : undefined;
     <meta name="twitter:description" content={description} />
     {ogImageURL && <meta name="twitter:image" content={ogImageURL} />}
 
-    <ClientRouter />
-
     <script is:inline>
       // Site-wide light/dark, persisted. Runs once per real page load,
-      // before anything paints (no flash), and again on client-side
-      // view-transition navigation (ClientRouter swaps <body> without a
-      // full reload, so this needs to run there too).
+      // before anything paints (no flash).
       function applyTheme() {
         var stored = localStorage.getItem("theme");
         document.documentElement.dataset.theme = stored === "light" ? "light" : "dark";
       }
       applyTheme();
-      document.addEventListener("astro:after-swap", applyTheme);
     </script>
   </head>
   <body class="grain-bg transition-colors duration-200 bg-[var(--bg)] text-[var(--ink)]">
@@ -150,7 +144,6 @@ const ogImageURL = image ? new URL(image.src, Astro.site) : undefined;
         });
       }
 
-      document.addEventListener("astro:page-load", initThemeToggle);
       initThemeToggle();
     </script>
   </body>

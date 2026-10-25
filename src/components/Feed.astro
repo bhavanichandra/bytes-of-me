@@ -27,7 +27,7 @@ const { posts } = Astro.props;
     />
   </div>
 
-  <div class="rows-list spotlight-group flex flex-col">
+  <div class="rows-list flex flex-col gap-1.5">
     {posts.length === 0 && <p class="text-sm text-[var(--ink-muted)]">Nothing here yet.</p>}
     {posts.map((post) => <FeedRow {post} />)}
     <p data-no-matches class="hidden text-sm py-4 text-[var(--ink-muted)]">No matches.</p>
@@ -63,7 +63,4 @@ const { posts } = Astro.props;
   }
 
   document.querySelectorAll<HTMLElement>("[data-feed]").forEach(initFeed);
-  document.addEventListener("astro:page-load", () => {
-    document.querySelectorAll<HTMLElement>("[data-feed]").forEach(initFeed);
-  });
 </script>
