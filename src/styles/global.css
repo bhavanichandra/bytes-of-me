@@ -113,29 +113,6 @@ pre[data-language]::after {
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Universal page-transition: replaces Astro's default root crossfade
-   with a hard-stepped pixel-dissolve (~320ms), per the motion
-   guidelines (issue #19). */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.32s;
-  animation-timing-function: steps(6, end);
-}
-::view-transition-old(root) {
-  animation-name: pixel-dissolve-out;
-}
-::view-transition-new(root) {
-  animation-name: pixel-dissolve-in;
-}
-@keyframes pixel-dissolve-out {
-  from { opacity: 1; filter: blur(0); }
-  to { opacity: 0; filter: blur(6px); }
-}
-@keyframes pixel-dissolve-in {
-  from { opacity: 0; filter: blur(6px); }
-  to { opacity: 1; filter: blur(0); }
-}
-
 /* Hard-stepped retro "blip" reveal for rare/epic tier badges (issue
    #19) — applied once on mount, never on hover. */
 .badge-blip {
@@ -149,10 +126,6 @@ pre[data-language]::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-  }
   .badge-blip {
     animation: none;
   }

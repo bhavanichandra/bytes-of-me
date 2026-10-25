@@ -63,7 +63,4 @@ const { posts } = Astro.props;
   }
 
   document.querySelectorAll<HTMLElement>("[data-feed]").forEach(initFeed);
-  document.addEventListener("astro:page-load", () => {
-    document.querySelectorAll<HTMLElement>("[data-feed]").forEach(initFeed);
-  });
 </script>
