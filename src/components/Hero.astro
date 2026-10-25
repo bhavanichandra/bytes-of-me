@@ -1,0 +1,48 @@
+---
+// The hero: wordmark + the one big statement on the page (Lora, Fowler-
+// style — a headline barely bigger than restraint allows, not a
+// terminal prompt). transition:persist keeps it mounted (no flicker)
+// across Astro view-transition navigation.
+---
+
+<div class="hero w-full pt-20 px-8 md:px-12 max-w-3xl" transition:persist transition:name="hero">
+  <a id="hero-name" href="/" class="text-xs uppercase tracking-widest text-[var(--ink)] opacity-60 hover:opacity-100 transition">
+    Bhavani Chandra
+  </a>
+  <h1
+    id="hero-statement"
+    class="font-serif font-medium leading-[1.1] mt-4 text-[var(--ink)] text-[clamp(2rem,5vw,3.75rem)]"
+  >
+    Eight years wiring systems together. Now AI&rsquo;s one of them.
+  </h1>
+</div>
+
+<script>
+  import { gsap } from "gsap";
+
+  // Entrance plays once per browser tab, not on every in-app navigation —
+  // replaying it on each view-transition swap read as the text flickering
+  // away and back.
+  const ANIMATED_KEY = "hero-animated";
+
+  function animateHero() {
+    const hero = document.querySelector(".hero");
+    if (!hero) return;
+    const lines = hero.querySelectorAll("#hero-name, #hero-statement");
+
+    if (sessionStorage.getItem(ANIMATED_KEY)) {
+      gsap.set(lines, { opacity: 1, y: 0 });
+      return;
+    }
+
+    gsap.set(lines, { opacity: 0, y: 14 });
+    gsap.to(lines, { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: "power2.out" });
+    sessionStorage.setItem(ANIMATED_KEY, "true");
+  }
+
+  if (!(window as any).__heroBound) {
+    (window as any).__heroBound = true;
+    document.addEventListener("astro:page-load", animateHero);
+  }
+  animateHero();
+</script>

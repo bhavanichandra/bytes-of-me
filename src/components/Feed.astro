@@ -1,112 +1,28 @@
 ---
-// The site's one content feed: every blog post, project and journal entry,
-// switchable between a flat List (default) and a Calendar heatmap, both
-// driven by the same search box. No separate Blogs/Projects/Journal pages.
+// The site's one content feed: every blog post, project and journal
+// entry, merged into one searchable list. No separate Blogs/Projects/
+// Journal pages.
 import FeedRow from "./FeedRow.astro";
-import { buildDays, groupByMonth, toDateStr, WEEKDAY_LABELS } from "../lib/heatmap";
 import type { UnifiedPost } from "../lib/content";
 
 interface Props {
   posts: UnifiedPost[];
 }
 const { posts } = Astro.props;
-
-const today = new Date();
-const todayStr = toDateStr(today);
-
-const heatmapEntries = posts.map((p) => ({ date: p.dateIso }));
-const firstDate = posts.length ? posts[posts.length - 1].date : today;
-const rangeStart = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
-const days = buildDays(heatmapEntries, rangeStart, today);
-const months = groupByMonth(days);
-const currentMonthIndex = Math.max(0, months.findIndex((m) => m.key === todayStr.slice(0, 7)));
 ---
 
 <div class="feed" data-feed>
-  <div class="mb-5 flex items-center justify-between gap-3">
-    <input
-      type="search"
-      placeholder="Search…"
-      data-feed-search
-      class="w-full max-w-xs border border-white/10 bg-transparent px-3 py-2 text-sm text-white outline-none placeholder:text-neutral-600 focus:border-cyan-400/60"
-    />
-    <div class="flex shrink-0 border border-white/10 rounded-lg overflow-hidden">
-      <button
-        type="button"
-        data-view-toggle="list"
-        aria-label="List view"
-        class="view-toggle-btn is-active px-2.5 py-2 text-neutral-400 hover:text-white transition-colors"
-      >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-      </button>
-      <button
-        type="button"
-        data-view-toggle="calendar"
-        aria-label="Calendar view"
-        class="view-toggle-btn px-2.5 py-2 text-neutral-400 hover:text-white transition-colors"
-      >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
-      </button>
-    </div>
-  </div>
+  <input
+    type="search"
+    placeholder="Search…"
+    data-feed-search
+    class="mb-5 w-full max-w-xs border border-[var(--border)] bg-transparent px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-cyan-400/60"
+  />
 
-  <div data-view-panel="list" class="rows-list spotlight-group flex flex-col">
-    {posts.length === 0 && <p class="text-sm text-neutral-500">Nothing here yet.</p>}
+  <div class="rows-list spotlight-group flex flex-col">
+    {posts.length === 0 && <p class="text-sm text-[var(--ink-muted)]">Nothing here yet.</p>}
     {posts.map((post) => <FeedRow {post} />)}
-    <p data-no-matches class="hidden text-sm text-neutral-500 py-4">No matches.</p>
-  </div>
-
-  <div data-view-panel="calendar" class="hidden border border-white/10 rounded-lg bg-[#161514] p-3 md:p-8 w-full">
-    <div class="grid md:grid-cols-[18rem_1fr] gap-8 items-stretch">
-      <div id="month-select-list" class="grid grid-cols-2 gap-2 content-between">
-        {months.map((month, mi) => (
-          <button
-            type="button"
-            data-month-select
-            data-month-index={mi}
-            class:list={[
-              "px-3 py-2.5 border rounded-md transition text-left text-xs uppercase tracking-wide",
-              mi === currentMonthIndex
-                ? "border-pink-400/70 bg-pink-400/10 text-white"
-                : "border-white/10 hover:border-white/25 text-neutral-400",
-            ]}
-          >
-            {month.label}
-          </button>
-        ))}
-      </div>
-
-      <div id="month-panels" class="relative min-w-0">
-        {months.map((month, mi) => (
-          <div data-month-panel data-month-index={mi} class:list={["w-full", mi !== currentMonthIndex && "hidden"]}>
-            <div class="grid grid-cols-7 gap-1.5 md:gap-3 text-center w-full">
-              {WEEKDAY_LABELS.map((label) => (
-                <div class="text-[10px] md:text-xs text-neutral-600">{label}</div>
-              ))}
-              {month.weeks.flat().map((day) => {
-                if (!day) return <div class="w-full aspect-square"></div>;
-                return (
-                  <button
-                    type="button"
-                    data-day-cell
-                    data-date={day.date}
-                    disabled={!day.worked}
-                    class:list={[
-                      "w-full aspect-square rounded-[4px] border transition relative flex items-center justify-center text-xs md:text-sm",
-                      day.worked
-                        ? "bg-pink-400 border-pink-300 text-black/70 hover:scale-105 hover:z-10 cursor-pointer"
-                        : "bg-white/5 border-white/10 text-neutral-600 cursor-default",
-                    ]}
-                    aria-label={`${day.date}${day.worked ? " — has entries" : ""}`}
-                  >{Number(day.date.slice(-2))}</button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-    <p class="text-xs text-neutral-600 mt-4">Click a day to see what was posted then.</p>
+    <p data-no-matches class="hidden text-sm py-4 text-[var(--ink-muted)]">No matches.</p>
   </div>
 </div>
 
@@ -118,10 +34,8 @@ const currentMonthIndex = Math.max(0, months.findIndex((m) => m.key === todayStr
     const search = root.querySelector<HTMLInputElement>("[data-feed-search]")!;
     const items = Array.from(root.querySelectorAll<HTMLElement>("[data-filter-item]"));
     const noMatches = root.querySelector<HTMLElement>("[data-no-matches]")!;
-    const toggleBtns = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-view-toggle]"));
-    const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-view-panel]"));
 
-    function applyFilter() {
+    search.addEventListener("input", () => {
       const q = search.value.trim().toLowerCase();
       let visible = 0;
       items.forEach((item) => {
@@ -130,42 +44,6 @@ const currentMonthIndex = Math.max(0, months.findIndex((m) => m.key === todayStr
         if (matches) visible++;
       });
       noMatches.classList.toggle("hidden", visible > 0 || items.length === 0);
-    }
-    search.addEventListener("input", applyFilter);
-
-    function showView(view: string) {
-      panels.forEach((p) => p.classList.toggle("hidden", p.dataset.viewPanel !== view));
-      toggleBtns.forEach((b) => b.classList.toggle("is-active", b.dataset.viewToggle === view));
-    }
-    toggleBtns.forEach((btn) => btn.addEventListener("click", () => showView(btn.dataset.viewToggle!)));
-
-    // Month carousel
-    const panelsWrap = root.querySelector<HTMLElement>("#month-panels");
-    const listWrap = root.querySelector<HTMLElement>("#month-select-list");
-    if (panelsWrap && listWrap) {
-      const monthPanels = Array.from(panelsWrap.querySelectorAll<HTMLElement>("[data-month-panel]"));
-      const monthItems = Array.from(listWrap.querySelectorAll<HTMLButtonElement>("[data-month-select]"));
-      monthItems.forEach((item, i) => {
-        item.addEventListener("click", () => {
-          monthPanels.forEach((p, j) => p.classList.toggle("hidden", i !== j));
-          monthItems.forEach((it, j) => {
-            it.classList.toggle("border-pink-400/70", i === j);
-            it.classList.toggle("bg-pink-400/10", i === j);
-            it.classList.toggle("text-white", i === j);
-            it.classList.toggle("border-white/10", i !== j);
-            it.classList.toggle("text-neutral-400", i !== j);
-          });
-        });
-      });
-    }
-
-    // Clicking a day jumps to the list, filtered to that date.
-    root.querySelectorAll<HTMLButtonElement>("[data-day-cell]:not([disabled])").forEach((cell) => {
-      cell.addEventListener("click", () => {
-        search.value = cell.dataset.date ?? "";
-        applyFilter();
-        showView("list");
-      });
     });
   }
 
@@ -174,10 +52,3 @@ const currentMonthIndex = Math.max(0, months.findIndex((m) => m.key === todayStr
     document.querySelectorAll<HTMLElement>("[data-feed]").forEach(initFeed);
   });
 </script>
-
-<style>
-  .view-toggle-btn.is-active {
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-  }
-</style>
