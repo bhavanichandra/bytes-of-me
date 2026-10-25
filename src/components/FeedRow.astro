@@ -3,7 +3,6 @@
 // entry, told apart only by a small stroke icon (the retro flare that
 // stays). Journal entries have no detail page, so they render as a plain
 // row with the note inline instead of a link.
-import { Image } from "astro:assets";
 import Tag from "./Tag.astro";
 import PixelIcon from "./PixelIcon.astro";
 import { POST_TYPE_META, type UnifiedPost } from "../lib/content";
@@ -31,15 +30,6 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
   ]}
 >
   <div class="flex items-start gap-4 min-w-0">
-    {post.cover && (
-      <Image
-        src={post.cover}
-        alt=""
-        width={96}
-        height={96}
-        class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover shrink-0"
-      />
-    )}
     <div class="flex flex-col gap-2 min-w-0">
       <h3 class="flex items-center gap-2 font-serif text-lg text-[var(--ink)] group-hover:font-bold transition-all leading-snug">
         <span
