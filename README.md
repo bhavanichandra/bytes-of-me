@@ -49,7 +49,6 @@ All commands run from the root of the project:
 - Light/dark theme is token-driven (`--bg`, `--ink`, `--surface`, `--border`,
   …) in `src/styles/global.css` — components should read these instead of
   hardcoding colors.
-- Headings use Lora (serif); body copy uses Space Grotesk (sans); code uses
-  Space Mono — matching martinfowler.com's typographic split.
+- All text (headings, body copy, and UI labels) uses Lora; code uses Space Mono.
 - Comments are powered by [Giscus](https://giscus.app) and re-theme live to
   match the site's light/dark toggle.

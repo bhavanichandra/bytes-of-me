@@ -6,7 +6,7 @@
 body {
   background-color: transparent !important;
   color: #e5e5e5 !important;
-  font-family: "Space Grotesk", sans-serif !important;
+  font-family: "Lora", ui-serif, Georgia, serif !important;
 }
 
 .gsc-header {
