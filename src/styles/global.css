@@ -29,6 +29,23 @@
   --border: rgba(31, 29, 26, 0.12);
 }
 
+/* NowLog's per-line accent colors — dim/desaturated so they read as
+   incidental terminal output, not a designed color code. Those same hex
+   values go muddy on a light background, so light mode gets its own,
+   darker-and-more-saturated set instead of sharing one hardcoded hex. */
+:root {
+  --log-bio: #a6924f;
+  --log-month: #5f8a9c;
+  --log-projects: #9c6f8e;
+  --log-hackathon: #6f9c6f;
+}
+[data-theme="light"] {
+  --log-bio: #8a7325;
+  --log-month: #2f6478;
+  --log-projects: #874a73;
+  --log-hackathon: #437a43;
+}
+
 [data-feed-search]::placeholder {
   color: var(--ink-faint);
 }

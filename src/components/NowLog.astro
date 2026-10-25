@@ -6,12 +6,14 @@ const { class: className = "" } = Astro.props;
 
 // Dim, desaturated tones (like a muted terminal color scheme, e.g.
 // journalctl/syslog level coloring) rather than bright UI accent colors —
-// reads as incidental output, not a designed color code.
+// reads as incidental output, not a designed color code. Colors come
+// from theme-aware CSS vars (global.css) since the dark-tuned hex values
+// go muddy on the light background.
 const LOG_LINES = [
-  { tag: "BIO", color: "#a6924f", value: "Full-stack engineer, Hyderabad. Infra to interface." },
-  { tag: "THIS_MONTH", color: "#5f8a9c", value: "Working through AI/ML and system design courses." },
-  { tag: "PROJECTS", color: "#9c6f8e", value: "bytes-of-me, LLM fine-tuning, something new (soon)" },
-  { tag: "HACKATHON", color: "#6f9c6f", value: "OpenAI Build Week — hosted by Dev.to" },
+  { tag: "BIO", color: "var(--log-bio)", value: "Full-stack engineer, Hyderabad. Infra to interface." },
+  { tag: "THIS_MONTH", color: "var(--log-month)", value: "Working through AI/ML and system design courses." },
+  { tag: "PROJECTS", color: "var(--log-projects)", value: "bytes-of-me, LLM fine-tuning, something new (soon)" },
+  { tag: "HACKATHON", color: "var(--log-hackathon)", value: "OpenAI Build Week — hosted by Dev.to" },
 ];
 ---
 
