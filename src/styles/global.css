@@ -27,6 +27,12 @@
   --border: rgba(24, 24, 26, 0.12);
 }
 
+/* Box-sizing reset and body margin are already handled by Tailwind's
+   preflight — ensure all code snippets fall back to Space Mono. */
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+}
+
 [data-feed-search]::placeholder {
   color: var(--ink-faint);
 }
@@ -68,8 +74,11 @@ pre[data-language] {
   border-radius: 0.75rem;
   border: 1px solid var(--border);
   background-color: var(--surface) !important;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono) !important;
   font-size: 0.85rem;
+}
+pre[data-language] code {
+  font-family: var(--font-mono) !important;
 }
 pre[data-language]::before {
   content: "";
@@ -169,6 +178,10 @@ pre[data-language]::after {
 .prose-body img {
   border-radius: 0.75rem;
   margin: 1rem 0;
+}
+.prose-body pre,
+.prose-body code {
+  font-family: var(--font-mono);
 }
 .prose-body :not(pre) > code {
   font-family: var(--font-mono);
