@@ -1,20 +1,40 @@
 import { getCollection } from "astro:content";
-import { BOOK, FOLDER, SHIELD } from "./pixelIcons";
+import { BOOK, CLOCK, CODE, COMMENT, FOLDER, SHIELD, SPARK, STAR } from "./pixelIcons";
 
-export type PostType = "blog" | "project" | "journal";
+export interface PostIconMeta {
+  bitmap: string[];
+  color: string;
+}
 
-/** Single source of truth for how each post type is told apart in the feed — icon only, never a colored badge. */
-export const POST_TYPE_META = {
-  blog: { icon: BOOK, color: "#22d3ee" },
-  project: { icon: FOLDER, color: "#f87171" },
-  journal: { icon: SHIELD, color: "#f472b6" },
-} as const;
+export const POST_ICON_OPTIONS: PostIconMeta[] = [
+  { bitmap: BOOK, color: "#22d3ee" },     // cyan
+  { bitmap: FOLDER, color: "#f87171" },   // rose
+  { bitmap: SHIELD, color: "#f472b6" },   // pink
+  { bitmap: CODE, color: "#a78bfa" },     // purple
+  { bitmap: STAR, color: "#fbbf24" },     // amber
+  { bitmap: SPARK, color: "#34d399" },    // emerald
+  { bitmap: CLOCK, color: "#60a5fa" },    // blue
+  { bitmap: COMMENT, color: "#fb923c" },  // orange
+];
+
+function hashSlug(slug: string): number {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash << 5) - hash + slug.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+export function getPostIcon(slug: string): PostIconMeta {
+  const index = hashSlug(slug) % POST_ICON_OPTIONS.length;
+  return POST_ICON_OPTIONS[index];
+}
 
 export interface UnifiedPost {
-  type: PostType;
   id: string;
-  /** Journal entries have no detail page — they render inline in the feed instead. */
-  href?: string;
+  slug: string;
+  href: string;
   title: string;
   description?: string;
   tags?: string[];
@@ -22,6 +42,7 @@ export interface UnifiedPost {
   date: Date;
   dateLabel: string;
   dateIso: string;
+  icon: PostIconMeta;
 }
 
 export const postDateFmt = new Intl.DateTimeFormat("en-US", {
@@ -39,49 +60,29 @@ function toIso(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-/** Every blog post, project and journal entry, newest first — the public site's one content feed. */
+/** Every post, newest first — the public site's content feed. */
 export async function getUnifiedPosts(): Promise<UnifiedPost[]> {
-  const [posts, projects, journalEntries] = await Promise.all([
-    getCollection("blog", ({ data }) => !data.draft),
-    getCollection("projects", ({ data }) => !data.draft),
-    getCollection("journal"),
-  ]);
+  const posts = await getCollection("posts", ({ data }) => {
+    if (import.meta.env.PROD && data.draft) return false;
+    return !data.draft;
+  });
 
-  const blogPosts: UnifiedPost[] = posts.map((p) => ({
-    type: "blog",
-    id: p.id,
-    href: `/blogs/${p.id}`,
-    title: p.data.title,
-    description: p.data.description,
-    tags: p.data.tags,
-    cover: p.data.cover,
-    date: p.data.date,
-    dateLabel: postDateFmt.format(p.data.date),
-    dateIso: toIso(p.data.date),
-  }));
-
-  const projectPosts: UnifiedPost[] = projects.map((p) => ({
-    type: "project",
-    id: p.id,
-    href: `/projects/${p.id}`,
-    title: p.data.title,
-    description: p.data.description,
-    tags: p.data.tags,
-    cover: p.data.cover,
-    date: p.data.date,
-    dateLabel: projectDateFmt.format(p.data.date),
-    dateIso: toIso(p.data.date),
-  }));
-
-  const journalPosts: UnifiedPost[] = journalEntries.map((e) => ({
-    type: "journal",
-    id: e.id,
-    title: e.data.title || e.id,
-    description: (e.body ?? "").trim(),
-    date: e.data.date,
-    dateLabel: postDateFmt.format(e.data.date),
-    dateIso: toIso(e.data.date),
-  }));
-
-  return [...blogPosts, ...projectPosts, ...journalPosts].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+  return posts
+    .map((p) => {
+      const slug = p.id.replace(/\/index$/, "");
+      return {
+        id: p.id,
+        slug,
+        href: `/posts/${slug}`,
+        title: p.data.title,
+        description: p.data.description,
+        tags: p.data.tags,
+        cover: p.data.cover,
+        date: p.data.date,
+        dateLabel: postDateFmt.format(p.data.date),
+        dateIso: toIso(p.data.date),
+        icon: getPostIcon(slug),
+      };
+    })
+    .sort((a, b) => b.date.valueOf() - a.date.valueOf());
 }

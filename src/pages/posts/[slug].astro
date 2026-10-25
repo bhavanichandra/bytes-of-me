@@ -4,15 +4,19 @@ import DetailPage from "../../components/DetailPage.astro";
 import { postDateFmt } from "../../lib/content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  return posts.map((post) => {
+    const slug = post.id.replace(/\/index$/, "");
+    return {
+      params: { slug },
+      props: { post },
+    };
+  });
 }
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
+const slug = post.id.replace(/\/index$/, "");
 ---
 
 <DetailPage
@@ -20,11 +24,12 @@ const { Content, headings } = await render(post);
   description={post.data.description}
   date={postDateFmt.format(post.data.date)}
   tags={post.data.tags}
+  href={post.data.href}
   cover={post.data.cover}
   backHref="/"
   backLabel="Home"
   headings={headings}
-  commentsTerm={post.id}
+  commentsTerm={slug}
 >
   <Content />
 </DetailPage>

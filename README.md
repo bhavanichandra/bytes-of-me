@@ -1,7 +1,6 @@
 # bytes-of-me
 
-Bhavani Chandra's personal site — writing, projects and the daily journal, merged
-into one feed. Built with [Astro](https://astro.build) and deployed on Vercel.
+Bhavani Chandra's personal site — posts merged into one feed. Built with [Astro](https://astro.build) and deployed on Vercel.
 
 ## Stack
 
@@ -9,8 +8,7 @@ into one feed. Built with [Astro](https://astro.build) and deployed on Vercel.
 - **Package manager:** [bun](https://bun.sh)
 - **Styling:** Tailwind CSS v4 (`@tailwindcss/vite`)
 - **Animation:** gsap
-- **Content:** blog posts, projects and journal entries live as Markdown
-  collections under `src/content/`, fetched at build time from the
+- **Content:** posts live as Markdown collections under `src/content/posts/`, fetched at build time from the
   [themuler-blogs](https://github.com/bhavanichandra/themuler-blogs) repo via
   `scripts/fetch-content.sh`
 
@@ -20,13 +18,13 @@ into one feed. Built with [Astro](https://astro.build) and deployed on Vercel.
 /
 ├── public/                 static assets, Giscus theme CSS
 ├── scripts/
-│   └── fetch-content.sh    pulls blogs/projects/journal from themuler-blogs
+│   └── fetch-content.sh    pulls posts from themuler-blogs
 ├── src/
 │   ├── components/         Astro UI components
-│   ├── content/             synced content collections (blogs, projects, journal)
+│   ├── content/             synced content collections (posts)
 │   ├── layouts/             shared page shell (theme, nav, tag panel)
 │   ├── lib/                 content loading, icons, theming helpers
-│   ├── pages/                routes (home, about, now, blog/project detail pages)
+│   ├── pages/                routes (home, about, now, post detail pages)
 │   └── styles/               global Tailwind + theme tokens
 └── package.json
 ```

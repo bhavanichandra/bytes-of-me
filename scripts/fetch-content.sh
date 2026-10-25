@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Pulls the latest blogs/projects/journal content from themuler-blogs (public,
-# no auth) into src/content/{blogs,projects,journal} at build/dev time. Never
+# Pulls the latest posts content from themuler-blogs (public,
+# no auth) into src/content/posts at build/dev time. Never
 # committed here — see .gitignore.
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -35,16 +35,8 @@ fi
 
 tar -xzf "$ARCHIVE" -C "$TMP_DIR" --strip-components=1
 
-for dir in blogs projects; do
-  if [[ ! -d "$TMP_DIR/$dir" || -L "$TMP_DIR/$dir" ]]; then
-    echo "fetch-content: '$dir' missing or not a plain directory in fetched archive" >&2
-    exit 1
-  fi
-done
-
-# journal/ is optional — no entries may have been authored yet.
-if [[ -L "$TMP_DIR/journal" ]]; then
-  echo "fetch-content: 'journal' is a symlink in fetched archive, refusing to extract" >&2
+if [[ ! -d "$TMP_DIR/posts" || -L "$TMP_DIR/posts" ]]; then
+  echo "fetch-content: 'posts' missing or not a plain directory in fetched archive" >&2
   exit 1
 fi
 
@@ -52,13 +44,7 @@ fi
 # so a failure anywhere above never leaves src/content partially replaced.
 rm -rf "$STAGE_DIR"
 mkdir -p "$STAGE_DIR"
-cp -R -P "$TMP_DIR/blogs" "$STAGE_DIR/blogs"
-cp -R -P "$TMP_DIR/projects" "$STAGE_DIR/projects"
-if [[ -d "$TMP_DIR/journal" ]]; then
-  cp -R -P "$TMP_DIR/journal" "$STAGE_DIR/journal"
-else
-  mkdir -p "$STAGE_DIR/journal"
-fi
+cp -R -P "$TMP_DIR/posts" "$STAGE_DIR/posts"
 
 rm -rf "$BACKUP_DIR"
 if [[ -d "$ROOT_DIR/src/content" ]]; then
@@ -66,4 +52,4 @@ if [[ -d "$ROOT_DIR/src/content" ]]; then
 fi
 mv "$STAGE_DIR" "$ROOT_DIR/src/content"
 
-echo "Fetched content from themuler-blogs@main into src/content/{blogs,projects,journal}"
+echo "Fetched content from themuler-blogs@main into src/content/posts"
