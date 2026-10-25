@@ -69,6 +69,17 @@ export const PROFILE = [
   "1111111",
 ];
 
+// Clock face — marks the "Now" link in the corner panel.
+export const CLOCK = [
+  "0111110",
+  "1000001",
+  "1001001",
+  "1001111",
+  "1000001",
+  "1000001",
+  "0111110",
+];
+
 export const COMMENT = [
   "0111110",
   "1000001",

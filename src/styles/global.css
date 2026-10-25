@@ -148,7 +148,7 @@ pre[data-language]::after {
 .prose-body h1,
 .prose-body h2,
 .prose-body h3 {
-  color: white;
+  color: var(--ink);
   margin-top: 2rem;
   margin-bottom: 0.75rem;
   font-weight: 600;
@@ -163,7 +163,7 @@ pre[data-language]::after {
   list-style: disc;
 }
 .prose-body a {
-  color: white;
+  color: var(--ink);
   text-decoration: underline;
 }
 .prose-body img {
@@ -174,8 +174,8 @@ pre[data-language]::after {
   font-family: var(--font-mono);
   font-size: 0.85em;
   color: #f472b6;
-  background-color: #1a1918;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   padding: 0.15rem 0.4rem;
   border-radius: 0.35rem;
 }

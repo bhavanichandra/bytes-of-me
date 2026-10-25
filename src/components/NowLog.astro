@@ -15,13 +15,13 @@ const LOG_LINES = [
 ];
 ---
 
-<div class={`text-xs ${className}`}>
-  <div class="text-neutral-500 uppercase tracking-widest mb-3">Now</div>
+<div class={`text-xs text-[var(--ink)] ${className}`}>
+  <div class="text-[var(--ink-faint)] uppercase tracking-widest mb-3">Now</div>
   <div class="grid gap-y-2" style="grid-template-columns: max-content 1fr;">
     {LOG_LINES.map((line) => (
       <>
         <span class="pr-3 uppercase tracking-wide" style={`color: ${line.color};`}>{line.tag}</span>
-        <span class="text-neutral-300 leading-relaxed">{line.value}</span>
+        <span class="text-[var(--ink-muted)] leading-relaxed">{line.value}</span>
       </>
     ))}
   </div>
