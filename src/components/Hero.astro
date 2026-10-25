@@ -1,20 +1,16 @@
 ---
-// The hero: wordmark + the one big statement on the page (Lora, Fowler-
-// style — a headline barely bigger than restraint allows, not a
-// terminal prompt). transition:persist keeps it mounted (no flicker)
-// across Astro view-transition navigation.
+// The hero mirrors DetailPage's header treatment: centered name +
+// subtitle, same as a post's centered title + description, instead of
+// a left-pinned sidebar block.
 ---
 
-<div class="hero w-full pt-20 px-8 md:px-12 max-w-3xl" transition:persist transition:name="hero">
-  <a id="hero-name" href="/" class="text-xs uppercase tracking-widest text-[var(--ink)] opacity-60 hover:opacity-100 transition">
-    Bhavani Chandra
-  </a>
-  <h1
-    id="hero-statement"
-    class="font-serif font-medium leading-[1.1] mt-4 text-[var(--ink)] text-[clamp(2rem,5vw,3.75rem)]"
-  >
-    Eight years wiring systems together. Now AI&rsquo;s one of them.
+<div class="hero w-full text-center" transition:persist transition:name="hero">
+  <h1 id="hero-name" class="font-serif font-semibold leading-snug text-[var(--ink)] text-3xl md:text-4xl">
+    <a href="/" class="hover:opacity-80 transition">Bhavani Chandra</a>
   </h1>
+  <p id="hero-statement" class="font-sans mt-3 text-[var(--ink-muted)] text-lg max-w-2xl mx-auto">
+    Eight years wiring systems together. Now AI&rsquo;s one of them.
+  </p>
 </div>
 
 <script>

@@ -12,12 +12,20 @@ const { posts } = Astro.props;
 ---
 
 <div class="feed" data-feed>
-  <input
-    type="search"
-    placeholder="Search…"
-    data-feed-search
-    class="mb-5 w-full max-w-xs border border-[var(--border)] bg-transparent px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-cyan-400/60"
-  />
+  <div class="flex flex-wrap items-center gap-3 mb-5">
+    <input
+      type="date"
+      data-feed-date
+      class="border border-[var(--border)] bg-transparent px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-cyan-400/60"
+    />
+
+    <input
+      type="search"
+      placeholder="Search…"
+      data-feed-search
+      class="flex-1 min-w-[12rem] ml-auto border border-[var(--border)] bg-transparent px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-cyan-400/60"
+    />
+  </div>
 
   <div class="rows-list spotlight-group flex flex-col">
     {posts.length === 0 && <p class="text-sm text-[var(--ink-muted)]">Nothing here yet.</p>}
@@ -32,19 +40,26 @@ const { posts } = Astro.props;
     root.dataset.bound = "true";
 
     const search = root.querySelector<HTMLInputElement>("[data-feed-search]")!;
+    const dateFilter = root.querySelector<HTMLInputElement>("[data-feed-date]")!;
     const items = Array.from(root.querySelectorAll<HTMLElement>("[data-filter-item]"));
     const noMatches = root.querySelector<HTMLElement>("[data-no-matches]")!;
 
-    search.addEventListener("input", () => {
+    function applyFilters() {
       const q = search.value.trim().toLowerCase();
+      const d = dateFilter.value;
       let visible = 0;
       items.forEach((item) => {
-        const matches = !q || (item.dataset.filterText ?? "").includes(q) || (item.dataset.filterDate ?? "").includes(q);
+        const matchesDate = !d || item.dataset.filterDate === d;
+        const matchesSearch = !q || (item.dataset.filterText ?? "").includes(q) || (item.dataset.filterDate ?? "").includes(q);
+        const matches = matchesDate && matchesSearch;
         item.hidden = !matches;
         if (matches) visible++;
       });
       noMatches.classList.toggle("hidden", visible > 0 || items.length === 0);
-    });
+    }
+
+    search.addEventListener("input", applyFilters);
+    dateFilter.addEventListener("input", applyFilters);
   }
 
   document.querySelectorAll<HTMLElement>("[data-feed]").forEach(initFeed);

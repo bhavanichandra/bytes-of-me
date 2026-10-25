@@ -59,14 +59,15 @@ export const LINKEDIN = [
   "0101010",
 ];
 
-export const PROFILE = [
-  "0011100",
+// Clock face — marks the "Now" link in the corner panel.
+export const CLOCK = [
   "0111110",
+  "1000001",
+  "1001001",
+  "1001111",
+  "1000001",
+  "1000001",
   "0111110",
-  "0011100",
-  "0000000",
-  "1111111",
-  "1111111",
 ];
 
 export const COMMENT = [

@@ -1,0 +1,122 @@
+---
+// Site-wide slide-over opened by clicking any Tag — lists every post
+// carrying that tag, client-side, without leaving the current page.
+// Mirrors CommentsPanel's drawer pattern.
+import type { UnifiedPost } from "../lib/content";
+
+interface Props {
+  posts: UnifiedPost[];
+}
+const { posts } = Astro.props;
+
+const data = posts.map((p) => ({
+  title: p.title,
+  href: p.href ?? null,
+  dateLabel: p.dateLabel,
+  tags: (p.tags ?? []).map((t) => t.toLowerCase()),
+}));
+---
+
+<div
+  id="tag-panel-backdrop"
+  class="fixed inset-0 bg-black/40 z-[900] hidden"
+  data-tag-panel-backdrop
+></div>
+
+<div
+  id="tag-panel"
+  class="tag-panel fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-md z-[901] bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl shadow-black/60 overflow-y-auto"
+>
+  <div class="flex items-center justify-between p-6 border-b border-[var(--border)]">
+    <div class="font-mono text-[10px] uppercase tracking-widest text-[var(--ink-faint)]" data-tag-panel-title>
+      Tag
+    </div>
+    <button data-tag-panel-close class="text-[var(--ink-faint)] hover:text-[var(--ink)] text-xs font-mono">close ✕</button>
+  </div>
+  <div class="p-6 flex flex-col" data-tag-panel-list></div>
+</div>
+
+<script define:vars={{ data }}>
+  function init() {
+    const panel = document.getElementById("tag-panel");
+    const backdrop = document.getElementById("tag-panel-backdrop");
+    if (!panel || !backdrop || panel.dataset.bound === "true") return;
+    panel.dataset.bound = "true";
+
+    const list = panel.querySelector("[data-tag-panel-list]");
+    const title = panel.querySelector("[data-tag-panel-title]");
+
+    function open(tag) {
+      title.textContent = `Tagged “${tag}”`;
+      list.replaceChildren();
+
+      const matches = data.filter((p) => p.tags.includes(tag));
+      if (matches.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "text-sm text-[var(--ink-muted)]";
+        empty.textContent = "Nothing tagged here yet.";
+        list.appendChild(empty);
+      }
+
+      matches.forEach((p) => {
+        const row = document.createElement(p.href ? "a" : "div");
+        if (p.href) row.href = p.href;
+        row.className =
+          "flex items-center justify-between gap-3 py-3 border-b border-[var(--border)] text-sm text-[var(--ink-muted)] hover:text-[var(--ink)] transition";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = p.title;
+        const dateSpan = document.createElement("span");
+        dateSpan.className = "text-xs text-[var(--ink-faint)] shrink-0";
+        dateSpan.textContent = p.dateLabel;
+
+        row.append(titleSpan, dateSpan);
+        list.appendChild(row);
+      });
+
+      panel.classList.remove("translate-x-full");
+      backdrop.classList.remove("hidden");
+    }
+
+    function close() {
+      panel.classList.add("translate-x-full");
+      backdrop.classList.add("hidden");
+    }
+
+    document.addEventListener("click", (e) => {
+      const trigger = e.target.closest("[data-open-tag-panel]");
+      if (!trigger) return;
+      e.preventDefault();
+      open(trigger.dataset.openTagPanel);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        close();
+        return;
+      }
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const trigger = e.target.closest?.("[data-open-tag-panel]");
+      if (!trigger) return;
+      e.preventDefault();
+      open(trigger.dataset.openTagPanel);
+    });
+
+    panel.querySelector("[data-tag-panel-close]").addEventListener("click", close);
+    backdrop.addEventListener("click", close);
+  }
+
+  document.addEventListener("astro:page-load", init);
+  init();
+</script>
+
+<style>
+  .tag-panel {
+    transition: transform 0.35s steps(6, end);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tag-panel {
+      transition: none;
+    }
+  }
+</style>

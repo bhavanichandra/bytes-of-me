@@ -1,7 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import LanyardCard from "../components/lanyard/LanyardCard.astro";
-import NowLog from "../components/NowLog.astro";
 import CareerTimeline from "../components/CareerTimeline.astro";
 ---
 
@@ -11,18 +10,13 @@ import CareerTimeline from "../components/CareerTimeline.astro";
 >
   <a
     href="/"
-    class="fixed top-8 left-8 text-xs uppercase tracking-widest text-neutral-500 hover:text-white transition z-50"
+    class="fixed top-8 left-8 text-xs uppercase tracking-widest text-[var(--ink-muted)] hover:text-[var(--ink)] transition z-50"
   >
     ← Home
   </a>
 
   <div class="relative pt-16 mb-16">
     <LanyardCard />
-    <NowLog class="hidden lg:block absolute top-24 right-1/2 mr-[184px] w-full max-w-md z-10" />
-  </div>
-
-  <div class="lg:hidden px-6 mb-16">
-    <NowLog />
   </div>
 
   <div class="pb-20">

@@ -14,8 +14,8 @@ const { entry, active, align = "left" } = Astro.props;
     <div class:list={["flex items-center gap-3", align === "right" && "flex-row-reverse"]}>
       <PixelAvatar level={beardLevelFor(entry)} maxLevel={BEARD_MAX_LEVEL} size={5} />
       <div>
-        <h3 class="text-lg text-white font-semibold">{entry.title}</h3>
-        <p class="text-sm text-neutral-400">{entry.company}</p>
+        <h3 class="text-lg text-[var(--ink)] font-semibold">{entry.title}</h3>
+        <p class="text-sm text-[var(--ink-muted)]">{entry.company}</p>
       </div>
     </div>
     <span
@@ -23,25 +23,25 @@ const { entry, active, align = "left" } = Astro.props;
       style={
         active
           ? `color: ${entry.color}; border-color: ${entry.color}66; background: ${entry.color}1a;`
-          : "color: rgb(115 115 115); border-color: rgb(255 255 255 / 0.1);"
+          : "color: var(--ink-faint); border-color: var(--border);"
       }
     >
       {active ? "Active" : "Complete"}
     </span>
   </div>
 
-  <p class:list={["text-xs font-mono text-neutral-500 mb-3", align === "right" && "text-right"]}>
+  <p class:list={["text-xs font-mono text-[var(--ink-faint)] mb-3", align === "right" && "text-right"]}>
     {formatDate(entry.start)} — {entry.end ? formatDate(entry.end) : "present"}
-    <span class="text-neutral-600"> · {formatDuration(entry.start, entry.end)}</span>
+    <span class="text-[var(--ink-faint)]"> · {formatDuration(entry.start, entry.end)}</span>
   </p>
 
-  <p class="text-sm leading-relaxed text-neutral-200 mb-4">{entry.blurb}</p>
+  <p class="text-sm leading-relaxed text-[var(--ink-muted)] mb-4">{entry.blurb}</p>
 
   {entry.tags.length > 0 && (
     <div class:list={["flex flex-wrap gap-2 mb-4", align === "right" && "justify-end"]}>
       {entry.tags.map((tag) => (
         <span
-          class="text-[10px] font-mono uppercase tracking-wide text-neutral-300 border px-2 py-1"
+          class="text-[10px] font-mono uppercase tracking-wide text-[var(--ink-muted)] border px-2 py-1"
           style={`background: ${entry.color}14; border-color: ${entry.color}33;`}
         >
           {tag}
@@ -51,11 +51,11 @@ const { entry, active, align = "left" } = Astro.props;
   )}
 
   {entry.promotion && (
-    <div class:list={["text-xs font-mono border-t border-white/10 pt-3", align === "right" && "text-right"]}>
+    <div class:list={["text-xs font-mono border-t border-[var(--border)] pt-3", align === "right" && "text-right"]}>
       <div class="text-emerald-400 whitespace-nowrap">
-        ▲ level up → <span class="text-neutral-200">{entry.promotion.title}</span>
+        ▲ level up → <span class="text-[var(--ink-muted)]">{entry.promotion.title}</span>
       </div>
-      <div class="text-neutral-600 mt-1">{entry.promotion.note}</div>
+      <div class="text-[var(--ink-faint)] mt-1">{entry.promotion.note}</div>
     </div>
   )}
 </div>
