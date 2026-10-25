@@ -14,7 +14,7 @@ interface Props {
 
 const {
   title,
-  description = "Bhavani Chandra's personal site — blog posts and projects.",
+  description = "Bhavani Chandra's personal site — writing, projects and the daily log, in one feed.",
   image,
 } = Astro.props;
 
@@ -24,9 +24,9 @@ const ogImageURL = image ? new URL(image.src, Astro.site) : undefined;
 // The floating corner menu is a distraction while reading a blog post
 // or project write-up, and it's redundant on the About page itself
 // (LanyardCard has its own social links there) — so it only shows on
-// the three list/landing surfaces; readers can always tap back Home.
+// the home feed; readers can always tap back Home.
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
-const showCornerPanel = path === "/" || path === "/blogs" || path === "/projects";
+const showCornerPanel = path === "/";
 ---
 
 <html lang="en" class="text-white">

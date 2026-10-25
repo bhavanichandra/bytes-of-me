@@ -1,19 +1,19 @@
-export interface JournalEntry {
+// Pure date-bucketing for the Calendar view — generic over whatever has a
+// `date`, not journal-specific (journal was folded into the unified feed).
+export interface HeatmapEntry {
   date: string; // yyyy-mm-dd
-  title?: string;
-  note: string;
 }
 
-export interface JournalDay {
+export interface HeatmapDay<T extends HeatmapEntry> {
   date: string;
   worked: boolean;
-  entry?: JournalEntry;
+  entries: T[];
 }
 
-export interface JournalMonth {
+export interface HeatmapMonth<T extends HeatmapEntry> {
   key: string; // yyyy-mm
   label: string;
-  weeks: (JournalDay | null)[][];
+  weeks: (HeatmapDay<T> | null)[][];
 }
 
 export const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -24,20 +24,24 @@ export function toDateStr(d: Date): string {
 }
 
 /** Absence of an entry for a date means unworked — no explicit `worked: false` records. */
-export function buildDays(entries: JournalEntry[], start: Date, end: Date): JournalDay[] {
-  const byDate = new Map(entries.map((e) => [e.date, e]));
+export function buildDays<T extends HeatmapEntry>(entries: T[], start: Date, end: Date): HeatmapDay<T>[] {
+  const byDate = new Map<string, T[]>();
+  for (const e of entries) {
+    if (!byDate.has(e.date)) byDate.set(e.date, []);
+    byDate.get(e.date)!.push(e);
+  }
 
-  const out: JournalDay[] = [];
+  const out: HeatmapDay<T>[] = [];
   for (const d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
     const date = toDateStr(d);
-    const entry = byDate.get(date);
-    out.push({ date, worked: Boolean(entry), entry });
+    const dayEntries = byDate.get(date) ?? [];
+    out.push({ date, worked: dayEntries.length > 0, entries: dayEntries });
   }
   return out;
 }
 
-export function groupByMonth(days: JournalDay[]): JournalMonth[] {
-  const byKey = new Map<string, JournalDay[]>();
+export function groupByMonth<T extends HeatmapEntry>(days: HeatmapDay<T>[]): HeatmapMonth<T>[] {
+  const byKey = new Map<string, HeatmapDay<T>[]>();
   for (const day of days) {
     const key = day.date.slice(0, 7);
     if (!byKey.has(key)) byKey.set(key, []);
@@ -50,7 +54,7 @@ export function groupByMonth(days: JournalDay[]): JournalMonth[] {
     const byDate = new Map(monthDays.map((d) => [d.date, d]));
     const daysInMonth = new Date(year, month, 0).getDate();
 
-    const cells: (JournalDay | null)[] = [];
+    const cells: (HeatmapDay<T> | null)[] = [];
     const firstWeekday = (new Date(year, month - 1, 1).getDay() + 6) % 7; // Mon=0
     for (let i = 0; i < firstWeekday; i++) cells.push(null);
     for (let d = 1; d <= daysInMonth; d++) {
@@ -59,43 +63,13 @@ export function groupByMonth(days: JournalDay[]): JournalMonth[] {
     }
     while (cells.length % 7 !== 0) cells.push(null);
 
-    const weeks: (JournalDay | null)[][] = [];
+    const weeks: (HeatmapDay<T> | null)[][] = [];
     for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
 
     return { key, label, weeks };
   });
 }
 
-export function monthHasLogs(month: JournalMonth): boolean {
+export function monthHasLogs<T extends HeatmapEntry>(month: HeatmapMonth<T>): boolean {
   return month.weeks.flat().some((d) => d?.worked);
-}
-
-/** An unlogged "today" is dropped before counting — it must not read as breaking a live streak. */
-export function currentStreak(days: JournalDay[], todayDate: string): number {
-  let list = days;
-  const last = list[list.length - 1];
-  if (last && last.date === todayDate && !last.worked) {
-    list = list.slice(0, -1);
-  }
-
-  let streak = 0;
-  for (let i = list.length - 1; i >= 0; i--) {
-    if (!list[i].worked) break;
-    streak++;
-  }
-  return streak;
-}
-
-export function bestStreak(days: JournalDay[]): number {
-  let best = 0;
-  let run = 0;
-  for (const d of days) {
-    run = d.worked ? run + 1 : 0;
-    best = Math.max(best, run);
-  }
-  return best;
-}
-
-export function totalDays(days: JournalDay[]): number {
-  return days.filter((d) => d.worked).length;
 }
