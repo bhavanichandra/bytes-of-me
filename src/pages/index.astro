@@ -12,9 +12,9 @@ const posts = await getUnifiedPosts();
   title="Bhavani Chandra"
   description="Bhavani Chandra's personal site — writing, projects and the daily log, in one feed."
 >
-  <div class="min-h-screen flex flex-col items-start">
+  <div class="min-h-screen mx-auto max-w-3xl px-8 md:px-12">
     <Hero />
-    <div class="w-full max-w-3xl px-8 md:px-12 mt-10">
+    <div class="mt-10">
       <PageIntro />
       <Feed {posts} />
     </div>
