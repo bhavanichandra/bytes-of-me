@@ -16,14 +16,13 @@ const { posts } = Astro.props;
     type="search"
     placeholder="Search…"
     data-feed-search
-    class="mb-5 w-full max-w-xs border bg-transparent px-3 py-2 text-sm outline-none focus:border-cyan-400/60"
-    style="border-color:var(--border); color:var(--ink)"
+    class="mb-5 w-full max-w-xs border border-[var(--border)] bg-transparent px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-cyan-400/60"
   />
 
   <div class="rows-list spotlight-group flex flex-col">
-    {posts.length === 0 && <p class="text-sm" style="color:var(--ink-muted)">Nothing here yet.</p>}
+    {posts.length === 0 && <p class="text-sm text-[var(--ink-muted)]">Nothing here yet.</p>}
     {posts.map((post) => <FeedRow {post} />)}
-    <p data-no-matches class="hidden text-sm py-4" style="color:var(--ink-muted)">No matches.</p>
+    <p data-no-matches class="hidden text-sm py-4 text-[var(--ink-muted)]">No matches.</p>
   </div>
 </div>
 
