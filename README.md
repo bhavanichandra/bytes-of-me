@@ -1,46 +1,55 @@
-# Astro Starter Kit: Minimal
+# bytes-of-me
 
-```sh
-bun create astro@latest -- --template minimal
-```
+Bhavani Chandra's personal site — writing, projects and the daily journal, merged
+into one feed. Built with [Astro](https://astro.build) and deployed on Vercel.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Stack
 
-## 🚀 Project Structure
+- **Framework:** Astro 7
+- **Package manager:** [bun](https://bun.sh)
+- **Styling:** Tailwind CSS v4 (`@tailwindcss/vite`)
+- **Animation:** gsap
+- **Content:** blog posts, projects and journal entries live as Markdown
+  collections under `src/content/`, fetched at build time from the
+  [themuler-blogs](https://github.com/bhavanichandra/themuler-blogs) repo via
+  `scripts/fetch-content.sh`
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project structure
 
 ```text
 /
-├── public/
+├── public/                 static assets, Giscus theme CSS
+├── scripts/
+│   └── fetch-content.sh    pulls blogs/projects/journal from themuler-blogs
 ├── src/
-│   └── pages/
-│       └── index.astro
+│   ├── components/         Astro UI components
+│   ├── content/             synced content collections (blogs, projects, journal)
+│   ├── layouts/             shared page shell (theme, nav, tag panel)
+│   ├── lib/                 content loading, icons, theming helpers
+│   ├── pages/                routes (home, about, now, blog/project detail pages)
+│   └── styles/               global Tailwind + theme tokens
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file
-name.
+## Commands
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact
-components.
+All commands run from the root of the project:
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Command                | Action                                               |
+| :---------------------- | :---------------------------------------------------- |
+| `bun install`           | Install dependencies                                   |
+| `bun dev`                | Fetch content, then start the dev server at `localhost:4321` |
+| `bun run build`          | Fetch content, then build the production site to `./dist/` |
+| `bun run preview`        | Preview the production build locally                   |
+| `bun run astro ...`      | Run Astro CLI commands (`astro add`, `astro check`, …) |
+| `bun test`                | Run tests                                               |
 
-## 🧞 Commands
+## Design notes
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                | Action                                           |
-|:-----------------------|:-------------------------------------------------|
-| `bun install`          | Installs dependencies                            |
-| `bun dev`              | Starts local dev server at `localhost:4321`      |
-| `bun run build`        | Build your production site to `./dist/`          |
-| `bun run preview`      | Preview your build locally, before deploying     |
-| `bun run astro ...`    | Run CLI commands like `astro add`, `astro check` |
-| `bun run astro --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into
-our [Discord server](https://astro.build/chat).
+- Light/dark theme is token-driven (`--bg`, `--ink`, `--surface`, `--border`,
+  …) in `src/styles/global.css` — components should read these instead of
+  hardcoding colors.
+- Headings use Lora (serif); body copy uses Space Grotesk (sans); code uses
+  Space Mono — matching martinfowler.com's typographic split.
+- Comments are powered by [Giscus](https://giscus.app) and re-theme live to
+  match the site's light/dark toggle.
