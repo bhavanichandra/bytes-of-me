@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Rail from "../components/Rail.astro";
+import Hero from "../components/Hero.astro";
 import PageIntro from "../components/PageIntro.astro";
 import Feed from "../components/Feed.astro";
 import { getUnifiedPosts } from "../lib/content";
@@ -12,15 +12,11 @@ const posts = await getUnifiedPosts();
   title="Bhavani Chandra"
   description="Bhavani Chandra's personal site — writing, projects and the daily log, in one feed."
 >
-  <div class="flex flex-col md:grid md:grid-cols-[16rem_1fr] md:content-start min-h-screen">
-    <Rail />
-    <main class="contents">
-      <div class="pt-20 pl-8 pr-20 md:px-8 md:col-start-2">
-        <PageIntro />
-      </div>
-      <div class="pl-8 pr-20 md:px-8 pb-24 md:col-start-2">
-        <Feed {posts} />
-      </div>
-    </main>
+  <div class="min-h-screen flex flex-col items-start">
+    <Hero />
+    <div class="w-full max-w-3xl px-8 md:px-12 mt-10">
+      <PageIntro />
+      <Feed {posts} />
+    </div>
   </div>
 </Layout>

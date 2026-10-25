@@ -22,7 +22,8 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
   data-filter-item
   data-filter-date={post.dateIso}
   data-filter-text={filterText}
-  class={`row spotlight-item group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 py-6 first:pt-0 border-b border-white/5 transition-opacity duration-300 ${post.href ? "" : "cursor-default"}`}
+  class={`row spotlight-item group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 py-6 first:pt-0 border-b transition-opacity duration-300 ${post.href ? "" : "cursor-default"}`}
+  style="border-color:var(--border)"
 >
   <div class="flex items-start gap-4 min-w-0">
     {post.cover && (
@@ -35,17 +36,17 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
       />
     )}
     <div class="flex flex-col gap-2 min-w-0">
-      <h3 class="flex items-center gap-2 text-lg text-neutral-100 group-hover:text-white transition leading-snug">
+      <h3 class="flex items-center gap-2 font-serif text-lg transition leading-snug" style="color:var(--ink)">
         <PixelIcon bitmap={POST_TYPE_META[post.type].icon} color={POST_TYPE_META[post.type].color} size={1.5} />
         {post.title}
       </h3>
       {post.description && (
-        <p class="text-sm text-neutral-500 leading-relaxed max-w-md line-clamp-3">{post.description}</p>
+        <p class="font-serif text-sm leading-relaxed max-w-md line-clamp-3" style="color:var(--ink-muted)">{post.description}</p>
       )}
     </div>
   </div>
   <div class="flex flex-row md:flex-col items-center md:items-end gap-2 shrink-0">
-    <span class="text-xs text-neutral-500">{post.dateLabel}</span>
+    <span class="text-xs" style="color:var(--ink-faint)">{post.dateLabel}</span>
     {post.tags && post.tags.length > 0 && (
       <span class="flex gap-1.5">
         {post.tags.slice(0, 2).map((tag) => (

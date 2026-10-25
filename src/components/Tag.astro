@@ -8,6 +8,9 @@ const { label, size = "sm" } = Astro.props;
 const padding = size === "md" ? "px-2 py-0.5 text-[11px]" : "px-1.5 py-0.5 text-[10px]";
 ---
 
-<span class={`inline-flex items-center uppercase tracking-wide ${padding} border border-white/15 text-neutral-400 rounded-sm`}>
+<span
+  class={`inline-flex items-center uppercase tracking-wide border rounded-sm ${padding}`}
+  style="border-color:var(--border); color:var(--ink-faint)"
+>
   {label}
 </span>

@@ -1,10 +1,36 @@
 @import "tailwindcss";
 
-/* Space Grotesk for prose/headings, Space Mono for
-   nav/labels/tags/metadata accents. */
+/* Lora (serif) for the reading surface — headline and body copy, Fowler-
+   style; Space Grotesk/Mono stay for UI chrome (nav, labels, dates, tags)
+   — the retro accent that stays. */
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
+  --font-serif: "Lora", ui-serif, Georgia, serif;
+}
+
+/* Light/dark theme tokens. Dark is the default (the site's original look);
+   [data-theme="light"] on <html> overrides. Set by an inline head script
+   (see Layout.astro) before first paint, so there's no flash. */
+:root {
+  --bg: #1a1918;
+  --ink: #ffffff;
+  --ink-muted: rgba(255, 255, 255, 0.5);
+  --ink-faint: rgba(255, 255, 255, 0.35);
+  --surface: #242220;
+  --border: rgba(255, 255, 255, 0.1);
+}
+[data-theme="light"] {
+  --bg: #f7f4ec;
+  --ink: #1f1d1a;
+  --ink-muted: rgba(31, 29, 26, 0.6);
+  --ink-faint: rgba(31, 29, 26, 0.4);
+  --surface: #ece7d9;
+  --border: rgba(31, 29, 26, 0.12);
+}
+
+[data-feed-search]::placeholder {
+  color: var(--ink-faint);
 }
 
 /* Warm dark ground + subtle grain, used site-wide. */
@@ -106,26 +132,12 @@ pre[data-language]::after {
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* Idle bob on the pixel arrow pointing at the floating about-page
-   avatar (issue #35) — hard-stepped, not eased, per the motion
-   guidelines. */
-.corner-arrow {
-  animation: arrow-bob 1.4s steps(4, end) infinite;
-}
-@keyframes arrow-bob {
-  0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, 4px); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
   }
   .badge-blip {
-    animation: none;
-  }
-  .corner-arrow {
     animation: none;
   }
 }
