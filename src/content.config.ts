@@ -2,40 +2,20 @@ import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
 // `image()` resolves the cover filename (co-located with the entry, same
-// convention as inline body images) into a real build-processed asset —
-// a plain z.string() here would leave `cover` pointing at a filename with
-// no actual resolvable URL, since Astro only auto-resolves images
-// referenced via markdown syntax in the body, not frontmatter strings.
-const baseSchema = ({ image }: { image: () => z.ZodType<ImageMetadata> }) =>
-  z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    description: z.string(),
-    tags: z.array(z.string()),
-    draft: z.boolean().default(false),
-    cover: image().optional(),
-  });
-
-const blog = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/blogs" }),
-  schema: (context) => baseSchema(context).extend({
-    enableComments: z.boolean().default(false),
-  }),
+// convention as inline body images) into a real build-processed asset.
+const posts = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      date: z.coerce.date(),
+      tags: z.array(z.string()).default([]),
+      draft: z.boolean().default(false),
+      enableComments: z.boolean().default(false),
+      href: z.string().optional(),
+      cover: image().optional(),
+    }),
 });
 
-const projects = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
-  schema: (context) => baseSchema(context).extend({
-    href: z.string().optional(),
-  }),
-});
-
-const journal = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/journal" }),
-  schema: z.object({
-    date: z.coerce.date(),
-    title: z.string().optional(),
-  }),
-});
-
-export const collections = { blog, projects, journal };
+export const collections = { posts };

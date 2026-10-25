@@ -3,7 +3,8 @@ dist/
 # generated types
 .astro/
 
-# blog/project content — fetched from themuler-blogs at build time (see #7, #13), never committed here
+# posts content — fetched from themuler-blogs at build time (see #7, #13), never committed here
+src/content/posts/
 src/content/blogs/
 src/content/projects/
 src/content/journal/

@@ -1,46 +1,36 @@
 ---
-// One row in the unified feed — a blog post, a project, or a journal
-// entry, told apart only by a small stroke icon (the retro flare that
-// stays). Journal entries have no detail page, so they render as a plain
-// row with the note inline instead of a link.
+// One row in the unified feed.
 import Tag from "./Tag.astro";
 import PixelIcon from "./PixelIcon.astro";
-import { POST_TYPE_META, type UnifiedPost } from "../lib/content";
+import type { UnifiedPost } from "../lib/content";
 
 interface Props {
   post: UnifiedPost;
 }
 const { post } = Astro.props;
 
-const Wrapper = post.href ? "a" : "div";
 const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).join(" ")}`.toLowerCase();
 ---
 
-<Wrapper
+<a
   href={post.href}
   data-filter-item
   data-filter-date={post.dateIso}
   data-filter-text={filterText}
-  class:list={[
-    "row group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6",
-    "-mx-3 md:-mx-4 px-3 md:px-4 py-4 rounded-xl",
-    "border border-transparent hover:border-[var(--border-hover)]",
-    "transition-colors duration-100 ease-out",
-    post.href ? "cursor-pointer" : "cursor-default",
-  ]}
+  class="row group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 -mx-3 md:-mx-4 px-3 md:px-4 py-4 rounded-xl border border-transparent hover:border-[var(--border-hover)] transition-colors duration-100 ease-out cursor-pointer"
 >
   <div class="flex items-start gap-4 min-w-0">
     <div class="flex flex-col gap-2 min-w-0">
       <h3 class="flex items-center gap-2 font-serif font-medium text-lg text-[var(--ink)] leading-snug">
         <span
           class="w-1.5 h-1.5 rounded-full shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-100"
-          style={`background: ${POST_TYPE_META[post.type].color};`}
+          style={`background: ${post.icon.color};`}
         ></span>
-        <PixelIcon bitmap={POST_TYPE_META[post.type].icon} color={POST_TYPE_META[post.type].color} size={1.5} />
+        <PixelIcon bitmap={post.icon.bitmap} color={post.icon.color} size={1.5} />
         {post.title}
       </h3>
       {post.description && (
-        <p class:list={["font-sans text-sm leading-relaxed max-w-md text-[var(--ink-muted)]", post.href && "line-clamp-3"]}>
+        <p class="font-sans text-sm leading-relaxed max-w-md text-[var(--ink-muted)] line-clamp-3">
           {post.description}
         </p>
       )}
@@ -56,4 +46,4 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
       </span>
     )}
   </div>
-</Wrapper>
+</a>
