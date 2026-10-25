@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
-/* Space Grotesk (sans) for all body copy and headings; Space Mono for code. */
+/* Lora (serif) for headlines, Space Grotesk (sans) for body copy — matches martinfowler.com's split. Space Mono stays for code. */
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
+  --font-serif: "Lora", ui-serif, Georgia, serif;
 }
 
 /* Light/dark theme tokens. Dark is the default (the site's original look);
@@ -146,7 +147,7 @@ pre[data-language]::after {
 .prose-body h1,
 .prose-body h2,
 .prose-body h3 {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   color: var(--ink);
   margin-top: 2rem;
   margin-bottom: 0.75rem;
