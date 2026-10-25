@@ -1,25 +1,27 @@
 import { getCollection } from "astro:content";
-import type { JournalEntry } from "./journal";
+import { BOOK, FOLDER, SHIELD } from "./pixelIcons";
 
-export async function getJournalEntries(): Promise<JournalEntry[]> {
-  return (await getCollection("journal")).map((e) => ({
-    date: e.data.date.toISOString().slice(0, 10),
-    title: e.data.title,
-    note: e.body ?? "",
-  }));
-}
+export type PostType = "blog" | "project" | "journal";
 
-export async function getRecentPosts(limit?: number) {
-  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-  );
-  return limit ? posts.slice(0, limit) : posts;
-}
+/** Single source of truth for how each post type is told apart in the feed — icon only, never a colored badge. */
+export const POST_TYPE_META = {
+  blog: { icon: BOOK, color: "#22d3ee" },
+  project: { icon: FOLDER, color: "#f87171" },
+  journal: { icon: SHIELD, color: "#f472b6" },
+} as const;
 
-export async function getSortedProjects() {
-  return (await getCollection("projects", ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-  );
+export interface UnifiedPost {
+  type: PostType;
+  id: string;
+  /** Journal entries have no detail page — they render inline in the feed instead. */
+  href?: string;
+  title: string;
+  description?: string;
+  tags?: string[];
+  cover?: ImageMetadata;
+  date: Date;
+  dateLabel: string;
+  dateIso: string;
 }
 
 export const postDateFmt = new Intl.DateTimeFormat("en-US", {
@@ -32,3 +34,54 @@ export const projectDateFmt = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
   month: "short",
 });
+
+function toIso(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+/** Every blog post, project and journal entry, newest first — the public site's one content feed. */
+export async function getUnifiedPosts(): Promise<UnifiedPost[]> {
+  const [posts, projects, journalEntries] = await Promise.all([
+    getCollection("blog", ({ data }) => !data.draft),
+    getCollection("projects", ({ data }) => !data.draft),
+    getCollection("journal"),
+  ]);
+
+  const blogPosts: UnifiedPost[] = posts.map((p) => ({
+    type: "blog",
+    id: p.id,
+    href: `/blogs/${p.id}`,
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags,
+    cover: p.data.cover,
+    date: p.data.date,
+    dateLabel: postDateFmt.format(p.data.date),
+    dateIso: toIso(p.data.date),
+  }));
+
+  const projectPosts: UnifiedPost[] = projects.map((p) => ({
+    type: "project",
+    id: p.id,
+    href: `/projects/${p.id}`,
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags,
+    cover: p.data.cover,
+    date: p.data.date,
+    dateLabel: projectDateFmt.format(p.data.date),
+    dateIso: toIso(p.data.date),
+  }));
+
+  const journalPosts: UnifiedPost[] = journalEntries.map((e) => ({
+    type: "journal",
+    id: e.id,
+    title: e.data.title || e.id,
+    description: (e.body ?? "").trim(),
+    date: e.data.date,
+    dateLabel: postDateFmt.format(e.data.date),
+    dateIso: toIso(e.data.date),
+  }));
+
+  return [...blogPosts, ...projectPosts, ...journalPosts].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+}
