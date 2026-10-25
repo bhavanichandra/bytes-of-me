@@ -30,18 +30,20 @@ body {
 :root {
   --bg: #1a1918;
   --ink: #ffffff;
-  --ink-muted: rgba(255, 255, 255, 0.5);
+  --ink-muted: rgba(255, 255, 255, 0.6);
   --ink-faint: rgba(255, 255, 255, 0.35);
   --surface: #242220;
   --border: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(255, 255, 255, 0.22);
 }
 [data-theme="light"] {
   --bg: #ffffff;
-  --ink: #18181a;
-  --ink-muted: rgba(24, 24, 26, 0.6);
-  --ink-faint: rgba(24, 24, 26, 0.4);
-  --surface: #f5f5f5;
-  --border: rgba(24, 24, 26, 0.12);
+  --ink: #111113;
+  --ink-muted: #374151;
+  --ink-faint: #6b7280;
+  --surface: #f3f4f6;
+  --border: rgba(17, 17, 19, 0.15);
+  --border-hover: rgba(17, 17, 19, 0.25);
 }
 
 /* Box-sizing reset and body margin are already handled by Tailwind's
@@ -68,18 +70,6 @@ code, kbd, samp, pre {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
-/* Spotlight hover for card/row groups: the hovered item stays sharp,
-   its siblings dim. Apply .spotlight-group to the wrapper and
-   .spotlight-item to each hoverable child. Gated to devices with a
-   real hover state — touch browsers keep :hover engaged after a tap
-   with no matching "leave" event, which otherwise reads as every row
-   but the last-tapped one being stuck dimmed. */
-@media (hover: hover) and (pointer: fine) {
-  .spotlight-group:hover .spotlight-item:not(:hover) {
-    opacity: 0.4;
-  }
-}
-
 /* Editor-chrome treatment for fenced code blocks: fake traffic-light
    tab bar + a language label read off Shiki's own data-language
    attribute. Applies to any Shiki-rendered <pre> site-wide, wherever
@@ -90,7 +80,8 @@ pre[data-language] {
   padding: 2.5rem 1.25rem 1.25rem;
   border-radius: 0.75rem;
   border: 1px solid var(--border);
-  background-color: var(--surface) !important;
+  background-color: #1e1e20 !important;
+  color: #e1e4e8 !important;
   font-family: var(--font-mono) !important;
   font-size: 0.85rem;
 }
@@ -119,7 +110,7 @@ pre[data-language]::after {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ink-faint);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Universal page-transition: replaces Astro's default root crossfade
@@ -208,4 +199,7 @@ pre[data-language]::after {
   border: 1px solid var(--border);
   padding: 0.15rem 0.4rem;
   border-radius: 0.35rem;
+}
+[data-theme="light"] .prose-body :not(pre) > code {
+  color: #db2777;
 }
