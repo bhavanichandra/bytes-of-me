@@ -1,20 +1,18 @@
 ---
-// The hero: wordmark + the one big statement on the page (Lora, Fowler-
-// style — a headline barely bigger than restraint allows, not a
-// terminal prompt). transition:persist keeps it mounted (no flicker)
-// across Astro view-transition navigation.
+// The hero: name as the dominant element (the wordmark, per how
+// martinfowler.com and similar sites actually do it — no page beats
+// the name), with the role/headline as a clearly subordinate subtitle
+// underneath, not a competing giant statement. transition:persist
+// keeps it mounted (no flicker) across Astro view-transition navigation.
 ---
 
 <div class="hero w-full pt-20" transition:persist transition:name="hero">
-  <a id="hero-name" href="/" class="text-xs uppercase tracking-widest text-[var(--ink)] opacity-60 hover:opacity-100 transition">
-    Bhavani Chandra
-  </a>
-  <h1
-    id="hero-statement"
-    class="font-serif font-medium leading-[1.1] mt-4 text-[var(--ink)] text-[clamp(2rem,5vw,3.75rem)]"
-  >
-    Eight years wiring systems together. Now AI&rsquo;s one of them.
+  <h1 id="hero-name" class="font-serif font-semibold leading-tight text-[var(--ink)] text-4xl md:text-5xl">
+    <a href="/" class="hover:opacity-80 transition">Bhavani Chandra</a>
   </h1>
+  <p id="hero-statement" class="font-serif mt-3 text-[var(--ink-muted)] text-lg md:text-xl max-w-2xl">
+    Eight years wiring systems together. Now AI&rsquo;s one of them.
+  </p>
 </div>
 
 <script>
