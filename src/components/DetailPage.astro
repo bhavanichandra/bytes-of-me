@@ -63,7 +63,7 @@ const sectionHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-xs text-blue-400 hover:text-blue-300 transition"
+              class="text-xs text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
             >
               Visit site
             </a>
@@ -94,7 +94,7 @@ const sectionHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 <a
                   href={`#${h.slug}`}
                   class:list={[
-                    "text-sm transition text-blue-400 hover:text-blue-300",
+                    "text-sm transition-colors text-[var(--ink-muted)] hover:text-[var(--ink)]",
                     h.depth === 3 && "pl-3 text-xs",
                   ]}
                 >

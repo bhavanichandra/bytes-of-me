@@ -9,7 +9,7 @@ interface Props {
 const { color = "rgba(255,255,255,0.35)", class: className = "", style = "", ...rest } = Astro.props;
 ---
 
-<div class={`pixel-frame relative border border-white/10 ${className}`} style={`--frame-color: ${color}; ${style}`} {...rest}>
+<div class={`pixel-frame relative border border-[var(--border)] ${className}`} style={`--frame-color: ${color}; ${style}`} {...rest}>
   <span class="pixel-frame-corner pixel-frame-corner--tl"></span>
   <span class="pixel-frame-corner pixel-frame-corner--tr"></span>
   <span class="pixel-frame-corner pixel-frame-corner--bl"></span>

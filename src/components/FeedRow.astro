@@ -35,7 +35,7 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
       />
     )}
     <div class="flex flex-col gap-2 min-w-0">
-      <h3 class="flex items-center gap-2 font-serif text-lg text-[var(--ink)] transition leading-snug">
+      <h3 class="flex items-center gap-2 font-serif text-lg text-[var(--ink)] transition-colors leading-snug">
         <span
           class="w-1.5 h-1.5 rounded-full shrink-0 opacity-0 group-hover:opacity-100 transition"
           style={`background: ${POST_TYPE_META[post.type].color};`}
