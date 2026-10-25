@@ -52,7 +52,7 @@ const sectionHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
   <main class="pl-6 pr-14 md:pl-8 md:pr-12 pt-20 pb-24">
     <div class="max-w-4xl mx-auto text-center mb-16">
-      <h1 class="font-serif text-3xl text-[var(--ink)] mb-3 leading-snug">{title}</h1>
+      <h1 class="font-sans text-3xl text-[var(--ink)] mb-3 leading-snug">{title}</h1>
       {description && <p class="font-sans max-w-2xl mx-auto text-[var(--ink-muted)] leading-relaxed">{description}</p>}
       <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
         <span class="text-xs text-[var(--ink-faint)]">{date}</span>
@@ -63,7 +63,7 @@ const sectionHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-xs text-blue-400 hover:text-blue-300 transition"
+              class="text-xs text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors"
             >
               Visit site
             </a>
@@ -94,7 +94,7 @@ const sectionHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 <a
                   href={`#${h.slug}`}
                   class:list={[
-                    "text-sm transition text-blue-400 hover:text-blue-300",
+                    "text-sm transition-colors text-[var(--ink-muted)] hover:text-[var(--ink)]",
                     h.depth === 3 && "pl-3 text-xs",
                   ]}
                 >
