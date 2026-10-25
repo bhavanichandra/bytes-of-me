@@ -9,7 +9,10 @@ const padding = size === "md" ? "px-2 py-0.5 text-[11px]" : "px-1.5 py-0.5 text-
 ---
 
 <span
-  class={`inline-flex items-center uppercase tracking-wide border border-[var(--border)] text-[var(--ink-faint)] rounded-sm ${padding}`}
+  role="button"
+  tabindex="0"
+  data-open-tag-panel={label}
+  class={`inline-flex items-center border border-[var(--border)] text-[var(--ink-faint)] hover:text-[var(--ink)] hover:border-[var(--ink-faint)] rounded-sm cursor-pointer transition ${padding}`}
 >
   {label}
 </span>

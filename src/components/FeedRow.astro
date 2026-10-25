@@ -36,11 +36,17 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
     )}
     <div class="flex flex-col gap-2 min-w-0">
       <h3 class="flex items-center gap-2 font-serif text-lg text-[var(--ink)] transition leading-snug">
+        <span
+          class="w-1.5 h-1.5 rounded-full shrink-0 opacity-0 group-hover:opacity-100 transition"
+          style={`background: ${POST_TYPE_META[post.type].color};`}
+        ></span>
         <PixelIcon bitmap={POST_TYPE_META[post.type].icon} color={POST_TYPE_META[post.type].color} size={1.5} />
         {post.title}
       </h3>
       {post.description && (
-        <p class="font-serif text-sm leading-relaxed max-w-md line-clamp-3 text-[var(--ink-muted)]">{post.description}</p>
+        <p class:list={["font-sans text-sm leading-relaxed max-w-md text-[var(--ink-muted)]", post.href && "line-clamp-3"]}>
+          {post.description}
+        </p>
       )}
     </div>
   </div>
