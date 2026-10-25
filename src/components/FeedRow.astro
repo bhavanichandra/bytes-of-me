@@ -6,16 +6,12 @@
 import { Image } from "astro:assets";
 import Tag from "./Tag.astro";
 import PixelIcon from "./PixelIcon.astro";
-import { BOOK, FOLDER, SHIELD } from "../lib/pixelIcons";
-import type { UnifiedPost } from "../lib/content";
+import { POST_TYPE_META, type UnifiedPost } from "../lib/content";
 
 interface Props {
   post: UnifiedPost;
 }
 const { post } = Astro.props;
-
-const ICONS = { blog: BOOK, project: FOLDER, journal: SHIELD } as const;
-const ICON_COLOR = { blog: "#22d3ee", project: "#f87171", journal: "#f472b6" } as const;
 
 const Wrapper = post.href ? "a" : "div";
 const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).join(" ")}`.toLowerCase();
@@ -40,7 +36,7 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
     )}
     <div class="flex flex-col gap-2 min-w-0">
       <h3 class="flex items-center gap-2 text-lg text-neutral-100 group-hover:text-white transition leading-snug">
-        <PixelIcon bitmap={ICONS[post.type]} color={ICON_COLOR[post.type]} size={1.5} />
+        <PixelIcon bitmap={POST_TYPE_META[post.type].icon} color={POST_TYPE_META[post.type].color} size={1.5} />
         {post.title}
       </h3>
       {post.description && (

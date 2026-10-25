@@ -1,6 +1,14 @@
 import { getCollection } from "astro:content";
+import { BOOK, FOLDER, SHIELD } from "./pixelIcons";
 
 export type PostType = "blog" | "project" | "journal";
+
+/** Single source of truth for how each post type is told apart in the feed — icon only, never a colored badge. */
+export const POST_TYPE_META = {
+  blog: { icon: BOOK, color: "#22d3ee" },
+  project: { icon: FOLDER, color: "#f87171" },
+  journal: { icon: SHIELD, color: "#f472b6" },
+} as const;
 
 export interface UnifiedPost {
   type: PostType;
