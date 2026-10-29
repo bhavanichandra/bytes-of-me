@@ -1,5 +1,11 @@
 ---
-import { formatDuration, formatDate, beardLevelFor, BEARD_MAX_LEVEL, type CareerEntry } from "../lib/career";
+import {
+  formatDuration,
+  formatDate,
+  beardLevelFor,
+  BEARD_MAX_LEVEL,
+  type CareerEntry,
+} from "../lib/career";
 import PixelAvatar from "./PixelAvatar.astro";
 interface Props {
   entry: CareerEntry;
@@ -10,12 +16,28 @@ const { entry, active, align = "left" } = Astro.props;
 ---
 
 <div>
-  <div class:list={["flex items-start gap-4 flex-wrap mb-2", align === "right" ? "justify-end flex-row-reverse text-right" : "justify-between"]}>
-    <div class:list={["flex items-center gap-3", align === "right" && "flex-row-reverse"]}>
-      <PixelAvatar level={beardLevelFor(entry)} maxLevel={BEARD_MAX_LEVEL} size={5} />
+  <div
+    class:list={[
+      "flex items-start gap-4 flex-wrap mb-2",
+      align === "right"
+        ? "justify-end flex-row-reverse text-right"
+        : "justify-between",
+    ]}
+  >
+    <div
+      class:list={[
+        "flex items-center gap-3",
+        align === "right" && "flex-row-reverse",
+      ]}
+    >
+      <PixelAvatar
+        level={beardLevelFor(entry)}
+        maxLevel={BEARD_MAX_LEVEL}
+        size={5}
+      />
       <div>
-        <h3 class="text-lg text-[var(--ink)] font-semibold">{entry.title}</h3>
-        <p class="text-sm text-[var(--ink-muted)]">{entry.company}</p>
+        <h3 class="text-lg text-(--ink) font-semibold">{entry.title}</h3>
+        <p class="text-sm text-(--ink-muted)">{entry.company}</p>
       </div>
     </div>
     <span
@@ -30,18 +52,31 @@ const { entry, active, align = "left" } = Astro.props;
     </span>
   </div>
 
-  <p class:list={["text-xs font-mono text-[var(--ink-faint)] mb-3", align === "right" && "text-right"]}>
+  <p
+    class:list={[
+      "text-xs font-mono text-(--ink-faint) mb-3",
+      align === "right" && "text-right",
+    ]}
+  >
     {formatDate(entry.start)} — {entry.end ? formatDate(entry.end) : "present"}
-    <span class="text-[var(--ink-faint)]"> · {formatDuration(entry.start, entry.end)}</span>
+    <span class="text-(--ink-faint)">
+      {" "}
+      · {formatDuration(entry.start, entry.end)}
+    </span>
   </p>
 
-  <p class="text-sm leading-relaxed text-[var(--ink-muted)] mb-4">{entry.blurb}</p>
+  <p class="text-sm leading-relaxed text-(--ink-muted) mb-4">{entry.blurb}</p>
 
   {entry.tags.length > 0 && (
-    <div class:list={["flex flex-wrap gap-2 mb-4", align === "right" && "justify-end"]}>
+    <div
+      class:list={[
+        "flex flex-wrap gap-2 mb-4",
+        align === "right" && "justify-end",
+      ]}
+    >
       {entry.tags.map((tag) => (
         <span
-          class="text-[10px] font-pixel uppercase tracking-wide text-[var(--ink-muted)] border px-2 py-1"
+          class="text-[10px] font-pixel uppercase tracking-wide text-(--ink-muted) border px-2 py-1"
           style={`background: ${entry.color}14; border-color: ${entry.color}33;`}
         >
           {tag}
@@ -51,11 +86,17 @@ const { entry, active, align = "left" } = Astro.props;
   )}
 
   {entry.promotion && (
-    <div class:list={["text-xs font-mono border-t border-[var(--border)] pt-3", align === "right" && "text-right"]}>
+    <div
+      class:list={[
+        "text-xs font-mono border-t border-(--border) pt-3",
+        align === "right" && "text-right",
+      ]}
+    >
       <div class="text-emerald-400 whitespace-nowrap">
-        ▲ level up → <span class="text-[var(--ink-muted)]">{entry.promotion.title}</span>
+        ▲ level up →{" "}
+        <span class="text-(--ink-muted)">{entry.promotion.title}</span>
       </div>
-      <div class="text-[var(--ink-faint)] mt-1">{entry.promotion.note}</div>
+      <div class="text-(--ink-faint) mt-1">{entry.promotion.note}</div>
     </div>
   )}
 </div>

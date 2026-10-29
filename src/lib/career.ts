@@ -26,7 +26,7 @@ export const CAREER: CareerEntry[] = [
     start: "2021-11-29",
     end: "2023-07-07",
     blurb:
-      "Built an AI-powered contract-analytics product end to end — Angular front end, Django API, AWS deploys. Pre-ChatGPT era; the \"AI\" was mostly rules and elbow grease.",
+      'Built an AI-powered contract-analytics product end to end — Angular front end, Django API, AWS deploys. Pre-ChatGPT era; the "AI" was mostly rules and elbow grease.',
     tags: ["Angular", "Python", "Django", "AWS"],
     color: "#38bdf8", // sky-400, matches MeCards' hackathon accent
   },
@@ -49,7 +49,8 @@ export const CAREER: CareerEntry[] = [
 export function formatDuration(start: string, end: string | null): string {
   const s = new Date(start);
   const e = end ? new Date(end) : new Date();
-  let months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
+  let months =
+    (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
   if (e.getDate() < s.getDate()) months -= 1;
   const years = Math.floor(months / 12);
   const rem = months % 12;
@@ -60,7 +61,10 @@ export function formatDuration(start: string, end: string | null): string {
 }
 
 export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
 }
 
 // Beard level is derived from years-of-experience-at-role-start, not hardcoded
@@ -72,7 +76,7 @@ export const BEARD_MAX_LEVEL = BEARD_THRESHOLDS.length;
 
 const FIRST_START = CAREER.reduce(
   (earliest, e) => (e.start < earliest ? e.start : earliest),
-  CAREER[0].start
+  CAREER[0].start,
 );
 
 export function beardLevelFor(entry: CareerEntry): number {

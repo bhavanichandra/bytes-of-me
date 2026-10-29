@@ -25,13 +25,21 @@ const data = posts.map((p) => ({
 
 <div
   id="tag-panel"
-  class="tag-panel fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-md z-[901] bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl shadow-black/60 overflow-y-auto"
+  class="tag-panel fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-md z-[901] bg-(--bg) border-l border-(--border) shadow-2xl shadow-black/60 overflow-y-auto"
 >
-  <div class="flex items-center justify-between p-6 border-b border-[var(--border)]">
-    <div class="font-mono text-[10px] uppercase tracking-widest text-[var(--ink-faint)]" data-tag-panel-title>
+  <div class="flex items-center justify-between p-6 border-b border-(--border)">
+    <div
+      class="font-mono text-[10px] uppercase tracking-widest text-(--ink-faint)"
+      data-tag-panel-title
+    >
       Tag
     </div>
-    <button data-tag-panel-close class="text-[var(--ink-faint)] hover:text-[var(--ink)] text-xs font-mono">close ✕</button>
+    <button
+      data-tag-panel-close
+      class="text-(--ink-faint) hover:text-(--ink) text-xs font-mono"
+    >
+      close ✕
+    </button>
   </div>
   <div class="p-6 flex flex-col" data-tag-panel-list></div>
 </div>
@@ -53,7 +61,7 @@ const data = posts.map((p) => ({
       const matches = data.filter((p) => p.tags.includes(tag));
       if (matches.length === 0) {
         const empty = document.createElement("p");
-        empty.className = "text-sm text-[var(--ink-muted)]";
+        empty.className = "text-sm text-(--ink-muted)";
         empty.textContent = "Nothing tagged here yet.";
         list.appendChild(empty);
       }
@@ -62,12 +70,12 @@ const data = posts.map((p) => ({
         const row = document.createElement(p.href ? "a" : "div");
         if (p.href) row.href = p.href;
         row.className =
-          "flex items-center justify-between gap-3 py-3 border-b border-[var(--border)] text-sm text-[var(--ink-muted)] hover:text-[var(--ink)] transition";
+          "flex items-center justify-between gap-3 py-3 border-b border-(--border) text-sm text-(--ink-muted) hover:text-(--ink) transition";
 
         const titleSpan = document.createElement("span");
         titleSpan.textContent = p.title;
         const dateSpan = document.createElement("span");
-        dateSpan.className = "text-xs text-[var(--ink-faint)] shrink-0";
+        dateSpan.className = "text-xs text-(--ink-faint) shrink-0";
         dateSpan.textContent = p.dateLabel;
 
         row.append(titleSpan, dateSpan);
@@ -102,7 +110,9 @@ const data = posts.map((p) => ({
       open(trigger.dataset.openTagPanel);
     });
 
-    panel.querySelector("[data-tag-panel-close]").addEventListener("click", close);
+    panel
+      .querySelector("[data-tag-panel-close]")
+      .addEventListener("click", close);
     backdrop.addEventListener("click", close);
   }
 

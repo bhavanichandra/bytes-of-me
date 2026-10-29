@@ -3,7 +3,12 @@
 // panel's sheet-reveal — a deliberate motion-language difference.
 import PixelIcon from "./PixelIcon.astro";
 import { COMMENT } from "../lib/pixelIcons";
-import { GISCUS_REPO, GISCUS_REPO_ID, GISCUS_CATEGORY, GISCUS_CATEGORY_ID } from "../lib/giscus";
+import {
+  GISCUS_REPO,
+  GISCUS_REPO_ID,
+  GISCUS_CATEGORY,
+  GISCUS_CATEGORY_ID,
+} from "../lib/giscus";
 
 interface Props {
   term: string;
@@ -17,27 +22,43 @@ const { term } = Astro.props;
   data-comments-open
   aria-label="Open comments"
   title="Comments"
-  class="comments-trigger fixed bottom-6 right-6 z-[899] w-12 h-12 rounded-full flex items-center justify-center bg-[var(--surface)] border-2 border-[var(--border)] shadow-lg shadow-black/40 hover:border-pink-400/50 cursor-pointer transition"
+  class="comments-trigger fixed bottom-6 right-6 z-[899] w-12 h-12 rounded-full flex items-center justify-center bg-(--surface) border-2 border-(--border) shadow-lg shadow-black/40 hover:border-pink-400/50 cursor-pointer transition"
 >
   <PixelIcon bitmap={COMMENT} color="#f472b6" size={2.5} />
 </button>
 
 <div
   id="comments-panel"
-  class="fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-lg z-[901] bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl shadow-black/60 overflow-y-auto comments-panel"
+  class="fixed top-0 right-0 bottom-0 translate-x-full w-full max-w-lg z-[901] bg-(--bg) border-l border-(--border) shadow-2xl shadow-black/60 overflow-y-auto comments-panel"
   data-term={term}
 >
-  <div class="flex items-center justify-between p-6 border-b border-[var(--border)]">
-    <div class="font-mono text-[10px] uppercase tracking-widest text-pink-400/80">Comments</div>
-    <button data-comments-close class="text-[var(--ink-faint)] hover:text-[var(--ink)] text-xs font-mono">close ✕</button>
+  <div class="flex items-center justify-between p-6 border-b border-(--border)">
+    <div class="font-mono text-[10px] uppercase tracking-widest text-pink-400/80">
+      Comments
+    </div>
+    <button
+      data-comments-close
+      class="text-(--ink-faint) hover:text-(--ink) text-xs font-mono"
+    >
+      close ✕
+    </button>
   </div>
-  <div class="p-6" data-giscus-mount data-repo={GISCUS_REPO} data-repo-id={GISCUS_REPO_ID} data-category={GISCUS_CATEGORY} data-category-id={GISCUS_CATEGORY_ID}></div>
+  <div
+    class="p-6"
+    data-giscus-mount
+    data-repo={GISCUS_REPO}
+    data-repo-id={GISCUS_REPO_ID}
+    data-category={GISCUS_CATEGORY}
+    data-category-id={GISCUS_CATEGORY_ID}
+  ></div>
 </div>
 
 <script>
   function init() {
     const panel = document.getElementById("comments-panel");
-    const openBtn = document.querySelector<HTMLButtonElement>("[data-comments-open]");
+    const openBtn = document.querySelector<HTMLButtonElement>(
+      "[data-comments-open]",
+    );
     if (!panel || !openBtn || panel.dataset.bound === "true") return;
     panel.dataset.bound = "true";
 
@@ -74,8 +95,13 @@ const { term } = Astro.props;
     // reach it via CSS — it needs an explicit postMessage to re-theme live.
     new MutationObserver(() => {
       if (!loaded) return;
-      const iframe = panel!.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
-      iframe?.contentWindow?.postMessage({ giscus: { setConfig: { theme: giscusThemeUrl() } } }, "https://giscus.app");
+      const iframe = panel!.querySelector<HTMLIFrameElement>(
+        "iframe.giscus-frame",
+      );
+      iframe?.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme: giscusThemeUrl() } } },
+        "https://giscus.app",
+      );
     }).observe(document.documentElement, { attributeFilter: ["data-theme"] });
 
     function open() {
@@ -90,7 +116,9 @@ const { term } = Astro.props;
     }
 
     openBtn.addEventListener("click", open);
-    panel.querySelector("[data-comments-close]")?.addEventListener("click", close);
+    panel
+      .querySelector("[data-comments-close]")
+      ?.addEventListener("click", close);
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
     });

@@ -36,7 +36,8 @@ const BEARD = "#1c1512";
 
 // At max level the beard is "done growing" (solid); below max, the newest
 // row is drawn at reduced opacity to read as still-growing stubble.
-const revealed = level >= maxLevel ? BEARD_ROWS.length : Math.min(level, BEARD_ROWS.length);
+const revealed =
+  level >= maxLevel ? BEARD_ROWS.length : Math.min(level, BEARD_ROWS.length);
 const atMax = level >= maxLevel;
 
 function cellColor(ch: string, rowIndex: number): string | null {
@@ -59,6 +60,6 @@ function cellColor(ch: string, rowIndex: number): string | null {
     row.split("").map((ch) => {
       const color = cellColor(ch, r);
       return <span style={color ? `background:${color};` : ""} />;
-    })
+    }),
   )}
 </div>
