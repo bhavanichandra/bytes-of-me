@@ -6,10 +6,19 @@ interface Props {
   class?: string;
   style?: string;
 }
-const { color = "rgba(255,255,255,0.35)", class: className = "", style = "", ...rest } = Astro.props;
+const {
+  color = "rgba(255,255,255,0.35)",
+  class: className = "",
+  style = "",
+  ...rest
+} = Astro.props;
 ---
 
-<div class={`pixel-frame relative border border-[var(--border)] ${className}`} style={`--frame-color: ${color}; ${style}`} {...rest}>
+<div
+  class={`pixel-frame relative border border-(--border) ${className}`}
+  style={`--frame-color: ${color}; ${style}`}
+  {...rest}
+>
   <span class="pixel-frame-corner pixel-frame-corner--tl"></span>
   <span class="pixel-frame-corner pixel-frame-corner--tr"></span>
   <span class="pixel-frame-corner pixel-frame-corner--bl"></span>
@@ -24,8 +33,20 @@ const { color = "rgba(255,255,255,0.35)", class: className = "", style = "", ...
     height: 5px;
     background: var(--frame-color);
   }
-  .pixel-frame-corner--tl { top: -2px; left: -2px; }
-  .pixel-frame-corner--tr { top: -2px; right: -2px; }
-  .pixel-frame-corner--bl { bottom: -2px; left: -2px; }
-  .pixel-frame-corner--br { bottom: -2px; right: -2px; }
+  .pixel-frame-corner--tl {
+    top: -2px;
+    left: -2px;
+  }
+  .pixel-frame-corner--tr {
+    top: -2px;
+    right: -2px;
+  }
+  .pixel-frame-corner--bl {
+    bottom: -2px;
+    left: -2px;
+  }
+  .pixel-frame-corner--br {
+    bottom: -2px;
+    right: -2px;
+  }
 </style>

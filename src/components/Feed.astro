@@ -14,21 +14,27 @@ const { posts } = Astro.props;
     <input
       type="date"
       data-feed-date
-      class="border border-[var(--border)] bg-transparent px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-cyan-400/60"
+      class="border border-(--border) bg-transparent px-3 py-2 text-sm text-(--ink) outline-none focus:border-cyan-400/60"
     />
 
     <input
       type="search"
       placeholder="Search…"
       data-feed-search
-      class="flex-1 min-w-[12rem] ml-auto border border-[var(--border)] bg-transparent px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-cyan-400/60"
+      class="flex-1 min-w-[12rem] ml-auto border border-(--border) bg-transparent px-3 py-2 text-sm text-(--ink) outline-none focus:border-cyan-400/60"
     />
   </div>
 
   <div class="rows-list flex flex-col gap-1.5">
-    {posts.length === 0 && <p class="text-sm text-[var(--ink-muted)]">Nothing here yet.</p>}
-    {posts.map((post) => <FeedRow {post} />)}
-    <p data-no-matches class="hidden text-sm py-4 text-[var(--ink-muted)]">No matches.</p>
+    {posts.length === 0 && (
+      <p class="text-sm text-(--ink-muted)">Nothing here yet.</p>
+    )}
+    {posts.map((post) => (
+      <FeedRow {post} />
+    ))}
+    <p data-no-matches class="hidden text-sm py-4 text-(--ink-muted)">
+      No matches.
+    </p>
   </div>
 </div>
 
@@ -38,8 +44,11 @@ const { posts } = Astro.props;
     root.dataset.bound = "true";
 
     const search = root.querySelector<HTMLInputElement>("[data-feed-search]")!;
-    const dateFilter = root.querySelector<HTMLInputElement>("[data-feed-date]")!;
-    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-filter-item]"));
+    const dateFilter =
+      root.querySelector<HTMLInputElement>("[data-feed-date]")!;
+    const items = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-filter-item]"),
+    );
     const noMatches = root.querySelector<HTMLElement>("[data-no-matches]")!;
 
     function applyFilters() {
@@ -48,7 +57,10 @@ const { posts } = Astro.props;
       let visible = 0;
       items.forEach((item) => {
         const matchesDate = !d || item.dataset.filterDate === d;
-        const matchesSearch = !q || (item.dataset.filterText ?? "").includes(q) || (item.dataset.filterDate ?? "").includes(q);
+        const matchesSearch =
+          !q ||
+          (item.dataset.filterText ?? "").includes(q) ||
+          (item.dataset.filterDate ?? "").includes(q);
         const matches = matchesDate && matchesSearch;
         item.hidden = !matches;
         if (matches) visible++;

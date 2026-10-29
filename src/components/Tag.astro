@@ -5,14 +5,15 @@ interface Props {
 }
 
 const { label, size = "sm" } = Astro.props;
-const padding = size === "md" ? "px-2 py-0.5 text-[11px]" : "px-1.5 py-0.5 text-[10px]";
+const padding =
+  size === "md" ? "px-2 py-0.5 text-[11px]" : "px-1.5 py-0.5 text-[10px]";
 ---
 
 <span
   role="button"
   tabindex="0"
   data-open-tag-panel={label}
-  class={`inline-flex items-center font-pixel border border-[var(--border)] text-[var(--ink-faint)] hover:text-[var(--ink)] hover:border-[var(--ink-faint)] rounded-sm cursor-pointer transition ${padding}`}
+  class={`inline-flex items-center font-pixel border border-(--border) text-(--ink-faint) hover:text-(--ink) hover:border-(--ink-faint) rounded-sm cursor-pointer transition ${padding}`}
 >
   {label}
 </span>

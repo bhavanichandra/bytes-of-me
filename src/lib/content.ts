@@ -1,5 +1,14 @@
 import { getCollection } from "astro:content";
-import { BOOK, CLOCK, CODE, COMMENT, FOLDER, SHIELD, SPARK, STAR } from "./pixelIcons";
+import {
+  BOOK,
+  CLOCK,
+  CODE,
+  COMMENT,
+  FOLDER,
+  SHIELD,
+  SPARK,
+  STAR,
+} from "./pixelIcons";
 
 export interface PostIconMeta {
   bitmap: string[];
@@ -7,14 +16,14 @@ export interface PostIconMeta {
 }
 
 export const POST_ICON_OPTIONS: PostIconMeta[] = [
-  { bitmap: BOOK, color: "#22d3ee" },     // cyan
-  { bitmap: FOLDER, color: "#f87171" },   // rose
-  { bitmap: SHIELD, color: "#f472b6" },   // pink
-  { bitmap: CODE, color: "#a78bfa" },     // purple
-  { bitmap: STAR, color: "#fbbf24" },     // amber
-  { bitmap: SPARK, color: "#34d399" },    // emerald
-  { bitmap: CLOCK, color: "#60a5fa" },    // blue
-  { bitmap: COMMENT, color: "#fb923c" },  // orange
+  { bitmap: BOOK, color: "#22d3ee" }, // cyan
+  { bitmap: FOLDER, color: "#f87171" }, // rose
+  { bitmap: SHIELD, color: "#f472b6" }, // pink
+  { bitmap: CODE, color: "#a78bfa" }, // purple
+  { bitmap: STAR, color: "#fbbf24" }, // amber
+  { bitmap: SPARK, color: "#34d399" }, // emerald
+  { bitmap: CLOCK, color: "#60a5fa" }, // blue
+  { bitmap: COMMENT, color: "#fb923c" }, // orange
 ];
 
 function hashSlug(slug: string): number {

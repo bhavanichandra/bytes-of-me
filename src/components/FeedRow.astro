@@ -9,7 +9,8 @@ interface Props {
 }
 const { post } = Astro.props;
 
-const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).join(" ")}`.toLowerCase();
+const filterText =
+  `${post.title} ${post.description ?? ""} ${(post.tags ?? []).join(" ")}`.toLowerCase();
 ---
 
 <a
@@ -17,27 +18,33 @@ const filterText = `${post.title} ${post.description ?? ""} ${(post.tags ?? []).
   data-filter-item
   data-filter-date={post.dateIso}
   data-filter-text={filterText}
-  class="row group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 -mx-3 md:-mx-4 px-3 md:px-4 py-4 rounded-xl border border-transparent hover:border-[var(--border-hover)] transition-colors duration-100 ease-out cursor-pointer"
+  class="row group flex flex-col md:flex-row items-start md:justify-between gap-3 md:gap-6 -mx-3 md:-mx-4 px-3 md:px-4 py-4 rounded-xl border border-transparent hover:border-(--border-hover) transition-colors duration-100 ease-out cursor-pointer"
 >
   <div class="flex items-start gap-4 min-w-0">
     <div class="flex flex-col gap-2 min-w-0">
-      <h3 class="flex items-center gap-2 font-serif font-medium text-lg text-[var(--ink)] leading-snug">
+      <h3 class="flex items-center gap-2 font-serif font-medium text-lg text-(--ink) leading-snug">
         <span
           class="w-1.5 h-1.5 rounded-full shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-100"
           style={`background: ${post.icon.color};`}
         ></span>
-        <PixelIcon bitmap={post.icon.bitmap} color={post.icon.color} size={1.5} />
+        <PixelIcon
+          bitmap={post.icon.bitmap}
+          color={post.icon.color}
+          size={1.5}
+        />
         {post.title}
       </h3>
       {post.description && (
-        <p class="font-sans text-sm leading-relaxed max-w-md text-[var(--ink-muted)] line-clamp-3">
+        <p class="font-sans text-sm leading-relaxed max-w-md text-(--ink-muted) line-clamp-3">
           {post.description}
         </p>
       )}
     </div>
   </div>
   <div class="flex flex-row md:flex-col items-center md:items-end gap-2 shrink-0">
-    <span class="text-xs font-pixel text-[var(--ink-faint)] group-hover:text-[var(--ink-muted)] transition-colors duration-100">{post.dateLabel}</span>
+    <span class="text-xs font-pixel text-(--ink-faint) group-hover:text-(--ink-muted) transition-colors duration-100">
+      {post.dateLabel}
+    </span>
     {post.tags && post.tags.length > 0 && (
       <span class="flex gap-1.5">
         {post.tags.slice(0, 2).map((tag) => (
